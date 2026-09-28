@@ -29,6 +29,23 @@
 html {
   min-width: 320px;
   scroll-behavior: smooth;
+  scrollbar-color: #aab2a6 var(--color-bg);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid var(--color-bg);
+  border-radius: 999px;
+  background: #aab2a6;
 }
 
 body {
@@ -235,6 +252,39 @@ svg {
   border-color: #cbd1c7;
   box-shadow: var(--shadow-soft);
   transform: translateY(-3px);
+}
+
+.skeleton-block {
+  display: block;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--color-line), #eef0ec, var(--color-line));
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.state-panel {
+  padding: 36px;
+  border: 1px dashed #cbd1c7;
+  border-radius: var(--radius);
+  background: var(--color-panel);
+  text-align: center;
+}
+
+.state-panel h2 {
+  margin: 0;
+  letter-spacing: -0.035em;
+}
+
+.state-panel > p:last-of-type {
+  margin: 10px 0 0;
+  color: var(--color-muted);
 }
 
 .eyebrow {
@@ -1618,14 +1668,14 @@ a.friend-card:hover {
   letter-spacing: -0.1em;
   line-height: 0.68;
 }
-.error-page h1 {
+.error-state h1 {
   max-width: 680px;
   margin: 0;
   font-size: clamp(2.8rem, 7vw, 5.5rem);
   letter-spacing: -0.065em;
   line-height: 0.95;
 }
-.error-page > p:not(.eyebrow) {
+.error-state > p:not(.eyebrow) {
   max-width: 520px;
   margin: 24px 0;
   color: var(--color-muted);
@@ -1836,6 +1886,10 @@ a.friend-card:hover {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .skeleton-block {
+    animation: none;
   }
 }
 

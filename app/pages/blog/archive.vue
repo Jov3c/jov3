@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BlogChrome from '~/components/blog/BlogChrome.vue';
-import PageHeading from '~/components/ui/PageHeading.vue';
+import StandardHero from '~/components/ui/StandardHero.vue';
 import { archiveEntries } from '~/data/content';
 
 useSeoMeta({ title: 'Archive — Blog — Jov3', description: '按时间查看 Jov3 的全部文章。' });
@@ -8,7 +8,7 @@ useSeoMeta({ title: 'Archive — Blog — Jov3', description: '按时间查看 J
 
 <template>
   <BlogChrome>
-    <PageHeading
+    <StandardHero
       eyebrow="Archive"
       title="All posts, over time."
       description="按时间收好写过的文章，也保留一路变化的痕迹。"

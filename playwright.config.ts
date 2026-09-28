@@ -23,6 +23,13 @@ export default defineConfig({
         viewport: { width: 390, height: 844 },
       },
     },
+    {
+      name: 'tablet-chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 920, height: 1000 },
+      },
+    },
   ],
   webServer: {
     command: 'pnpm dev --host 127.0.0.1 --port 3000',

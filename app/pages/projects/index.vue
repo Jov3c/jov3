@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ProjectCard from '~/components/projects/ProjectCard.vue';
-import PageHeading from '~/components/ui/PageHeading.vue';
+import StandardHero from '~/components/ui/StandardHero.vue';
 import { projects } from '~/data/content';
 
 useSeoMeta({
@@ -11,7 +11,7 @@ useSeoMeta({
 
 <template>
   <div class="page-container">
-    <PageHeading
+    <StandardHero
       eyebrow="Projects / 01—06"
       title="Selected work."
       description="一些正在构建、持续维护或已经完成的项目。点击卡片进入项目 README。"

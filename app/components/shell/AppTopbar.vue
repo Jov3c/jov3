@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import AppBrand from './AppBrand.vue';
 import MainNav from './MainNav.vue';
 </script>
 
 <template>
   <header class="topbar">
     <div class="topbar__inner">
-      <NuxtLink class="wordmark" to="/" aria-label="JOV3 首页">JOV3<span>.</span></NuxtLink>
+      <AppBrand />
       <MainNav />
     </div>
   </header>

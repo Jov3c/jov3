@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BlogChrome from '~/components/blog/BlogChrome.vue';
-import PageHeading from '~/components/ui/PageHeading.vue';
+import StandardHero from '~/components/ui/StandardHero.vue';
 import { friendLinks } from '~/data/content';
 
 useSeoMeta({ title: 'Links — Blog — Jov3', description: '一些常去的站点，和互联网里的朋友。' });
@@ -8,7 +8,7 @@ useSeoMeta({ title: 'Links — Blog — Jov3', description: '一些常去的站�
 
 <template>
   <BlogChrome>
-    <PageHeading
+    <StandardHero
       eyebrow="Blogroll"
       title="Good places on the web."
       description="一些常去的站点，和互联网里的朋友。只有已确认的地址可以跳转。"

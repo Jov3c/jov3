@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BlogChrome from '~/components/blog/BlogChrome.vue';
 import PostCard from '~/components/blog/PostCard.vue';
-import PageHeading from '~/components/ui/PageHeading.vue';
+import StandardHero from '~/components/ui/StandardHero.vue';
 import { blogPosts } from '~/data/content';
 
 useSeoMeta({ title: 'Blog — Jov3', description: 'AI、产品、开发，以及那些值得慢慢写下来的东西。' });
@@ -9,7 +9,7 @@ useSeoMeta({ title: 'Blog — Jov3', description: 'AI、产品、开发，以及
 
 <template>
   <BlogChrome>
-    <PageHeading
+    <StandardHero
       eyebrow="Journal / 2026"
       title="Writing, slowly."
       description="AI、产品、开发，以及那些值得慢慢写下来的东西。"

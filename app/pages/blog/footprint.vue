@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BlogChrome from '~/components/blog/BlogChrome.vue';
-import PageHeading from '~/components/ui/PageHeading.vue';
+import StandardHero from '~/components/ui/StandardHero.vue';
 import { footprintPlaces } from '~/data/content';
 
 const selectedId = ref(footprintPlaces[0]!.id);
@@ -26,7 +26,7 @@ useSeoMeta({
 
 <template>
   <BlogChrome>
-    <PageHeading
+    <StandardHero
       eyebrow="Footprint / 07 places"
       title="Places I remember."
       description="去过的地方、留下的记忆，以及先放在地图上的期待。"

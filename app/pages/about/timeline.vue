@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageHeading from '~/components/ui/PageHeading.vue';
+import StandardHero from '~/components/ui/StandardHero.vue';
 import { timelineChapters } from '~/data/content';
 
 useSeoMeta({
@@ -10,7 +10,7 @@ useSeoMeta({
 
 <template>
   <div class="page-container timeline-page">
-    <PageHeading
+    <StandardHero
       eyebrow="About / Timeline"
       title="A story still being written."
       description="不是简历，也不是履历表。只是把一些值得记住的节点留下来：做过的项目、改变方向的时刻、学到的东西，以及正在发生的生活。"

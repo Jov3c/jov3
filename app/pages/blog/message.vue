@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BlogChrome from '~/components/blog/BlogChrome.vue';
-import PageHeading from '~/components/ui/PageHeading.vue';
+import StandardHero from '~/components/ui/StandardHero.vue';
 import { guestbookMessages } from '~/data/content';
 
 useSeoMeta({ title: 'Guestbook — Blog — Jov3', description: '给 Jov3 留下一句话。' });
@@ -8,7 +8,7 @@ useSeoMeta({ title: 'Guestbook — Blog — Jov3', description: '给 Jov3 留下
 
 <template>
   <BlogChrome>
-    <PageHeading
+    <StandardHero
       eyebrow="Guestbook"
       title="Leave a small note."
       description="如果你路过这里，可以留下一句话。"
