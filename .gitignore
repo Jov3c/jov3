@@ -19,9 +19,9 @@ playwright-report/
 server/generated/prisma/
 
 # Local persistent data
-data/
-uploads/
-docker/postgres/data/
+/data/
+/uploads/
+/docker/postgres/data/
 
 # Logs and editor files
 *.log
