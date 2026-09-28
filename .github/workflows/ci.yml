@@ -29,6 +29,9 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://jov3:jov3_ci_only@127.0.0.1:5432/jov3?schema=public
+      ADMIN_EMAIL: stage02-admin@example.com
+      ADMIN_PASSWORD: stage-02-e2e-admin-password
+      ADMIN_DISPLAY_NAME: Jov3
 
     steps:
       - name: Check out source
@@ -68,6 +71,9 @@ jobs:
 
       - name: Run database integration tests
         run: pnpm test:integration
+
+      - name: Bootstrap test administrator
+        run: pnpm admin:bootstrap
 
       - name: Install browser for end-to-end tests
         run: pnpm exec playwright install --with-deps chromium
