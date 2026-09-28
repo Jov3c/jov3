@@ -1,0 +1,54 @@
+{
+  "name": "jov3-website",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.15.1",
+  "engines": {
+    "node": ">=24.14.0 <25"
+  },
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run --config vitest.config.ts tests/unit",
+    "test:watch": "vitest --config vitest.config.ts tests/unit",
+    "test:integration": "vitest run --config vitest.config.ts tests/integration",
+    "test:e2e": "playwright test",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "prisma:generate": "prisma generate --config prisma7.config.ts",
+    "prisma:migrate:dev": "prisma migrate dev --config prisma7.config.ts",
+    "prisma:migrate:deploy": "prisma migrate deploy --config prisma7.config.ts",
+    "prisma:studio": "prisma studio --config prisma7.config.ts",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "dotenv": "18.0.4",
+    "nuxt": "4.5.2",
+    "pg": "8.23.0",
+    "vue": "3.5.43",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "1.17.0",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.10.1",
+    "@types/pg": "8.23.1",
+    "@vitest/coverage-v8": "5.0.2",
+    "eslint": "10.11.0",
+    "prettier": "3.9.9",
+    "prisma": "7.10.0",
+    "typescript": "6.0.3",
+    "vitest": "5.0.2",
+    "vue-tsc": "3.2.5"
+  }
+}
