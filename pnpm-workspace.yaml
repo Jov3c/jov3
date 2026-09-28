@@ -6,3 +6,5 @@ allowBuilds:
 
 overrides:
   '@bomb.sh/tab': 0.0.22
+  deepmerge-ts: 8.0.0
+  mysql2: 3.23.1
