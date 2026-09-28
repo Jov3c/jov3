@@ -223,27 +223,23 @@ export const archiveEntries: ArchiveEntry[] = [
   {
     year: 2026,
     month: '09',
-    items: blogPosts
-      .slice(0, 3)
-      .map((post) => ({
-        date: post.publishedAt.slice(5, 10),
-        title: post.title,
-        category: post.category,
-        slug: post.slug,
-      })),
+    items: blogPosts.slice(0, 3).map((post) => ({
+      date: post.publishedAt.slice(5, 10),
+      title: post.title,
+      category: post.category,
+      slug: post.slug,
+    })),
   },
   {
     year: 2026,
     month: '08',
     items: [
-      ...blogPosts
-        .slice(3)
-        .map((post) => ({
-          date: post.publishedAt.slice(5, 10),
-          title: post.title,
-          category: post.category,
-          slug: post.slug,
-        })),
+      ...blogPosts.slice(3).map((post) => ({
+        date: post.publishedAt.slice(5, 10),
+        title: post.title,
+        category: post.category,
+        slug: post.slug,
+      })),
       { date: '08-11', title: '一些关于长期做项目的想法', category: '随笔' },
     ],
   },
