@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: jov3-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-jov3}
+      POSTGRES_USER: ${POSTGRES_USER:-jov3}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-jov3_dev_only}
+    ports:
+      - '${POSTGRES_PORT:-54329}:5432'
+    volumes:
+      - jov3_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-jov3} -d ${POSTGRES_DB:-jov3}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  jov3_postgres_data:
