@@ -28,11 +28,13 @@
     "prisma:migrate:dev": "prisma migrate dev --config prisma7.config.ts",
     "prisma:migrate:deploy": "prisma migrate deploy --config prisma7.config.ts",
     "prisma:studio": "prisma studio --config prisma7.config.ts",
+    "admin:bootstrap": "tsx prisma/seed.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.0",
     "@prisma/client": "7.10.0",
+    "argon2": "0.45.1",
     "dotenv": "18.0.4",
     "nuxt": "4.5.2",
     "pg": "8.23.0",
@@ -48,6 +50,7 @@
     "eslint": "10.11.0",
     "prettier": "3.9.9",
     "prisma": "7.10.0",
+    "tsx": "4.20.6",
     "typescript": "6.0.3",
     "vitest": "5.0.2",
     "vue-tsc": "3.2.5"

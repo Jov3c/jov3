@@ -54,14 +54,14 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Generate Prisma client
+        run: pnpm prisma:generate
+
       - name: Typecheck
         run: pnpm typecheck
 
       - name: Run unit tests
         run: pnpm test
-
-      - name: Generate Prisma client
-        run: pnpm prisma:generate
 
       - name: Apply database migrations
         run: pnpm prisma:migrate:deploy
