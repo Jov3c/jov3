@@ -1,0 +1,35 @@
+# Dependencies and Nuxt output
+node_modules/
+.nuxt/
+.output/
+.nitro/
+.cache/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Test output
+coverage/
+test-results/
+playwright-report/
+
+# Generated database client
+server/generated/prisma/
+
+# Local persistent data
+data/
+uploads/
+docker/postgres/data/
+
+# Logs and editor files
+*.log
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Process workspaces must never enter the source repository
+.superpowers/
