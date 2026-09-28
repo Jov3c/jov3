@@ -4,6 +4,8 @@
 .gitattributes text eol=lf
 .gitignore text eol=lf
 .nvmrc text eol=lf
+.prettierignore text eol=lf
+.env.example text eol=lf
 
 *.js text eol=lf
 *.mjs text eol=lf
