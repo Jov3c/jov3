@@ -1,0 +1,59 @@
+import type { PrismaClient } from '../generated/prisma/client';
+import type { MediaListQuery } from '../../shared/schemas/media';
+
+export class MediaRepository {
+  constructor(private readonly prisma: PrismaClient) {}
+
+  create(input: {
+    originalName: string;
+    storedName: string;
+    mimeType: string;
+    sizeBytes: bigint;
+    width?: number;
+    height?: number;
+    storagePath: string;
+    publicUrl: string;
+    sha256: string;
+    altText: string | null;
+  }) {
+    return this.prisma.mediaAsset.create({ data: input });
+  }
+
+  async list(query: MediaListQuery) {
+    const where = query.q
+      ? {
+          OR: [
+            { originalName: { contains: query.q, mode: 'insensitive' as const } },
+            { altText: { contains: query.q, mode: 'insensitive' as const } },
+          ],
+        }
+      : {};
+    const [items, total] = await Promise.all([
+      this.prisma.mediaAsset.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (query.page - 1) * query.pageSize,
+        take: query.pageSize,
+      }),
+      this.prisma.mediaAsset.count({ where }),
+    ]);
+    return { items, total };
+  }
+
+  findById(id: string) {
+    return this.prisma.mediaAsset.findUnique({ where: { id } });
+  }
+
+  updateAltText(id: string, altText: string | null) {
+    return this.prisma.mediaAsset.update({ where: { id }, data: { altText } });
+  }
+
+  delete(id: string) {
+    return this.prisma.mediaAsset.delete({ where: { id } });
+  }
+
+  /** Later content tables will replace this with relation-aware reference checks. */
+  async countReferences(_id: string) {
+    return 0;
+  }
+}

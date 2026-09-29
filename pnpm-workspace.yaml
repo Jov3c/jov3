@@ -5,6 +5,9 @@ allowBuilds:
   prisma: true
   unrs-resolver: true
 
+minimumReleaseAgeExclude:
+  - nodemailer@10.0.12
+
 overrides:
   '@bomb.sh/tab': 0.0.22
   deepmerge-ts: 8.0.0

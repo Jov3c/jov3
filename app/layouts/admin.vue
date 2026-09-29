@@ -30,13 +30,14 @@ async function signOut() {
         <NuxtLink class="admin-nav-link" to="/admin"><i>⌂</i> Dashboard</NuxtLink>
         <section v-for="section in futureNavigation" :key="section.group">
           <p>{{ section.group }}</p>
-          <span
-            v-for="item in section.items"
-            :key="item"
-            class="admin-nav-link admin-nav-link--disabled"
-          >
-            <i>·</i> {{ item }}<small>Later</small>
-          </span>
+          <template v-for="item in section.items" :key="item">
+            <NuxtLink v-if="item === 'Media'" class="admin-nav-link" to="/admin/media">
+              <i>·</i> {{ item }}
+            </NuxtLink>
+            <span v-else class="admin-nav-link admin-nav-link--disabled">
+              <i>·</i> {{ item }}<small>Later</small>
+            </span>
+          </template>
         </section>
       </nav>
       <div class="admin-identity">

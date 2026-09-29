@@ -6,8 +6,8 @@ import { describe, expect, it } from 'vitest';
 const schemaPath = fileURLToPath(new URL('../../prisma/schema.prisma', import.meta.url));
 const schema = readFileSync(schemaPath, 'utf8');
 
-describe('Stage 02 database contract', () => {
-  it.each(['AdminUser', 'AdminSession', 'SiteProfile', 'MediaAsset'])(
+describe('database contract', () => {
+  it.each(['AdminUser', 'AdminSession', 'SiteProfile', 'MediaAsset', 'EmailVerification'])(
     'defines the %s model',
     (model) => {
       expect(schema).toContain(`model ${model} {`);
@@ -26,5 +26,14 @@ describe('Stage 02 database contract', () => {
     expect(schema).toContain('@@map("admin_sessions")');
     expect(schema).toContain('@@map("site_profile")');
     expect(schema).toContain('@@map("media_assets")');
+    expect(schema).toContain('@@map("email_verifications")');
+  });
+
+  it('stores email verification tokens as hashes with expiry state', () => {
+    expect(schema).toContain('model EmailVerification {');
+    expect(schema).toContain('tokenHash');
+    expect(schema).toContain('consumedAt');
+    expect(schema).toContain('expiresAt');
+    expect(schema).not.toMatch(/model EmailVerification \{[\s\S]*\btoken\s+String/);
   });
 });

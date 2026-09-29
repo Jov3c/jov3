@@ -32,6 +32,15 @@ Copy-Item .env.example .env
 pnpm dev
 ```
 
+Media uploads are kept outside the repository and build output. When
+`MEDIA_STORAGE_ROOT` is not set, local development uses `.data/uploads/`; the
+production value is `/srv/jov3/data/uploads/`, which should be supplied as a
+persistent host bind mount by the deployment configuration.
+
+SMTP is provider-agnostic. Configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`,
+optional credentials, sender fields, and `PUBLIC_SITE_URL` before enabling
+visitor email verification flows.
+
 ## Verification
 
 ```bash

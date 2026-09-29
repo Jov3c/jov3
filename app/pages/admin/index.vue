@@ -43,10 +43,10 @@ useSeoMeta({ title: 'Dashboard — Jov3 Admin', robots: 'noindex, nofollow' });
     <section class="admin-next-step">
       <span>Next stage</span>
       <div>
-        <h2>Media & email infrastructure</h2>
-        <p>下一步会把媒体库和 SMTP 配置接入这套受保护的后台。</p>
+        <h2>Home & site configuration</h2>
+        <p>媒体库和邮箱验证基础已经就绪，下一步接入首页配置的数据闭环。</p>
       </div>
-      <b>03</b>
+      <b>04</b>
     </section>
   </div>
 </template>

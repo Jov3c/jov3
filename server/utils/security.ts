@@ -29,3 +29,11 @@ export function createSessionToken() {
 export function hashSessionToken(token: string) {
   return createHash('sha256').update(token, 'utf8').digest('hex');
 }
+
+export function createVerificationToken() {
+  return randomBytes(32).toString('base64url');
+}
+
+export function hashVerificationToken(token: string) {
+  return createHash('sha256').update(token, 'utf8').digest('hex');
+}
