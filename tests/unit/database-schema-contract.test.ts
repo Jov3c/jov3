@@ -22,6 +22,15 @@ describe('database contract', () => {
     'ArticleComment',
     'Message',
     'FriendLink',
+    'CvProfile',
+    'CvExperience',
+    'CvEducation',
+    'CvSkillGroup',
+    'CvProjectRef',
+    'TimelineEntry',
+    'TimelineEntryMedia',
+    'TimelineEntryLink',
+    'TimelineEntryProject',
   ])('defines the %s model', (model) => {
     expect(schema).toContain(`model ${model} {`);
   });
@@ -50,6 +59,17 @@ describe('database contract', () => {
     expect(schema).toContain('@@map("friend_links")');
     expect(schema).toContain('enum FriendLinkStatus');
     expect(schema).toContain('enum FriendLinkSource');
+    expect(schema).toContain('enum DatePrecision');
+    expect(schema).toContain('@@map("cv_profile")');
+    expect(schema).toContain('@@map("cv_experiences")');
+    expect(schema).toContain('@@map("cv_educations")');
+    expect(schema).toContain('@@map("cv_skill_groups")');
+    expect(schema).toContain('@@map("cv_project_refs")');
+    expect(schema).toContain('@@map("timeline_entries")');
+    expect(schema).toContain('@@map("timeline_entry_media")');
+    expect(schema).toContain('@@map("timeline_entry_links")');
+    expect(schema).toContain('@@map("timeline_entry_projects")');
+    expect(schema).toContain('projectId');
   });
 
   it('stores email verification tokens as hashes with expiry state', () => {

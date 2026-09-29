@@ -49,6 +49,12 @@ enum FriendLinkSource {
   APPLICATION
 }
 
+enum DatePrecision {
+  YEAR
+  MONTH
+  DAY
+}
+
 model AdminUser {
   id           String         @id @default(uuid()) @db.Uuid
   email        String         @unique @db.VarChar(254)
@@ -101,6 +107,8 @@ model MediaAsset {
   homeProfiles HomeProfile[]
   postCovers   Post[]       @relation("PostCover")
   friendLinkLogos FriendLink[] @relation("FriendLinkLogo")
+  cvPortraits  CvProfile[]  @relation("CvPortrait")
+  timelineMedia TimelineEntryMedia[]
 
   @@map("media_assets")
 }
@@ -179,6 +187,8 @@ model Project {
   visible        Boolean       @default(true)
   createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  cvProjectRefs  CvProjectRef[]
+  timelineProjects TimelineEntryProject[]
 
   @@index([visible, sortOrder])
   @@map("projects")
@@ -284,4 +294,139 @@ model FriendLink {
 
   @@index([status, visible, sortOrder])
   @@map("friend_links")
+}
+
+model CvProfile {
+  id             String          @id @default(uuid()) @db.Uuid
+  isPublic       Boolean         @default(true) @map("is_public")
+  name           String          @db.VarChar(120)
+  headline       String          @db.VarChar(180)
+  bio            String
+  location       String          @db.VarChar(120)
+  website        String?         @db.VarChar(500)
+  statusText     String?         @map("status_text") @db.VarChar(120)
+  statement      String
+  portraitMediaId String?        @map("portrait_media_id") @db.Uuid
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  portraitMedia  MediaAsset?     @relation("CvPortrait", fields: [portraitMediaId], references: [id], onDelete: SetNull)
+  experiences    CvExperience[]
+  educations     CvEducation[]
+  skillGroups    CvSkillGroup[]
+  projectRefs    CvProjectRef[]
+
+  @@map("cv_profile")
+}
+
+model CvExperience {
+  id          String    @id @default(uuid()) @db.Uuid
+  profileId   String    @map("profile_id") @db.Uuid
+  company     String    @db.VarChar(180)
+  role        String    @db.VarChar(180)
+  location    String    @db.VarChar(120)
+  startDate   DateTime  @map("start_date") @db.Date
+  endDate     DateTime? @map("end_date") @db.Date
+  isCurrent   Boolean   @default(false) @map("is_current")
+  description String
+  sortOrder   Int       @default(0) @map("sort_order")
+  profile     CvProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, sortOrder])
+  @@map("cv_experiences")
+}
+
+model CvEducation {
+  id          String    @id @default(uuid()) @db.Uuid
+  profileId   String    @map("profile_id") @db.Uuid
+  school      String    @db.VarChar(180)
+  major       String    @db.VarChar(180)
+  degree      String    @db.VarChar(120)
+  startDate   DateTime  @map("start_date") @db.Date
+  endDate     DateTime? @map("end_date") @db.Date
+  description String
+  sortOrder   Int       @default(0) @map("sort_order")
+  profile     CvProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, sortOrder])
+  @@map("cv_educations")
+}
+
+model CvSkillGroup {
+  id         String    @id @default(uuid()) @db.Uuid
+  profileId  String    @map("profile_id") @db.Uuid
+  title      String    @db.VarChar(120)
+  content    String
+  sortOrder  Int       @default(0) @map("sort_order")
+  profile    CvProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId, sortOrder])
+  @@map("cv_skill_groups")
+}
+
+model CvProjectRef {
+  id        String   @id @default(uuid()) @db.Uuid
+  profileId String   @map("profile_id") @db.Uuid
+  projectId String   @map("project_id") @db.Uuid
+  sortOrder Int      @default(0) @map("sort_order")
+  profile   CvProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Restrict)
+
+  @@unique([profileId, projectId])
+  @@index([profileId, sortOrder])
+  @@map("cv_project_refs")
+}
+
+model TimelineEntry {
+  id          String          @id @default(uuid()) @db.Uuid
+  eventDate   DateTime        @map("event_date") @db.Date
+  datePrecision DatePrecision @map("date_precision")
+  title       String          @db.VarChar(180)
+  bodyMarkdown String         @map("body_markdown")
+  sortOrder   Int             @default(0) @map("sort_order")
+  visible     Boolean         @default(true)
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  media       TimelineEntryMedia[]
+  links       TimelineEntryLink[]
+  projectRefs TimelineEntryProject[]
+
+  @@index([visible, eventDate, sortOrder])
+  @@map("timeline_entries")
+}
+
+model TimelineEntryMedia {
+  id             String        @id @default(uuid()) @db.Uuid
+  timelineEntryId String       @map("timeline_entry_id") @db.Uuid
+  mediaId        String        @map("media_id") @db.Uuid
+  sortOrder      Int           @default(0) @map("sort_order")
+  timelineEntry  TimelineEntry @relation(fields: [timelineEntryId], references: [id], onDelete: Cascade)
+  media          MediaAsset   @relation(fields: [mediaId], references: [id], onDelete: Restrict)
+
+  @@unique([timelineEntryId, mediaId])
+  @@index([timelineEntryId, sortOrder])
+  @@map("timeline_entry_media")
+}
+
+model TimelineEntryLink {
+  id             String        @id @default(uuid()) @db.Uuid
+  timelineEntryId String       @map("timeline_entry_id") @db.Uuid
+  label          String        @db.VarChar(120)
+  url            String        @db.VarChar(500)
+  sortOrder      Int           @default(0) @map("sort_order")
+  timelineEntry  TimelineEntry @relation(fields: [timelineEntryId], references: [id], onDelete: Cascade)
+
+  @@index([timelineEntryId, sortOrder])
+  @@map("timeline_entry_links")
+}
+
+model TimelineEntryProject {
+  id             String        @id @default(uuid()) @db.Uuid
+  timelineEntryId String       @map("timeline_entry_id") @db.Uuid
+  projectId      String        @map("project_id") @db.Uuid
+  sortOrder      Int           @default(0) @map("sort_order")
+  timelineEntry  TimelineEntry @relation(fields: [timelineEntryId], references: [id], onDelete: Cascade)
+  project        Project       @relation(fields: [projectId], references: [id], onDelete: Restrict)
+
+  @@unique([timelineEntryId, projectId])
+  @@index([timelineEntryId, sortOrder])
+  @@map("timeline_entry_projects")
 }

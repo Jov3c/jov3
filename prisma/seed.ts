@@ -9,6 +9,8 @@ import { seedBlogDefaults } from '../server/services/blog-defaults';
 import { seedCommunityDefaults } from '../server/services/community-defaults';
 import { seedFriendLinkDefaults } from '../server/services/friend-link-defaults';
 import { seedProjectDefaults } from '../server/services/project-defaults';
+import { seedCvDefaults } from '../server/services/cv-defaults';
+import { seedTimelineDefaults } from '../server/services/timeline-defaults';
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) throw new Error('DATABASE_URL is required');
@@ -24,6 +26,8 @@ try {
   await seedBlogDefaults(prisma);
   await seedCommunityDefaults(prisma);
   await seedFriendLinkDefaults(prisma);
+  await seedCvDefaults(prisma);
+  await seedTimelineDefaults(prisma);
   process.stdout.write(
     result.created ? 'Administrator created.\n' : 'Administrator already exists.\n',
   );
