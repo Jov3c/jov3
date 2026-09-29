@@ -51,6 +51,8 @@ useSeoMeta({
         <div class="story-card">
           <p>JOV3 / {{ entry.dateLabel }}</p>
           <h2>{{ entry.title }}</h2>
+          <!-- The public API returns HTML from the shared sanitized Markdown renderer. -->
+          <!-- eslint-disable-next-line vue/no-v-html -->
           <div class="timeline-body" v-html="entry.bodyHtml" />
           <div v-if="entry.media.length" class="timeline-media" aria-label="Timeline images">
             <img

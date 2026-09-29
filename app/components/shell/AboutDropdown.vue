@@ -17,6 +17,11 @@ function close() {
   isOpen.value = false;
 }
 
+function handleFocusout(event: FocusEvent) {
+  const nextTarget = event.relatedTarget as Node | null;
+  if (root.value && nextTarget && !root.value.contains(nextTarget)) close();
+}
+
 function handlePointerDown(event: PointerEvent) {
   if (root.value && !root.value.contains(event.target as Node)) close();
 }
@@ -37,7 +42,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="root" class="about-menu" @focusout="isOpen = false">
+  <div ref="root" class="about-menu" @focusout="handleFocusout">
     <button
       class="nav-link nav-link--button"
       :class="{ 'router-link-active': isAboutRoute }"

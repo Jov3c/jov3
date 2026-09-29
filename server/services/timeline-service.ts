@@ -1,7 +1,6 @@
 import { renderMarkdown } from '../../shared/markdown';
 import {
   timelineEntrySchema,
-  timelineEntryUpdateSchema,
   type TimelineEntryInput,
   type TimelineEntryUpdateInput,
 } from '../../shared/schemas/cv-timeline';

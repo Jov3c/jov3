@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { TimelineError, TimelineService } from '../../server/services/timeline-service';
+import { TimelineService } from '../../server/services/timeline-service';
+import type { TimelineError } from '../../server/services/timeline-service';
 
 const entry = {
   id: '00000000-0000-4000-8000-000000000020',

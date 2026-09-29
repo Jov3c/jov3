@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { CvError, CvService } from '../../server/services/cv-service';
+import { CvService } from '../../server/services/cv-service';
+import type { CvError } from '../../server/services/cv-service';
 
 function createAggregate(isPublic = true) {
   return {

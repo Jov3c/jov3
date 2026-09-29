@@ -40,6 +40,9 @@ async function signOut() {
             <NuxtLink v-else-if="item === 'Projects'" class="admin-nav-link" to="/admin/projects">
               <i>·</i> {{ item }}
             </NuxtLink>
+            <NuxtLink v-else-if="item === 'Timeline'" class="admin-nav-link" to="/admin/timeline">
+              <i>·</i> {{ item }}
+            </NuxtLink>
             <NuxtLink v-else-if="item === 'Posts'" class="admin-nav-link" to="/admin/posts">
               <i>·</i> {{ item }}
             </NuxtLink>
@@ -64,6 +67,9 @@ async function signOut() {
               class="admin-nav-link"
               to="/admin/home#social-links"
             >
+              <i>·</i> {{ item }}
+            </NuxtLink>
+            <NuxtLink v-else-if="item === 'CV'" class="admin-nav-link" to="/admin/cv">
               <i>·</i> {{ item }}
             </NuxtLink>
             <span v-else class="admin-nav-link admin-nav-link--disabled">
