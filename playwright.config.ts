@@ -8,7 +8,8 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   use: {
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL: 'https://127.0.0.1:3000',
+    ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
   },
   projects: [
@@ -32,8 +33,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm dev --host 127.0.0.1 --port 3000',
-    url: 'http://127.0.0.1:3000',
+    command: 'pnpm dev --host 127.0.0.1 --port 3000 --https --https.domains=127.0.0.1,localhost',
+    url: 'https://127.0.0.1:3000',
+    ignoreHTTPSErrors: true,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

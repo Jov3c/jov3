@@ -50,7 +50,10 @@ test('protected admin APIs reject anonymous requests', async ({ playwright }, te
     testInfo.project.name !== 'desktop-chromium',
     'API contract runs once per browser engine',
   );
-  const anonymous = await playwright.request.newContext({ baseURL: 'http://127.0.0.1:3000' });
+  const anonymous = await playwright.request.newContext({
+    baseURL: 'https://127.0.0.1:3000',
+    ignoreHTTPSErrors: true,
+  });
   const response = await anonymous.get('/api/v1/admin/session');
   expect(response.status()).toBe(401);
   await anonymous.dispose();
