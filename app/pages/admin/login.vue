@@ -2,7 +2,6 @@
 definePageMeta({ layout: 'admin-auth' });
 
 const route = useRoute();
-const admin = useAdminSession();
 const form = reactive({ email: '', password: '' });
 const isHydrated = ref(false);
 const isSubmitting = ref(false);
@@ -17,15 +16,14 @@ async function submit() {
   isSubmitting.value = true;
   errorMessage.value = '';
   try {
-    const response = await $fetch<{ data: { admin: AdminIdentity } }>('/api/v1/auth/login', {
+    await $fetch('/api/v1/auth/login', {
       method: 'POST',
       body: form,
     });
-    admin.value = response.data.admin;
     const requested = typeof route.query.redirect === 'string' ? route.query.redirect : '/admin';
     const destination =
       requested.startsWith('/admin') && requested !== '/admin/login' ? requested : '/admin';
-    await navigateTo(destination);
+    await navigateTo(destination, { external: true });
   } catch (error) {
     const fetchError = error as { data?: { error?: { message?: string } }; statusCode?: number };
     errorMessage.value =
