@@ -29,8 +29,37 @@ describe('comments and message board lifecycle', () => {
   const service = new CommunityService(new CommunityRepository(prisma), verifier);
   let commentId = '';
   let messageId = '';
+  let postId = '';
+  let categoryId = '';
+  const postSlug = `stage-seven-post-${suffix}`;
 
   beforeAll(async () => {
+    const category = await prisma.postCategory.create({
+      data: {
+        slug: `stage-seven-${suffix}`,
+        name: 'Stage Seven',
+        sortOrder: 999,
+        visible: true,
+      },
+    });
+    categoryId = category.id;
+    const post = await prisma.post.create({
+      data: {
+        slug: postSlug,
+        title: 'Stage Seven integration post',
+        excerpt: 'A post created for community integration tests.',
+        categoryId,
+        coverMediaId: null,
+        markdownBody: '# Stage Seven\n\nCommunity integration fixture.',
+        status: 'PUBLISHED',
+        publishedAt: new Date(),
+        wordCount: 4,
+        viewCount: BigInt(0),
+        seoTitle: null,
+        seoDescription: null,
+      },
+    });
+    postId = post.id;
     await prisma.articleComment.deleteMany({ where: { email: `stage07-${suffix}@example.com` } });
     await prisma.message.deleteMany({ where: { email: `stage07-${suffix}@example.com` } });
     await prisma.emailVerification.deleteMany({
@@ -42,6 +71,10 @@ describe('comments and message board lifecycle', () => {
     if (commentId)
       await prisma.articleComment.delete({ where: { id: commentId } }).catch(() => undefined);
     if (messageId) await prisma.message.delete({ where: { id: messageId } }).catch(() => undefined);
+    if (postId) await prisma.articleComment.deleteMany({ where: { postId } });
+    if (postId) await prisma.post.delete({ where: { id: postId } }).catch(() => undefined);
+    if (categoryId)
+      await prisma.postCategory.delete({ where: { id: categoryId } }).catch(() => undefined);
     await prisma.emailVerification.deleteMany({
       where: { email: `stage07-${suffix}@example.com` },
     });
@@ -51,7 +84,7 @@ describe('comments and message board lifecycle', () => {
   it('keeps comments private until email verification and enforces one reply level', async () => {
     const email = `stage07-${suffix}@example.com`;
     const submitted = await service.submitComment(
-      'server',
+      postSlug,
       {
         nickname: 'Stage Seven',
         email,
@@ -62,14 +95,14 @@ describe('comments and message board lifecycle', () => {
     );
     commentId = submitted.id;
 
-    const pending = await service.listPublicComments('server', { page: 1, pageSize: 50 });
+    const pending = await service.listPublicComments(postSlug, { page: 1, pageSize: 50 });
     expect(pending.items.some((comment) => comment.id === commentId)).toBe(false);
 
     const token = new URL(sender.messages.at(-1)!.text.split('\n')[2]!).searchParams.get('token')!;
     const verified = await verifier.verify(token);
     await service.completeEmailVerification(verified);
 
-    const published = await service.listPublicComments('server', { page: 1, pageSize: 50 });
+    const published = await service.listPublicComments(postSlug, { page: 1, pageSize: 50 });
     const comment = published.items.find((item) => item.id === commentId)!;
     expect(comment.content).toContain('<script>plain text</script>');
     expect(comment).not.toHaveProperty('email');
