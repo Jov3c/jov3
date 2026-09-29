@@ -43,10 +43,10 @@ useSeoMeta({ title: 'Dashboard — Jov3 Admin', robots: 'noindex, nofollow' });
     <section class="admin-next-step">
       <span>Next stage</span>
       <div>
-        <h2>Home & site configuration</h2>
-        <p>媒体库和邮箱验证基础已经就绪，下一步接入首页配置的数据闭环。</p>
+        <h2>Projects & README</h2>
+        <p>首页配置的数据闭环已经就绪，下一步接入项目卡片与 README 内容。</p>
       </div>
-      <b>04</b>
+      <b>05</b>
     </section>
   </div>
 </template>

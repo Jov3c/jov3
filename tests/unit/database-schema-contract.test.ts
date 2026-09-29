@@ -7,12 +7,18 @@ const schemaPath = fileURLToPath(new URL('../../prisma/schema.prisma', import.me
 const schema = readFileSync(schemaPath, 'utf8');
 
 describe('database contract', () => {
-  it.each(['AdminUser', 'AdminSession', 'SiteProfile', 'MediaAsset', 'EmailVerification'])(
-    'defines the %s model',
-    (model) => {
-      expect(schema).toContain(`model ${model} {`);
-    },
-  );
+  it.each([
+    'AdminUser',
+    'AdminSession',
+    'SiteProfile',
+    'MediaAsset',
+    'EmailVerification',
+    'HomeProfile',
+    'HomeEntry',
+    'SocialLink',
+  ])('defines the %s model', (model) => {
+    expect(schema).toContain(`model ${model} {`);
+  });
 
   it('maps sensitive session state to hash-only storage', () => {
     expect(schema).toContain('tokenHash');
@@ -27,6 +33,9 @@ describe('database contract', () => {
     expect(schema).toContain('@@map("site_profile")');
     expect(schema).toContain('@@map("media_assets")');
     expect(schema).toContain('@@map("email_verifications")');
+    expect(schema).toContain('@@map("home_profile")');
+    expect(schema).toContain('@@map("home_entries")');
+    expect(schema).toContain('@@map("social_links")');
   });
 
   it('stores email verification tokens as hashes with expiry state', () => {

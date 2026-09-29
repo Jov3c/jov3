@@ -7,6 +7,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum EntryTargetType {
+  INTERNAL
+  EXTERNAL
+}
+
 model AdminUser {
   id           String         @id @default(uuid()) @db.Uuid
   email        String         @unique @db.VarChar(254)
@@ -56,6 +61,7 @@ model MediaAsset {
   sha256       String?  @db.Char(64)
   altText      String?  @map("alt_text") @db.VarChar(300)
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  homeProfiles HomeProfile[]
 
   @@map("media_assets")
 }
@@ -73,4 +79,49 @@ model EmailVerification {
   @@index([expiresAt])
   @@index([purpose, entityId])
   @@map("email_verifications")
+}
+
+model HomeProfile {
+  id            String      @id @default(uuid()) @db.Uuid
+  nickname      String      @db.VarChar(80)
+  role          String      @db.VarChar(160)
+  intro         String
+  avatarMediaId String?     @map("avatar_media_id") @db.Uuid
+  statusText    String?     @map("status_text") @db.VarChar(120)
+  statusVisible Boolean     @default(true) @map("status_visible")
+  updatedAt     DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  avatarMedia   MediaAsset? @relation(fields: [avatarMediaId], references: [id], onDelete: SetNull)
+
+  @@map("home_profile")
+}
+
+model HomeEntry {
+  id          String          @id @default(uuid()) @db.Uuid
+  title       String          @db.VarChar(80)
+  description String          @db.VarChar(180)
+  icon        String?         @db.VarChar(80)
+  url         String          @db.VarChar(500)
+  targetType  EntryTargetType @default(INTERNAL) @map("target_type")
+  openNewTab  Boolean         @default(false) @map("open_new_tab")
+  sortOrder   Int             @default(0) @map("sort_order")
+  visible     Boolean         @default(true)
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([visible, sortOrder])
+  @@map("home_entries")
+}
+
+model SocialLink {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(80)
+  icon      String?  @db.VarChar(80)
+  url       String   @db.VarChar(500)
+  sortOrder Int      @default(0) @map("sort_order")
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([visible, sortOrder])
+  @@map("social_links")
 }

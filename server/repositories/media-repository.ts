@@ -52,8 +52,7 @@ export class MediaRepository {
     return this.prisma.mediaAsset.delete({ where: { id } });
   }
 
-  /** Later content tables will replace this with relation-aware reference checks. */
-  async countReferences(_id: string) {
-    return 0;
+  async countReferences(id: string) {
+    return this.prisma.homeProfile.count({ where: { avatarMediaId: id } });
   }
 }
