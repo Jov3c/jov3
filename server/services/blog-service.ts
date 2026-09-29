@@ -49,7 +49,9 @@ export class BlogService {
       category: query.category.trim().toLowerCase(),
     });
     return {
-      items: result.items.map(toPublicListDto),
+      items: result.items.map((post) =>
+        toPublicListDto(post, result.commentCounts.get(post.id) ?? 0),
+      ),
       total: result.total,
       stats: { totalPosts: result.total, totalWords: result.totalWords },
     };
@@ -59,7 +61,7 @@ export class BlogService {
     const current = await this.repository.findPublicPostBySlug(slug.trim().toLowerCase());
     if (!current) throw new BlogError(404, 'POST_NOT_FOUND', 'Post not found');
     const post = await this.repository.incrementPostViewCount(current.id);
-    return toPublicDetailDto(post);
+    return toPublicDetailDto(post, await this.repository.countPublishedComments(post.id));
   }
 
   async listPublicCategories() {
@@ -376,7 +378,7 @@ function toMediaDto(media: { id: string; publicUrl: string; altText: string | nu
   return media ? { id: media.id, publicUrl: media.publicUrl, altText: media.altText } : null;
 }
 
-function toPublicListDto(post: BlogPostRecord) {
+function toPublicListDto(post: BlogPostRecord, commentCount = 0) {
   return {
     id: post.id,
     slug: post.slug,
@@ -388,13 +390,13 @@ function toPublicListDto(post: BlogPostRecord) {
     publishedAt: post.publishedAt?.toISOString() ?? null,
     wordCount: post.wordCount,
     viewCount: Number(post.viewCount),
-    commentCount: 0,
+    commentCount,
   };
 }
 
-function toPublicDetailDto(post: BlogPostRecord) {
+function toPublicDetailDto(post: BlogPostRecord, commentCount = 0) {
   return {
-    ...toPublicListDto(post),
+    ...toPublicListDto(post, commentCount),
     contentHtml: renderMarkdown(post.markdownBody),
     seoTitle: post.seoTitle,
     seoDescription: post.seoDescription,

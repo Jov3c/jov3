@@ -103,6 +103,7 @@ export class EmailVerificationService {
       verified: true,
       purpose: record.purpose as EmailVerificationPurpose,
       entityId: record.entityId,
+      email: record.email,
       verifiedAt: now,
     };
   }

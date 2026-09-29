@@ -19,6 +19,8 @@ describe('database contract', () => {
     'Project',
     'PostCategory',
     'Post',
+    'ArticleComment',
+    'Message',
   ])('defines the %s model', (model) => {
     expect(schema).toContain(`model ${model} {`);
   });
@@ -42,6 +44,8 @@ describe('database contract', () => {
     expect(schema).toContain('@@map("projects")');
     expect(schema).toContain('@@map("post_categories")');
     expect(schema).toContain('@@map("posts")');
+    expect(schema).toContain('@@map("article_comments")');
+    expect(schema).toContain('@@map("messages")');
   });
 
   it('stores email verification tokens as hashes with expiry state', () => {

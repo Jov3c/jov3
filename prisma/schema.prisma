@@ -24,6 +24,19 @@ enum PostStatus {
   PUBLISHED
 }
 
+enum ModerationStatus {
+  PENDING_EMAIL
+  PUBLISHED
+  HIDDEN
+  SPAM
+  DELETED
+}
+
+enum AuthorType {
+  VISITOR
+  ADMIN
+}
+
 model AdminUser {
   id           String         @id @default(uuid()) @db.Uuid
   email        String         @unique @db.VarChar(254)
@@ -190,8 +203,51 @@ model Post {
   updatedAt      DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
   category       PostCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   coverMedia     MediaAsset?  @relation("PostCover", fields: [coverMediaId], references: [id], onDelete: SetNull)
+  comments       ArticleComment[]
 
   @@index([status, publishedAt])
   @@index([categoryId])
   @@map("posts")
+}
+
+model ArticleComment {
+  id         String           @id @default(uuid()) @db.Uuid
+  postId     String           @map("post_id") @db.Uuid
+  parentId   String?          @map("parent_id") @db.Uuid
+  authorType AuthorType       @default(VISITOR) @map("author_type")
+  nickname   String           @db.VarChar(80)
+  email      String?          @db.VarChar(254)
+  content    String
+  status     ModerationStatus
+  verifiedAt DateTime?        @map("verified_at") @db.Timestamptz(6)
+  ipHash     String?          @map("ip_hash") @db.Char(64)
+  createdAt  DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  post       Post             @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent     ArticleComment?  @relation("ArticleCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies    ArticleComment[] @relation("ArticleCommentReplies")
+
+  @@index([postId, status, createdAt])
+  @@index([parentId])
+  @@map("article_comments")
+}
+
+model Message {
+  id         String           @id @default(uuid()) @db.Uuid
+  parentId   String?          @map("parent_id") @db.Uuid
+  authorType AuthorType       @default(VISITOR) @map("author_type")
+  nickname   String           @db.VarChar(80)
+  email      String?          @db.VarChar(254)
+  content    String
+  status     ModerationStatus
+  verifiedAt DateTime?        @map("verified_at") @db.Timestamptz(6)
+  ipHash     String?          @map("ip_hash") @db.Char(64)
+  createdAt  DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  parent     Message?         @relation("MessageReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies    Message[]        @relation("MessageReplies")
+
+  @@index([status, createdAt])
+  @@index([parentId])
+  @@map("messages")
 }

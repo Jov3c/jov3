@@ -3,7 +3,9 @@ import { readBody } from 'h3';
 import { verifyEmailSchema } from '../../../../../shared/schemas/email-verification';
 import { apiError } from '../../../../utils/api-response';
 import { EmailVerificationError } from '../../../../services/email-verification-service';
+import { CommunityError } from '../../../../services/community-service';
 import { useEmailVerificationService } from '../../../../utils/email-verification';
+import { useCommunityService } from '../../../../utils/community';
 
 export default defineEventHandler(async (event) => {
   const parsed = verifyEmailSchema.safeParse(await readBody(event));
@@ -18,10 +20,16 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    await useEmailVerificationService().verify(parsed.data.token);
+    const result = await useEmailVerificationService().verify(parsed.data.token);
+    if (result.purpose === 'COMMENT' || result.purpose === 'MESSAGE') {
+      await useCommunityService().completeEmailVerification(result);
+    }
     return { data: { verified: true } };
   } catch (error) {
     if (error instanceof EmailVerificationError) {
+      return apiError(event, error.statusCode, error.code, error.message);
+    }
+    if (error instanceof CommunityError) {
       return apiError(event, error.statusCode, error.code, error.message);
     }
     throw error;

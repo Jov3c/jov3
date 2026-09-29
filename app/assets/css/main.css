@@ -3984,3 +3984,448 @@ a.friend-card:hover {
     transition: none;
   }
 }
+
+/* Stage 07 — comments and guestbook */
+.message-hero {
+  padding: 52px 0 24px;
+}
+
+.message-hero h1 {
+  margin: 0;
+  font-size: clamp(44px, 7vw, 74px);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+}
+
+.message-hero > p:last-child {
+  max-width: 650px;
+  margin: 18px 0 0;
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.comment-section,
+.message-board {
+  display: grid;
+  gap: 14px;
+}
+
+.community-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 0 12px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.community-section-heading .eyebrow {
+  margin-bottom: 6px;
+}
+
+.community-section-heading h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+}
+
+.community-section-heading > span {
+  color: var(--color-muted);
+  font-size: 0.7rem;
+}
+
+.community-form,
+.message-panel {
+  padding: 20px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+}
+
+.community-form {
+  display: grid;
+  gap: 10px;
+}
+
+.community-form__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.community-form__heading h2,
+.community-form__heading h3 {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+.community-form__heading span {
+  color: var(--color-muted);
+  font-size: 0.64rem;
+}
+
+.community-form textarea,
+.community-form input,
+.moderation-reply textarea,
+.moderation-toolbar select {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.community-form textarea,
+.moderation-reply textarea {
+  min-height: 112px;
+  padding: 12px 13px;
+  resize: vertical;
+  line-height: 1.65;
+}
+
+.community-form input {
+  min-height: 40px;
+  padding: 0 12px;
+}
+
+.community-form textarea:focus,
+.community-form input:focus,
+.moderation-reply textarea:focus,
+.moderation-toolbar select:focus {
+  outline: none;
+  border-color: #bec8b9;
+  box-shadow: 0 0 0 3px rgb(127 138 118 / 8%);
+}
+
+.community-form__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.community-form__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.community-form__actions p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+}
+
+.community-form__replying button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  font: inherit;
+}
+
+.community-notice,
+.community-error {
+  margin: 0;
+  padding: 9px 11px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+}
+
+.community-notice {
+  background: #edf5ed;
+  color: #557259;
+}
+
+.community-error {
+  background: #fff0ee;
+  color: #9b5c54;
+}
+
+.community-list {
+  display: grid;
+  gap: 10px;
+}
+
+.community-card {
+  padding: 18px 20px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+}
+
+.community-card > header,
+.community-reply > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.community-card > header > div,
+.community-reply > header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.community-card strong,
+.community-reply strong {
+  font-size: 0.78rem;
+}
+
+.community-card header span:not(.community-badge),
+.community-reply time {
+  color: var(--color-muted);
+  font-size: 0.66rem;
+}
+
+.community-card > p,
+.community-reply > p {
+  margin: 10px 0 0;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.community-badge {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 0.6rem;
+  font-weight: 800;
+}
+
+.community-reply-link {
+  padding: 0;
+  margin-top: 10px;
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.66rem;
+}
+
+.community-reply-link:hover {
+  color: var(--color-accent);
+}
+
+.community-replies {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px solid var(--color-line);
+}
+
+.community-reply {
+  padding: 12px 14px;
+  border-left: 2px solid #d7ded3;
+  border-radius: 0 10px 10px 0;
+  background: var(--color-bg);
+}
+
+.community-reply > p {
+  margin-top: 6px;
+  font-size: 0.76rem;
+}
+
+.community-empty,
+.community-list-skeleton {
+  padding: 22px;
+  margin: 0;
+  border: 1px dashed var(--color-line);
+  border-radius: var(--radius);
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.community-list-skeleton {
+  display: grid;
+  gap: 10px;
+  border-style: solid;
+}
+
+.community-list-skeleton span {
+  display: block;
+  height: 66px;
+  border-radius: 9px;
+  background: linear-gradient(90deg, #edf0eb 25%, #f8f9f6 50%, #edf0eb 75%);
+  background-size: 220% 100%;
+  animation: community-shimmer 1.5s linear infinite;
+}
+
+@keyframes community-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -20% 0;
+  }
+}
+
+.message-panel__heading {
+  margin-bottom: 2px;
+}
+
+.moderation-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.moderation-toolbar h2 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+
+.moderation-toolbar label {
+  display: grid;
+  min-width: 150px;
+  gap: 6px;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+.moderation-toolbar select {
+  min-height: 37px;
+  padding: 0 10px;
+  font-size: 0.74rem;
+}
+
+.moderation-list {
+  display: grid;
+  gap: 10px;
+}
+
+.moderation-card {
+  padding: 18px 20px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+}
+
+.moderation-card[data-status='hidden'],
+.moderation-card[data-status='spam'] {
+  opacity: 0.72;
+}
+
+.moderation-card__header,
+.moderation-card__header > div,
+.moderation-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.moderation-card__header {
+  justify-content: space-between;
+}
+
+.moderation-card__header > div {
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.moderation-card__header strong {
+  font-size: 0.82rem;
+}
+
+.moderation-card__header span:not(.moderation-status) {
+  color: var(--color-muted);
+  font-size: 0.68rem;
+}
+
+.moderation-status {
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 0.62rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.moderation-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 0;
+  color: var(--color-muted);
+  font-size: 0.66rem;
+}
+
+.moderation-card__meta a:hover {
+  color: var(--color-accent);
+}
+
+.moderation-card__content {
+  margin: 12px 0 0;
+  color: var(--color-text);
+  font-size: 0.82rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.moderation-card__actions {
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.moderation-reply {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: end;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--color-line);
+}
+
+.moderation-reply textarea {
+  min-height: 58px;
+  font-size: 0.76rem;
+}
+
+@media (max-width: 660px) {
+  .community-form__fields,
+  .moderation-reply {
+    grid-template-columns: 1fr;
+  }
+
+  .community-form__heading,
+  .community-form__actions,
+  .moderation-toolbar,
+  .moderation-card__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .community-form__actions .button {
+    align-self: stretch;
+  }
+
+  .moderation-toolbar label {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community-list-skeleton span {
+    animation: none;
+    background: #edf0eb;
+  }
+}

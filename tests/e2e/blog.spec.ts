@@ -34,7 +34,7 @@ test('blog utilities preserve archive, links, and guestbook semantics', async ({
   await expect(page.getByText('Mori', { exact: true })).toBeVisible();
 
   await page.goto('/blog/message');
-  await expect(page.getByRole('heading', { name: 'Leave a small note.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Message', exact: true })).toBeVisible();
   await expect(page.getByText('这个站的整体节奏很舒服')).toBeVisible();
-  await expect(page.getByText(/当前阶段仅展示表单/)).toBeVisible();
+  await expect(page.getByText(/验证邮箱后公开/)).toBeVisible();
 });

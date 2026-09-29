@@ -50,7 +50,19 @@ export class BlogRepository {
       this.prisma.post.count({ where }),
       this.prisma.post.aggregate({ where, _sum: { wordCount: true } }),
     ]);
-    return { items, total, totalWords: aggregate._sum.wordCount ?? 0 };
+    const commentCounts = items.length
+      ? await this.prisma.articleComment.groupBy({
+          by: ['postId'],
+          where: { postId: { in: items.map((post) => post.id) }, status: 'PUBLISHED' },
+          _count: { _all: true },
+        })
+      : [];
+    return {
+      items,
+      total,
+      totalWords: aggregate._sum.wordCount ?? 0,
+      commentCounts: new Map(commentCounts.map((item) => [item.postId, item._count._all])),
+    };
   }
 
   findPublicPostBySlug(slug: string) {
@@ -197,6 +209,10 @@ export class BlogRepository {
 
   countPostsInCategory(id: string) {
     return this.prisma.post.count({ where: { categoryId: id } });
+  }
+
+  countPublishedComments(postId: string) {
+    return this.prisma.articleComment.count({ where: { postId, status: 'PUBLISHED' } });
   }
 
   findMedia(id: string) {

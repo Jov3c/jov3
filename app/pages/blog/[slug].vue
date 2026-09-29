@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BlogChrome from '~/components/blog/BlogChrome.vue';
+import CommentSection from '~/components/blog/CommentSection.vue';
 import type { PublicPostDetail } from '~/types/blog';
 import { formatPostDate } from '~/utils/content';
 
@@ -49,5 +50,6 @@ useSeoMeta({
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div class="article-body readme__content" v-html="article.contentHtml" />
     </article>
+    <CommentSection :slug="article.slug" />
   </BlogChrome>
 </template>

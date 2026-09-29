@@ -6,6 +6,7 @@ import { PrismaClient } from '../server/generated/prisma/client';
 import { bootstrapAdmin, parseBootstrapConfig } from '../server/services/admin-bootstrap';
 import { ensureHomeDefaults } from '../server/services/home-defaults';
 import { seedBlogDefaults } from '../server/services/blog-defaults';
+import { seedCommunityDefaults } from '../server/services/community-defaults';
 import { seedProjectDefaults } from '../server/services/project-defaults';
 
 const databaseUrl = process.env.DATABASE_URL;
@@ -20,6 +21,7 @@ try {
   await ensureHomeDefaults(prisma);
   await seedProjectDefaults(prisma);
   await seedBlogDefaults(prisma);
+  await seedCommunityDefaults(prisma);
   process.stdout.write(
     result.created ? 'Administrator created.\n' : 'Administrator already exists.\n',
   );

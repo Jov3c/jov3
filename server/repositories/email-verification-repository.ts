@@ -23,6 +23,7 @@ export interface EmailVerificationRepositoryContract {
   ): Promise<{
     purpose: string;
     entityId: string;
+    email: string;
   } | null>;
 }
 
@@ -54,6 +55,9 @@ export class EmailVerificationRepository implements EmailVerificationRepositoryC
       data: { consumedAt: now },
     });
     if (result.count !== 1) return null;
-    return this.prisma.emailVerification.findUnique({ where: { tokenHash } });
+    return this.prisma.emailVerification.findUnique({
+      where: { tokenHash },
+      select: { purpose: true, entityId: true, email: true },
+    });
   }
 }

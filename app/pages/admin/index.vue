@@ -5,7 +5,7 @@ const admin = useAdminSession();
 const overview = [
   { label: 'Published posts', value: '—', note: 'Available in Stage 06' },
   { label: 'Projects', value: '—', note: 'Manage in Projects' },
-  { label: 'Pending reviews', value: '—', note: 'Available in Stage 08' },
+  { label: 'Pending reviews', value: '—', note: 'Review in Comments / Messages' },
   { label: 'Site visits', value: '—', note: 'Available in Stage 11' },
 ];
 
@@ -43,10 +43,10 @@ useSeoMeta({ title: 'Dashboard — Jov3 Admin', robots: 'noindex, nofollow' });
     <section class="admin-next-step">
       <span>Next stage</span>
       <div>
-        <h2>Comments & message board</h2>
-        <p>文章、分类、发布状态和 Archive 已接入，下一阶段将完成评论与留言审核。</p>
+        <h2>Friend links & applications</h2>
+        <p>评论、留言、邮箱验证和审核已接入，下一阶段将完成友链与访客申请。</p>
       </div>
-      <b>07</b>
+      <b>08</b>
     </section>
   </div>
 </template>
