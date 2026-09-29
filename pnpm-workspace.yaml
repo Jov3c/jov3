@@ -7,6 +7,7 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - nodemailer@10.0.12
+  - '@types/sanitize-html@2.16.2'
 
 overrides:
   '@bomb.sh/tab': 0.0.22

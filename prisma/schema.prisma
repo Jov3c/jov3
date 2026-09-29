@@ -12,6 +12,13 @@ enum EntryTargetType {
   EXTERNAL
 }
 
+enum ProjectStatus {
+  BUILDING
+  ACTIVE
+  DONE
+  PAUSED
+}
+
 model AdminUser {
   id           String         @id @default(uuid()) @db.Uuid
   email        String         @unique @db.VarChar(254)
@@ -124,4 +131,23 @@ model SocialLink {
 
   @@index([visible, sortOrder])
   @@map("social_links")
+}
+
+model Project {
+  id             String        @id @default(uuid()) @db.Uuid
+  slug           String        @unique @db.VarChar(120)
+  name           String        @db.VarChar(120)
+  summary        String        @db.VarChar(400)
+  status         ProjectStatus
+  techStack      String[]      @map("tech_stack")
+  githubUrl      String?       @map("github_url") @db.VarChar(500)
+  demoUrl        String?       @map("demo_url") @db.VarChar(500)
+  readmeMarkdown String        @map("readme_markdown")
+  sortOrder      Int           @default(0) @map("sort_order")
+  visible        Boolean       @default(true)
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([visible, sortOrder])
+  @@map("projects")
 }

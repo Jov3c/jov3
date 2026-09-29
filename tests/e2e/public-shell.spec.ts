@@ -28,8 +28,14 @@ test('projects open a README-style detail page', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: 'Selected work.' })).toBeVisible();
   await page.getByRole('link', { name: /Signal Daily/ }).click();
-  await expect(page).toHaveURL(/\/projects\/signal$/);
-  await expect(page.getByRole('heading', { name: 'Signal Daily' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Why' })).toBeVisible();
+  await expect(page).toHaveURL(/\/projects\/signal-daily$/);
+  await expect(
+    page.locator('.project-detail__hero').getByRole('heading', { name: 'Signal Daily' }),
+  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Features' })).toBeVisible();
+  await expect(page.locator('.project-actions [aria-disabled="true"]')).toHaveAttribute(
+    'title',
+    '暂无在线预览',
+  );
   await expectNoHorizontalOverflow(page);
 });

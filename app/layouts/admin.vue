@@ -37,6 +37,9 @@ async function signOut() {
             <NuxtLink v-else-if="item === 'Homepage'" class="admin-nav-link" to="/admin/home">
               <i>·</i> {{ item }}
             </NuxtLink>
+            <NuxtLink v-else-if="item === 'Projects'" class="admin-nav-link" to="/admin/projects">
+              <i>·</i> {{ item }}
+            </NuxtLink>
             <NuxtLink
               v-else-if="item === 'Social Links'"
               class="admin-nav-link"

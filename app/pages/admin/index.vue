@@ -4,7 +4,7 @@ definePageMeta({ layout: 'admin', middleware: 'admin' });
 const admin = useAdminSession();
 const overview = [
   { label: 'Published posts', value: '—', note: 'Available in Stage 06' },
-  { label: 'Projects', value: '—', note: 'Available in Stage 05' },
+  { label: 'Projects', value: '—', note: 'Manage in Projects' },
   { label: 'Pending reviews', value: '—', note: 'Available in Stage 08' },
   { label: 'Site visits', value: '—', note: 'Available in Stage 11' },
 ];
@@ -44,9 +44,9 @@ useSeoMeta({ title: 'Dashboard — Jov3 Admin', robots: 'noindex, nofollow' });
       <span>Next stage</span>
       <div>
         <h2>Projects & README</h2>
-        <p>首页配置的数据闭环已经就绪，下一步接入项目卡片与 README 内容。</p>
+        <p>项目卡片、公开详情与 README 管理已经接入，可以从左侧 Projects 开始维护。</p>
       </div>
-      <b>05</b>
+      <b>06</b>
     </section>
   </div>
 </template>
