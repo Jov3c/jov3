@@ -43,10 +43,10 @@ useSeoMeta({ title: 'Dashboard — Jov3 Admin', robots: 'noindex, nofollow' });
     <section class="admin-next-step">
       <span>Next stage</span>
       <div>
-        <h2>Friend links & applications</h2>
-        <p>评论、留言、邮箱验证和审核已接入，下一阶段将完成友链与访客申请。</p>
+        <h2>CV & timeline dataization</h2>
+        <p>友链申请、邮箱验证和社区审核已闭环，下一阶段将把 CV 与 Timeline 接入真实数据。</p>
       </div>
-      <b>08</b>
+      <b>09</b>
     </section>
   </div>
 </template>

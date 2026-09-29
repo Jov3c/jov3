@@ -1245,6 +1245,399 @@ a.friend-card:hover {
   font-weight: 650;
 }
 
+.links-hero {
+  padding: 12px 0 24px;
+}
+
+.links-hero__eyebrow {
+  margin: 0 0 8px;
+  color: var(--color-accent);
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.links-hero h1 {
+  margin: 0;
+  font-size: clamp(2.7rem, 8vw, 5.8rem);
+  letter-spacing: -0.08em;
+  line-height: 0.95;
+}
+
+.links-hero > p:last-child {
+  max-width: 520px;
+  margin: 18px 0 0;
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  line-height: 1.9;
+}
+
+.friend-links-section {
+  margin-top: 28px;
+}
+
+.friend-links-section__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.friend-links-section__header h2 {
+  margin: 0;
+  font-size: 1.12rem;
+  letter-spacing: -0.03em;
+}
+
+.friend-links-section__header > span {
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.friend-link-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.friend-link-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  min-height: 108px;
+  padding: 17px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.friend-link-card:hover {
+  border-color: #b9c4b5;
+  transform: translateY(-2px);
+}
+
+.friend-link-card__avatar {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
+.friend-link-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-link-card__body {
+  min-width: 0;
+}
+
+.friend-link-card__body strong,
+.friend-link-card__body small,
+.friend-link-card__body em {
+  display: block;
+}
+
+.friend-link-card__body strong {
+  overflow: hidden;
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.friend-link-card__body small {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 5px;
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.friend-link-card__body em {
+  overflow: hidden;
+  margin-top: 6px;
+  color: var(--color-accent);
+  font-size: 0.63rem;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.friend-link-card > b {
+  align-self: start;
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+.friend-link-grid--skeleton span {
+  display: block;
+  height: 108px;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, #edf0eb 25%, #f8f9f6 50%, #edf0eb 75%);
+  background-size: 220% 100%;
+  animation: community-shimmer 1.5s linear infinite;
+}
+
+.friend-link-apply {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1.3fr);
+  gap: 26px;
+  padding: 24px;
+  margin-top: 42px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+}
+
+.friend-link-apply h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.friend-link-apply > div > p:last-child {
+  margin: 10px 0 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.75;
+}
+
+.friend-link-apply__form {
+  display: grid;
+  gap: 11px;
+}
+
+.friend-link-apply__form label {
+  display: grid;
+  gap: 6px;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.friend-link-apply__form input,
+.friend-link-apply__form textarea {
+  width: 100%;
+  min-height: 38px;
+  padding: 9px 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.friend-link-apply__form textarea {
+  resize: vertical;
+}
+
+.friend-link-apply__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.friend-link-apply__actions .admin-notice,
+.friend-link-apply__actions .admin-error {
+  flex: 1;
+  min-width: 180px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+.friend-links-admin {
+  display: grid;
+  gap: 16px;
+}
+
+.friend-link-create-panel {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1.3fr);
+  gap: 26px;
+  padding: 22px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+}
+
+.friend-link-create-panel h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.friend-link-create-panel p:last-child {
+  margin: 9px 0 0;
+  color: var(--color-muted);
+  font-size: 0.74rem;
+  line-height: 1.7;
+}
+
+.friend-link-create-form {
+  display: grid;
+  gap: 11px;
+}
+
+.friend-link-create-form label:not(.friend-link-checkbox) {
+  display: grid;
+  gap: 6px;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.friend-link-create-form input:not([type='checkbox']),
+.friend-link-create-form select {
+  min-height: 37px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.74rem;
+}
+
+.friend-link-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-muted);
+  font-size: 0.7rem;
+}
+
+.friend-link-tabs {
+  display: flex;
+  gap: 5px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.friend-link-tabs button {
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.friend-link-tabs button.is-active {
+  border-bottom-color: var(--color-accent);
+  color: var(--color-deep);
+}
+
+.friend-link-admin-list {
+  display: grid;
+  gap: 10px;
+}
+
+.friend-link-admin-card {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+}
+
+.friend-link-admin-card__avatar {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 0.7rem;
+  font-weight: 850;
+}
+
+.friend-link-admin-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-link-admin-card__body header,
+.friend-link-admin-card__body header > div,
+.friend-link-admin-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.friend-link-admin-card__body header {
+  justify-content: space-between;
+}
+
+.friend-link-admin-card__body header > div {
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.friend-link-admin-card__body strong {
+  font-size: 0.84rem;
+}
+
+.friend-link-admin-card__body header a,
+.friend-link-admin-card__body small {
+  color: var(--color-muted);
+  font-size: 0.67rem;
+}
+
+.friend-link-admin-card__body p {
+  margin: 9px 0 0;
+  color: var(--color-text);
+  font-size: 0.77rem;
+}
+
+.friend-link-admin-card__body small {
+  display: block;
+  margin-top: 5px;
+}
+
+.friend-link-admin-card__body blockquote {
+  padding-left: 10px;
+  margin: 10px 0 0;
+  border-left: 2px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  line-height: 1.7;
+}
+
+.friend-link-admin-card__actions {
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
 .message-form {
   padding: 24px;
   margin-bottom: 36px;
@@ -1993,8 +2386,22 @@ a.friend-card:hover {
   }
 
   .friend-grid,
+  .friend-link-grid,
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  .friend-link-apply {
+    grid-template-columns: 1fr;
+  }
+
+  .friend-link-create-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .friend-link-admin-card__body header {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .form-note {

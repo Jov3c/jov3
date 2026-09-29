@@ -21,6 +21,7 @@ describe('database contract', () => {
     'Post',
     'ArticleComment',
     'Message',
+    'FriendLink',
   ])('defines the %s model', (model) => {
     expect(schema).toContain(`model ${model} {`);
   });
@@ -46,6 +47,9 @@ describe('database contract', () => {
     expect(schema).toContain('@@map("posts")');
     expect(schema).toContain('@@map("article_comments")');
     expect(schema).toContain('@@map("messages")');
+    expect(schema).toContain('@@map("friend_links")');
+    expect(schema).toContain('enum FriendLinkStatus');
+    expect(schema).toContain('enum FriendLinkSource');
   });
 
   it('stores email verification tokens as hashes with expiry state', () => {

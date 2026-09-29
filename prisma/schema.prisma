@@ -37,6 +37,18 @@ enum AuthorType {
   ADMIN
 }
 
+enum FriendLinkStatus {
+  PENDING_EMAIL
+  PENDING_REVIEW
+  PUBLISHED
+  REJECTED
+}
+
+enum FriendLinkSource {
+  ADMIN
+  APPLICATION
+}
+
 model AdminUser {
   id           String         @id @default(uuid()) @db.Uuid
   email        String         @unique @db.VarChar(254)
@@ -88,6 +100,7 @@ model MediaAsset {
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   homeProfiles HomeProfile[]
   postCovers   Post[]       @relation("PostCover")
+  friendLinkLogos FriendLink[] @relation("FriendLinkLogo")
 
   @@map("media_assets")
 }
@@ -250,4 +263,25 @@ model Message {
   @@index([status, createdAt])
   @@index([parentId])
   @@map("messages")
+}
+
+model FriendLink {
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String          @db.VarChar(120)
+  url           String          @db.VarChar(500)
+  description   String          @db.VarChar(300)
+  logoMediaId   String?         @map("logo_media_id") @db.Uuid
+  contactEmail  String?         @map("contact_email") @db.VarChar(254)
+  applicantNote String?         @map("applicant_note") @db.VarChar(500)
+  source        FriendLinkSource
+  status        FriendLinkStatus
+  verifiedAt    DateTime?       @map("verified_at") @db.Timestamptz(6)
+  sortOrder     Int             @default(0) @map("sort_order")
+  visible       Boolean         @default(true)
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  logoMedia     MediaAsset?     @relation("FriendLinkLogo", fields: [logoMediaId], references: [id], onDelete: SetNull)
+
+  @@index([status, visible, sortOrder])
+  @@map("friend_links")
 }

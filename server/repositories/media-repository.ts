@@ -53,10 +53,11 @@ export class MediaRepository {
   }
 
   async countReferences(id: string) {
-    const [avatarReferences, coverReferences] = await Promise.all([
+    const [avatarReferences, coverReferences, friendLinkReferences] = await Promise.all([
       this.prisma.homeProfile.count({ where: { avatarMediaId: id } }),
       this.prisma.post.count({ where: { coverMediaId: id } }),
+      this.prisma.friendLink.count({ where: { logoMediaId: id } }),
     ]);
-    return avatarReferences + coverReferences;
+    return avatarReferences + coverReferences + friendLinkReferences;
   }
 }

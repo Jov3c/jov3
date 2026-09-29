@@ -7,6 +7,7 @@ import { bootstrapAdmin, parseBootstrapConfig } from '../server/services/admin-b
 import { ensureHomeDefaults } from '../server/services/home-defaults';
 import { seedBlogDefaults } from '../server/services/blog-defaults';
 import { seedCommunityDefaults } from '../server/services/community-defaults';
+import { seedFriendLinkDefaults } from '../server/services/friend-link-defaults';
 import { seedProjectDefaults } from '../server/services/project-defaults';
 
 const databaseUrl = process.env.DATABASE_URL;
@@ -22,6 +23,7 @@ try {
   await seedProjectDefaults(prisma);
   await seedBlogDefaults(prisma);
   await seedCommunityDefaults(prisma);
+  await seedFriendLinkDefaults(prisma);
   process.stdout.write(
     result.created ? 'Administrator created.\n' : 'Administrator already exists.\n',
   );
