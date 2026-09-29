@@ -8,7 +8,7 @@ const isSubmitting = ref(false);
 const errorMessage = ref('');
 
 useSeoMeta({ title: 'Admin login — Jov3', robots: 'noindex, nofollow' });
-onMounted(() => {
+onNuxtReady(() => {
   isHydrated.value = true;
 });
 
@@ -23,7 +23,7 @@ async function submit() {
     const requested = typeof route.query.redirect === 'string' ? route.query.redirect : '/admin';
     const destination =
       requested.startsWith('/admin') && requested !== '/admin/login' ? requested : '/admin';
-    await navigateTo(destination, { external: true });
+    window.location.assign(destination);
   } catch (error) {
     const fetchError = error as { data?: { error?: { message?: string } }; statusCode?: number };
     errorMessage.value =

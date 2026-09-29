@@ -15,7 +15,7 @@ async function signOut() {
   try {
     await $fetch('/api/v1/auth/logout', { method: 'POST' });
     admin.value = null;
-    await navigateTo('/admin/login');
+    window.location.assign('/admin/login');
   } finally {
     isSigningOut.value = false;
   }
