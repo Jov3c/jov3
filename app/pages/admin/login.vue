@@ -4,10 +4,14 @@ definePageMeta({ layout: 'admin-auth' });
 const route = useRoute();
 const admin = useAdminSession();
 const form = reactive({ email: '', password: '' });
+const isHydrated = ref(false);
 const isSubmitting = ref(false);
 const errorMessage = ref('');
 
 useSeoMeta({ title: 'Admin login — Jov3', robots: 'noindex, nofollow' });
+onMounted(() => {
+  isHydrated.value = true;
+});
 
 async function submit() {
   isSubmitting.value = true;
@@ -54,7 +58,7 @@ async function submit() {
         required
       />
       <p v-if="errorMessage" class="login-error" role="alert">{{ errorMessage }}</p>
-      <button class="button" type="submit" :disabled="isSubmitting">
+      <button class="button" type="submit" :disabled="!isHydrated || isSubmitting">
         {{ isSubmitting ? 'Signing in…' : 'Sign in' }}
       </button>
     </form>
