@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { CvRepository } from '../../server/repositories/cv-repository';
 import { CvService } from '../../server/services/cv-service';
+import { seedCvDefaults } from '../../server/services/cv-defaults';
 import { seedProjectDefaults } from '../../server/services/project-defaults';
 import { createPrismaClient } from '../../server/utils/prisma';
 
@@ -18,6 +19,7 @@ describe('CV lifecycle', () => {
 
   beforeAll(async () => {
     await seedProjectDefaults(prisma);
+    await seedCvDefaults(prisma);
     const profile = await prisma.cvProfile.findFirst({
       include: { projectRefs: { orderBy: { sortOrder: 'asc' } } },
     });
