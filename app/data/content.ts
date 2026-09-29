@@ -1,7 +1,6 @@
 import type {
   ArchiveEntry,
   BlogPost,
-  FootprintPlace,
   FriendLink,
   GuestbookMessage,
   Project,
@@ -291,72 +290,6 @@ export const guestbookMessages: GuestbookMessage[] = [
     content: '从博客逛到了足迹页，期待看到更多旅途记录。',
   },
   { name: 'Aster', date: '2026-09-11 09:35', content: '很喜欢这种克制又有细节的个人站。' },
-];
-
-export const footprintPlaces: FootprintPlace[] = [
-  {
-    id: 'chengdu',
-    country: 'China',
-    city: '成都',
-    coordinates: [72, 58],
-    date: '日常驻点',
-    title: '生活发生的地方',
-    memory: '熟悉的街道、持续推进的项目，以及很多普通但重要的日常。',
-  },
-  {
-    id: 'chongqing',
-    country: 'China',
-    city: '重庆',
-    coordinates: [75, 61],
-    date: '2025 · 夏',
-    title: '在坡与桥之间',
-    memory: '城市有强烈的方向感，也总能在下一个转角打破方向感。',
-  },
-  {
-    id: 'shanghai',
-    country: 'China',
-    city: '上海',
-    coordinates: [79, 45],
-    date: '2024 · 秋',
-    title: '短暂停留',
-    memory: '密集的信息、快速的节奏，还有夜里安静下来的街区。',
-  },
-  {
-    id: 'tokyo',
-    country: 'Japan',
-    city: '东京',
-    coordinates: [92, 39],
-    date: '2026 · 春',
-    title: '秩序里的细节',
-    memory: '第一次如此集中地观察公共空间如何照顾人的移动和停留。',
-  },
-  {
-    id: 'osaka',
-    country: 'Japan',
-    city: '大阪',
-    coordinates: [78, 64],
-    date: '2026 · 春',
-    title: '更松弛的一站',
-    memory: '从热闹的街区走到河边，城市的表情会在很短的距离里变化。',
-  },
-  {
-    id: 'kyoto',
-    country: 'Japan',
-    city: '京都',
-    coordinates: [91, 70],
-    date: '2026 · 春',
-    title: '慢一点看',
-    memory: '清晨的街道和傍晚的屋檐，让“慢”有了非常具体的形状。',
-  },
-  {
-    id: 'oslo',
-    country: 'Norway',
-    city: '奥斯陆',
-    coordinates: [51, 30],
-    date: '想去的地方',
-    title: '留给未来的一枚标记',
-    memory: '有些坐标来自记忆，有些坐标则先来自期待。',
-  },
 ];
 
 export const timelineChapters: TimelineChapter[] = [

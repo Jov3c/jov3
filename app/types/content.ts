@@ -47,16 +47,6 @@ export interface GuestbookMessage {
   reply?: { name: string; date: string; content: string };
 }
 
-export interface FootprintPlace {
-  id: string;
-  country: string;
-  city: string;
-  coordinates: [number, number];
-  date: string;
-  title: string;
-  memory: string;
-}
-
 export interface TimelineChapter {
   year: string;
   verb: string;

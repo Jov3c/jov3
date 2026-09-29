@@ -59,19 +59,22 @@ export class MediaRepository {
       friendLinkReferences,
       cvPortraitReferences,
       timelineMediaReferences,
+      footprintMemoryReferences,
     ] = await Promise.all([
       this.prisma.homeProfile.count({ where: { avatarMediaId: id } }),
       this.prisma.post.count({ where: { coverMediaId: id } }),
       this.prisma.friendLink.count({ where: { logoMediaId: id } }),
       this.prisma.cvProfile.count({ where: { portraitMediaId: id } }),
       this.prisma.timelineEntryMedia.count({ where: { mediaId: id } }),
+      this.prisma.footprintMemoryMedia.count({ where: { mediaId: id } }),
     ]);
     return (
       avatarReferences +
       coverReferences +
       friendLinkReferences +
       cvPortraitReferences +
-      timelineMediaReferences
+      timelineMediaReferences +
+      footprintMemoryReferences
     );
   }
 }

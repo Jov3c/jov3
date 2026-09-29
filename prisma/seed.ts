@@ -11,6 +11,7 @@ import { seedFriendLinkDefaults } from '../server/services/friend-link-defaults'
 import { seedProjectDefaults } from '../server/services/project-defaults';
 import { seedCvDefaults } from '../server/services/cv-defaults';
 import { seedTimelineDefaults } from '../server/services/timeline-defaults';
+import { seedFootprintDefaults } from '../server/services/footprint-defaults';
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) throw new Error('DATABASE_URL is required');
@@ -28,6 +29,7 @@ try {
   await seedFriendLinkDefaults(prisma);
   await seedCvDefaults(prisma);
   await seedTimelineDefaults(prisma);
+  await seedFootprintDefaults(prisma);
   process.stdout.write(
     result.created ? 'Administrator created.\n' : 'Administrator already exists.\n',
   );
