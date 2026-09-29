@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { BlogPost } from '~/types/content';
+import type { PublicPost } from '~/types/blog';
 import { formatPostDate } from '~/utils/content';
 
-defineProps<{ post: BlogPost; featured?: boolean }>();
+defineProps<{ post: PublicPost; featured?: boolean }>();
 </script>
 
 <template>
@@ -11,17 +11,23 @@ defineProps<{ post: BlogPost; featured?: boolean }>();
     :class="{ 'post-card--featured': featured }"
     :to="`/blog/${post.slug}`"
   >
-    <div class="post-card__cover" :data-cover="post.slug">
-      <span>{{ post.category }}</span>
+    <div
+      class="post-card__cover"
+      :data-cover="post.category.slug"
+      :style="post.cover ? { backgroundImage: `url(${post.cover.publicUrl})` } : undefined"
+    >
+      <span>{{ post.category.name }}</span>
       <b>{{ post.slug.slice(0, 2).toUpperCase() }}</b>
     </div>
     <div class="post-card__content">
-      <p class="post-meta">{{ formatPostDate(post.publishedAt) }} · {{ post.category }}</p>
+      <p class="post-meta">
+        {{ formatPostDate(post.publishedAt ?? '') }} · {{ post.category.name }}
+      </p>
       <h2>{{ post.title }}</h2>
-      <p>{{ post.summary }}</p>
+      <p>{{ post.excerpt }}</p>
       <div class="post-stats">
-        <span>{{ post.views }} views</span><span>{{ post.comments }} comments</span
-        ><span>{{ post.words }} words</span>
+        <span>{{ post.viewCount }} views</span><span>{{ post.commentCount }} comments</span
+        ><span>{{ post.wordCount }} words</span>
       </div>
     </div>
   </NuxtLink>

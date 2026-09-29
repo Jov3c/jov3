@@ -1,22 +1,61 @@
 <script setup lang="ts">
 import BlogChrome from '~/components/blog/BlogChrome.vue';
+import CategoryFilter from '~/components/blog/CategoryFilter.vue';
 import PostCard from '~/components/blog/PostCard.vue';
+import ErrorState from '~/components/ui/ErrorState.vue';
+import SkeletonBlock from '~/components/ui/SkeletonBlock.vue';
 import StandardHero from '~/components/ui/StandardHero.vue';
-import { blogPosts } from '~/data/content';
+import type { PublicCategoriesResponse, PublicPostsResponse } from '~/types/blog';
 
-useSeoMeta({ title: 'Blog — Jov3', description: 'AI、产品、开发，以及那些值得慢慢写下来的东西。' });
+const route = useRoute();
+const selectedCategory = computed(() =>
+  typeof route.query.category === 'string' ? route.query.category : '',
+);
+const categoryQuery = computed(() => ({ page: 1, pageSize: 20, category: selectedCategory.value }));
+const [{ data: postsResponse, pending, error, refresh }, { data: categoriesResponse }] =
+  await Promise.all([
+    useFetch<PublicPostsResponse>('/api/v1/public/posts', { query: categoryQuery }),
+    useFetch<PublicCategoriesResponse>('/api/v1/public/categories', {
+      key: 'public-blog-categories',
+    }),
+  ]);
+
+useSeoMeta({ title: 'Blog — Jov3', description: '记录 AI、产品、开发和一些值得长期保留的想法。' });
 </script>
 
 <template>
   <BlogChrome>
-    <StandardHero
-      eyebrow="Journal / 2026"
-      title="Writing, slowly."
-      description="AI、产品、开发，以及那些值得慢慢写下来的东西。"
-    />
-    <div class="post-list">
+    <template #category>
+      <CategoryFilter :categories="categoriesResponse?.data ?? []" />
+    </template>
+    <template #hero>
+      <StandardHero
+        eyebrow="Writing"
+        title="Blog"
+        description="记录 AI、产品、开发和一些值得长期保留的想法。"
+      />
+    </template>
+    <div v-if="pending" class="post-list post-list--loading" aria-label="正在加载文章">
+      <div v-for="index in 3" :key="index" class="post-card post-card--skeleton">
+        <SkeletonBlock class="post-card__skeleton-cover" />
+        <div class="post-card__skeleton-body">
+          <SkeletonBlock class="post-card__skeleton-meta" />
+          <SkeletonBlock class="post-card__skeleton-title" />
+          <SkeletonBlock class="post-card__skeleton-line" />
+          <SkeletonBlock class="post-card__skeleton-line post-card__skeleton-line--short" />
+        </div>
+      </div>
+    </div>
+    <ErrorState v-else-if="error" title="文章暂时无法加载" description="请稍后再试。">
+      <button class="button button--ghost" type="button" @click="refresh()">重新加载</button>
+    </ErrorState>
+    <div v-else-if="postsResponse?.data.items.length === 0" class="state-panel">
+      <h2>这个分类还没有文章。</h2>
+      <p>换一个分类，或者回到全部文章。</p>
+    </div>
+    <div v-else class="post-list">
       <PostCard
-        v-for="(post, index) in blogPosts"
+        v-for="(post, index) in postsResponse?.data.items"
         :key="post.slug"
         :post="post"
         :featured="index === 0"

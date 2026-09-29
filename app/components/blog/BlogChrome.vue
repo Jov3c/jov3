@@ -5,9 +5,12 @@ import BlogSubnav from './BlogSubnav.vue';
 
 <template>
   <div class="page-container blog-page">
-    <BlogSubnav />
     <div class="blog-layout">
-      <div class="blog-main"><slot /></div>
+      <div class="blog-main">
+        <slot name="hero" />
+        <BlogSubnav><slot name="category" /></BlogSubnav>
+        <slot />
+      </div>
       <BlogSidebar />
     </div>
   </div>

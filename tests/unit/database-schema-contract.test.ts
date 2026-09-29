@@ -17,6 +17,8 @@ describe('database contract', () => {
     'HomeEntry',
     'SocialLink',
     'Project',
+    'PostCategory',
+    'Post',
   ])('defines the %s model', (model) => {
     expect(schema).toContain(`model ${model} {`);
   });
@@ -38,6 +40,8 @@ describe('database contract', () => {
     expect(schema).toContain('@@map("home_entries")');
     expect(schema).toContain('@@map("social_links")');
     expect(schema).toContain('@@map("projects")');
+    expect(schema).toContain('@@map("post_categories")');
+    expect(schema).toContain('@@map("posts")');
   });
 
   it('stores email verification tokens as hashes with expiry state', () => {

@@ -8,11 +8,13 @@ useSeoMeta({ title: 'Guestbook — Blog — Jov3', description: '给 Jov3 留下
 
 <template>
   <BlogChrome>
-    <StandardHero
-      eyebrow="Guestbook"
-      title="Leave a small note."
-      description="如果你路过这里，可以留下一句话。"
-    />
+    <template #hero>
+      <StandardHero
+        eyebrow="Guestbook"
+        title="Leave a small note."
+        description="如果你路过这里，可以留下一句话。"
+      />
+    </template>
     <form class="message-form" @submit.prevent>
       <div class="form-row">
         <label

@@ -43,10 +43,10 @@ useSeoMeta({ title: 'Dashboard — Jov3 Admin', robots: 'noindex, nofollow' });
     <section class="admin-next-step">
       <span>Next stage</span>
       <div>
-        <h2>Projects & README</h2>
-        <p>项目卡片、公开详情与 README 管理已经接入，可以从左侧 Projects 开始维护。</p>
+        <h2>Comments & message board</h2>
+        <p>文章、分类、发布状态和 Archive 已接入，下一阶段将完成评论与留言审核。</p>
       </div>
-      <b>06</b>
+      <b>07</b>
     </section>
   </div>
 </template>

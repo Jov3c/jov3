@@ -8,11 +8,13 @@ useSeoMeta({ title: 'Links — Blog — Jov3', description: '一些常去的站�
 
 <template>
   <BlogChrome>
-    <StandardHero
-      eyebrow="Blogroll"
-      title="Good places on the web."
-      description="一些常去的站点，和互联网里的朋友。只有已确认的地址可以跳转。"
-    />
+    <template #hero>
+      <StandardHero
+        eyebrow="Blogroll"
+        title="Good places on the web."
+        description="一些常去的站点，和互联网里的朋友。只有已确认的地址可以跳转。"
+      />
+    </template>
     <div class="friend-grid">
       <component
         :is="friend.url ? 'a' : 'div'"

@@ -26,11 +26,13 @@ useSeoMeta({
 
 <template>
   <BlogChrome>
-    <StandardHero
-      eyebrow="Footprint / 07 places"
-      title="Places I remember."
-      description="去过的地方、留下的记忆，以及先放在地图上的期待。"
-    />
+    <template #hero>
+      <StandardHero
+        eyebrow="Footprint / 07 places"
+        title="Places I remember."
+        description="去过的地方、留下的记忆，以及先放在地图上的期待。"
+      />
+    </template>
 
     <div class="country-filters" aria-label="按国家查看足迹">
       <button

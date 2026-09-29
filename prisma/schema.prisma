@@ -19,6 +19,11 @@ enum ProjectStatus {
   PAUSED
 }
 
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model AdminUser {
   id           String         @id @default(uuid()) @db.Uuid
   email        String         @unique @db.VarChar(254)
@@ -69,6 +74,7 @@ model MediaAsset {
   altText      String?  @map("alt_text") @db.VarChar(300)
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   homeProfiles HomeProfile[]
+  postCovers   Post[]       @relation("PostCover")
 
   @@map("media_assets")
 }
@@ -150,4 +156,42 @@ model Project {
 
   @@index([visible, sortOrder])
   @@map("projects")
+}
+
+model PostCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  slug      String   @unique @db.VarChar(80)
+  name      String   @db.VarChar(80)
+  sortOrder Int      @default(0) @map("sort_order")
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  posts     Post[]
+
+  @@index([visible, sortOrder])
+  @@map("post_categories")
+}
+
+model Post {
+  id             String       @id @default(uuid()) @db.Uuid
+  slug           String       @unique @db.VarChar(160)
+  title          String       @db.VarChar(220)
+  excerpt        String       @db.VarChar(500)
+  categoryId     String       @map("category_id") @db.Uuid
+  coverMediaId   String?      @map("cover_media_id") @db.Uuid
+  markdownBody   String       @map("markdown_body")
+  status         PostStatus
+  publishedAt    DateTime?    @map("published_at") @db.Timestamptz(6)
+  wordCount      Int          @default(0) @map("word_count")
+  viewCount      BigInt       @default(0) @map("view_count")
+  seoTitle       String?      @map("seo_title") @db.VarChar(220)
+  seoDescription String?      @map("seo_description") @db.VarChar(320)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  category       PostCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  coverMedia     MediaAsset?  @relation("PostCover", fields: [coverMediaId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+  @@map("posts")
 }

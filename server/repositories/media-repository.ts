@@ -53,6 +53,10 @@ export class MediaRepository {
   }
 
   async countReferences(id: string) {
-    return this.prisma.homeProfile.count({ where: { avatarMediaId: id } });
+    const [avatarReferences, coverReferences] = await Promise.all([
+      this.prisma.homeProfile.count({ where: { avatarMediaId: id } }),
+      this.prisma.post.count({ where: { coverMediaId: id } }),
+    ]);
+    return avatarReferences + coverReferences;
   }
 }
