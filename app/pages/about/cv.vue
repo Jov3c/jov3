@@ -1,14 +1,45 @@
 <script setup lang="ts">
-import { cvProfile, projects } from '~/data/content';
+import type { PublicCvResponse } from '~/types/cv';
 
-function printCv() {
-  window.print();
+const { data, error } = await useFetch<PublicCvResponse>('/api/v1/public/cv', {
+  key: 'public-cv',
+});
+
+if (!data.value) {
+  throw createError({
+    statusCode: error.value?.statusCode === 404 ? 404 : 503,
+    statusMessage: error.value?.statusMessage || 'CV is not available',
+  });
 }
+
+const cv = computed(() => data.value!.data);
 
 useSeoMeta({
   title: 'CV — About — Jov3',
   description: 'Jov3 的个人工作档案、经历、项目和技能。',
 });
+
+function printCv() {
+  window.print();
+}
+
+function formatMonth(value: string) {
+  const [year, month] = value.split('-');
+  return `${year}.${month}`;
+}
+
+function formatDateRange(start: string, end: string | null, isCurrent: boolean) {
+  return `${formatMonth(start)} — ${isCurrent ? 'PRESENT' : end ? formatMonth(end) : '—'}`;
+}
+
+function websiteLabel(value: string | null) {
+  if (!value) return '—';
+  try {
+    return new URL(value).hostname.replace(/^www\./, '');
+  } catch {
+    return value;
+  }
+}
 </script>
 
 <template>
@@ -27,12 +58,25 @@ useSeoMeta({
     </header>
 
     <section class="cv-profile">
-      <div class="cv-monogram">J3</div>
+      <img
+        v-if="cv.profile.portrait"
+        class="cv-profile__portrait"
+        :src="cv.profile.portrait.publicUrl"
+        :alt="cv.profile.portrait.altText || cv.profile.name"
+      />
+      <div v-else class="cv-monogram">J3</div>
       <div>
-        <h2>{{ cvProfile.name }}</h2>
-        <p>{{ cvProfile.role }} · {{ cvProfile.location }}</p>
+        <h2>{{ cv.profile.name }}</h2>
+        <p>{{ cv.profile.headline }} · {{ cv.profile.location }}</p>
       </div>
-      <p>{{ cvProfile.bio }}</p>
+      <p>{{ cv.profile.bio }}</p>
+      <div class="cv-profile__meta">
+        <span>{{ cv.profile.location }}</span>
+        <a v-if="cv.profile.website" :href="cv.profile.website" target="_blank" rel="noreferrer">
+          {{ websiteLabel(cv.profile.website) }}
+        </a>
+        <span v-if="cv.profile.statusText">{{ cv.profile.statusText }}</span>
+      </div>
     </section>
 
     <div class="cv-grid">
@@ -41,11 +85,15 @@ useSeoMeta({
           <h2>Experience</h2>
           <span>Work / Practice</span>
         </header>
-        <article v-for="item in cvProfile.experience" :key="item.period" class="cv-entry">
-          <time>{{ item.period }}<br />{{ item.place }}</time>
+        <article v-for="item in cv.experiences" :key="item.id" class="cv-entry">
+          <time
+            >{{ formatDateRange(item.startDate, item.endDate, item.isCurrent) }}<br />{{
+              item.location
+            }}</time
+          >
           <div>
-            <h3>{{ item.title }}</h3>
-            <span>{{ item.subtitle }}</span>
+            <h3>{{ item.role }} · {{ item.company }}</h3>
+            <span>Infrastructure / Operations</span>
             <p>{{ item.description }}</p>
           </div>
         </article>
@@ -57,40 +105,45 @@ useSeoMeta({
           <span>Things I build</span>
         </header>
         <div class="cv-projects">
-          <article v-for="project in projects.slice(0, 4)" :key="project.slug">
-            <span>{{ project.index }} / {{ project.status }}</span>
-            <h3>{{ project.name }}</h3>
-            <p>{{ project.description }}</p>
+          <article v-for="(project, index) in cv.projects" :key="project.id">
+            <span>{{ String(index + 1).padStart(2, '0') }} / {{ project.status }}</span>
+            <h3>
+              <NuxtLink :to="`/projects/${project.slug}`">{{ project.name }}</NuxtLink>
+            </h3>
+            <p>{{ project.summary }}</p>
           </article>
         </div>
       </section>
 
       <section class="cv-panel">
         <header>
-          <h2>Skills</h2>
-          <span>Toolbox</span>
+          <h2>Skills & Stack</h2>
+          <span>Working set</span>
         </header>
-        <ul class="cv-skills">
-          <li v-for="skill in cvProfile.skills" :key="skill">{{ skill }}</li>
+        <ul class="cv-skills cv-skills--groups">
+          <li v-for="skill in cv.skills" :key="skill.id">
+            <strong>{{ skill.title }}</strong>
+            <span>{{ skill.content }}</span>
+          </li>
         </ul>
       </section>
 
       <section class="cv-panel">
         <header>
           <h2>Education</h2>
-          <span>Foundation</span>
+          <span>Background</span>
         </header>
-        <article class="cv-education">
-          <time>{{ cvProfile.education.period }}</time>
-          <h3>{{ cvProfile.education.title }}</h3>
-          <span>{{ cvProfile.education.subtitle }}</span>
-          <p>{{ cvProfile.education.description }}</p>
+        <article v-for="item in cv.educations" :key="item.id" class="cv-education">
+          <time>{{ formatDateRange(item.startDate, item.endDate, false) }}</time>
+          <h3>{{ item.school }}</h3>
+          <span>{{ item.major }} · {{ item.degree }}</span>
+          <p>{{ item.description }}</p>
         </article>
       </section>
     </div>
 
     <blockquote class="cv-statement">
-      <p>{{ cvProfile.statement }}</p>
+      <p>{{ cv.profile.statement }}</p>
       <small>JOV3 · 2026</small>
     </blockquote>
   </div>

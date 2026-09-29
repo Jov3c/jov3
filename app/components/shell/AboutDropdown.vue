@@ -5,6 +5,13 @@ const route = useRoute();
 const isOpen = ref(false);
 const root = ref<HTMLElement | null>(null);
 const isAboutRoute = computed(() => route.path.startsWith('/about'));
+const { data: publicCv } = await useFetch<{ data: unknown }>('/api/v1/public/cv', {
+  key: 'about-cv-visibility',
+  ignoreResponseError: true,
+});
+const visibleAboutNavigation = computed(() =>
+  publicCv.value?.data ? aboutNavigation : aboutNavigation.filter((item) => item.label !== 'CV'),
+);
 
 function close() {
   isOpen.value = false;
@@ -46,7 +53,7 @@ onBeforeUnmount(() => {
     </button>
     <div v-show="isOpen" class="about-menu__panel" role="menu">
       <NuxtLink
-        v-for="item in aboutNavigation"
+        v-for="item in visibleAboutNavigation"
         :key="item.to"
         :to="item.to"
         role="menuitem"
