@@ -7,7 +7,9 @@ test('admin login protects the shell and logout invalidates access', async ({ pa
   test.skip(testInfo.project.name !== 'desktop-chromium', 'Admin auth flow runs once');
 
   await page.goto('/admin');
-  await expect(page).toHaveURL(/\/admin\/login\?redirect=%2Fadmin$/);
+  await expect(page).toHaveURL(
+    (url) => url.pathname === '/admin/login' && url.searchParams.get('redirect') === '/admin',
+  );
   await expect(page.getByRole('heading', { name: 'Welcome back.' })).toBeVisible();
 
   await page.getByLabel('Email').fill(adminEmail);
@@ -22,5 +24,7 @@ test('admin login protects the shell and logout invalidates access', async ({ pa
   await page.getByRole('button', { name: 'Sign out' }).click();
   await expect(page).toHaveURL(/\/admin\/login$/);
   await page.goto('/admin');
-  await expect(page).toHaveURL(/\/admin\/login\?redirect=%2Fadmin$/);
+  await expect(page).toHaveURL(
+    (url) => url.pathname === '/admin/login' && url.searchParams.get('redirect') === '/admin',
+  );
 });
