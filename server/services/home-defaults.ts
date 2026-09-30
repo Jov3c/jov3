@@ -65,15 +65,19 @@ export const DEFAULT_SOCIAL_LINKS = [
 ];
 
 export async function ensureHomeDefaults(prisma: PrismaClient) {
-  const [siteProfile, homeProfile, homeEntryCount, socialLinkCount] = await Promise.all([
-    prisma.siteProfile.findFirst(),
-    prisma.homeProfile.findFirst(),
-    prisma.homeEntry.count(),
-    prisma.socialLink.count(),
-  ]);
+  await prisma.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(725531)`;
 
-  if (!siteProfile) await prisma.siteProfile.create({ data: DEFAULT_SITE_PROFILE });
-  if (!homeProfile) await prisma.homeProfile.create({ data: DEFAULT_HOME_PROFILE });
-  if (homeEntryCount === 0) await prisma.homeEntry.createMany({ data: DEFAULT_HOME_ENTRIES });
-  if (socialLinkCount === 0) await prisma.socialLink.createMany({ data: DEFAULT_SOCIAL_LINKS });
+    const [siteProfile, homeProfile, homeEntryCount, socialLinkCount] = await Promise.all([
+      tx.siteProfile.findFirst(),
+      tx.homeProfile.findFirst(),
+      tx.homeEntry.count(),
+      tx.socialLink.count(),
+    ]);
+
+    if (!siteProfile) await tx.siteProfile.create({ data: DEFAULT_SITE_PROFILE });
+    if (!homeProfile) await tx.homeProfile.create({ data: DEFAULT_HOME_PROFILE });
+    if (homeEntryCount === 0) await tx.homeEntry.createMany({ data: DEFAULT_HOME_ENTRIES });
+    if (socialLinkCount === 0) await tx.socialLink.createMany({ data: DEFAULT_SOCIAL_LINKS });
+  });
 }

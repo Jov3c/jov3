@@ -27,7 +27,9 @@ interface HomeData {
   socialLinks: Array<{ id: string; name: string; icon: string | null; url: string }>;
 }
 
-const { data: response, error } = await useFetch<{ data: HomeData }>('/api/v1/public/home');
+const { data: response, error } = await useFetch<{ data: HomeData }>('/api/v1/public/home', {
+  key: 'public-home-meta',
+});
 if (error.value || !response.value?.data) {
   throw createError({ statusCode: 503, statusMessage: 'Homepage is temporarily unavailable' });
 }
