@@ -4,7 +4,6 @@ export const DEFAULT_SITE_PROFILE = {
   siteTitle: 'Jov3 personal website',
   siteDescription: 'Building products, tools and ideas on the internet.',
   foundedAt: new Date('2023-01-01T00:00:00.000Z'),
-  publicContactEmail: 'hello@jov3.cloud',
 };
 
 export const DEFAULT_HOME_PROFILE = {
@@ -61,7 +60,6 @@ export const DEFAULT_HOME_ENTRIES = [
 
 export const DEFAULT_SOCIAL_LINKS = [
   { name: 'GitHub', icon: 'github', url: 'https://github.com/Jov3c', sortOrder: 10, visible: true },
-  { name: 'Email', icon: 'mail', url: 'mailto:hello@jov3.cloud', sortOrder: 20, visible: true },
 ];
 
 export async function ensureHomeDefaults(prisma: PrismaClient) {

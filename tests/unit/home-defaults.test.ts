@@ -7,6 +7,13 @@ import {
 } from '../../server/services/home-defaults';
 
 describe('home defaults', () => {
+  it('uses only a verified public GitHub social link', () => {
+    expect(DEFAULT_SOCIAL_LINKS).toEqual([
+      expect.objectContaining({ name: 'GitHub', url: 'https://github.com/Jov3c' }),
+    ]);
+    expect(JSON.stringify(DEFAULT_SOCIAL_LINKS)).not.toContain('@');
+  });
+
   it('initializes defaults behind a transaction advisory lock', async () => {
     const executeRaw = vi.fn().mockResolvedValue(1);
     const tx = {

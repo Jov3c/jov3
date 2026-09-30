@@ -331,7 +331,7 @@ onMounted(load);
           </label>
           <label
             ><span>Public contact email</span
-            ><input v-model="site.publicContactEmail" type="email" placeholder="hello@example.com"
+            ><input v-model="site.publicContactEmail" type="email" placeholder="公开邮箱（可选）"
           /></label>
           <button class="button" type="submit" :disabled="busyKey === 'site'">
             Save site profile

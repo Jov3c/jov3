@@ -1,24 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
-import { blogPosts, friendLinks, projects } from '../../app/data/content';
-import { findPost, findProject, isSafeExternalUrl } from '../../app/utils/content';
+import { DEFAULT_HOME_ENTRIES, DEFAULT_SOCIAL_LINKS } from '../../server/services/home-defaults';
+import { isSafeExternalUrl } from '../../app/utils/content';
 
-describe('typed public content', () => {
-  it('uses unique routable slugs', () => {
-    expect(new Set(projects.map((item) => item.slug)).size).toBe(projects.length);
-    expect(new Set(blogPosts.map((item) => item.slug)).size).toBe(blogPosts.length);
-  });
-
-  it('resolves project and article detail records', () => {
-    expect(findProject('signal')?.name).toBe('Signal Daily');
-    expect(findPost('server')?.title).toContain('自动巡检');
-    expect(findProject('missing')).toBeUndefined();
-  });
-
-  it('never promotes prototype placeholder domains to public links', () => {
-    const activeLinks = friendLinks.filter((item) => item.url).map((item) => item.url);
-    expect(activeLinks).toEqual(['https://feitwnd.cc']);
-    expect(activeLinks.every((url) => isSafeExternalUrl(url))).toBe(true);
+describe('production bootstrap content', () => {
+  it('uses only internal entry paths and a verified public GitHub profile', () => {
+    expect(DEFAULT_HOME_ENTRIES.every((entry) => entry.url.startsWith('/'))).toBe(true);
+    expect(DEFAULT_SOCIAL_LINKS.map((link) => link.url)).toEqual(['https://github.com/Jov3c']);
+    expect(DEFAULT_SOCIAL_LINKS.every((link) => isSafeExternalUrl(link.url))).toBe(true);
+    expect(JSON.stringify({ DEFAULT_HOME_ENTRIES, DEFAULT_SOCIAL_LINKS })).not.toMatch(
+      /example\.com|mailto:/i,
+    );
     expect(isSafeExternalUrl('#')).toBe(false);
   });
 });

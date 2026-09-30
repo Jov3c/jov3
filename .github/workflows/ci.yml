@@ -75,6 +75,9 @@ jobs:
       - name: Bootstrap test administrator
         run: pnpm admin:bootstrap
 
+      - name: Seed browser test fixtures
+        run: pnpm test:seed-browser-data
+
       - name: Install browser for end-to-end tests
         run: pnpm exec playwright install --with-deps chromium
 

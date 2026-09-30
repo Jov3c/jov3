@@ -29,6 +29,7 @@
     "prisma:migrate:deploy": "prisma migrate deploy --config prisma7.config.ts",
     "prisma:studio": "prisma studio --config prisma7.config.ts",
     "admin:bootstrap": "tsx prisma/seed.ts",
+    "test:seed-browser-data": "tsx tests/fixtures/seed-browser-data.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "dependencies": {

@@ -66,7 +66,7 @@ function isExternalSocialUrl(url: string) {
             :alt="home.homeProfile.avatar.altText || home.homeProfile.nickname"
           />
         </div>
-        <div v-else class="avatar" :aria-label="`${home.homeProfile.nickname} avatar placeholder`">
+        <div v-else class="avatar" :aria-label="`${home.homeProfile.nickname} avatar`">
           {{ home.homeProfile.nickname.slice(0, 2).toUpperCase() }}
         </div>
         <h1>{{ home.homeProfile.nickname }}</h1>
