@@ -15,7 +15,7 @@ if (!data.value) {
 
 const entries = computed(() => data.value!.data);
 
-useSeoMeta({
+usePageSeo({
   title: 'Timeline — About — Jov3',
   description: '做过的项目、改变方向的时刻、学到的东西，以及正在发生的生活。',
 });

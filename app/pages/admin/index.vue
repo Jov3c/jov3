@@ -2,12 +2,19 @@
 definePageMeta({ layout: 'admin', middleware: 'admin' });
 
 const admin = useAdminSession();
-const overview = [
-  { label: 'Published posts', value: '—', note: 'Available in Stage 06' },
+const { data: statsResponse } = await useFetch<{
+  data: { totalPageViews: number; onlineVisitors: number };
+}>('/api/v1/public/site/stats', { key: 'admin-site-stats' });
+const overview = computed(() => [
+  { label: 'Published posts', value: '—', note: 'Manage in Posts' },
   { label: 'Projects', value: '—', note: 'Manage in Projects' },
   { label: 'Pending reviews', value: '—', note: 'Review in Comments / Messages' },
-  { label: 'Site visits', value: '—', note: 'Available in Stage 11' },
-];
+  {
+    label: 'Site visits',
+    value: statsResponse.value?.data.totalPageViews.toLocaleString('zh-CN') ?? '—',
+    note: `${statsResponse.value?.data.onlineVisitors ?? '—'} online now`,
+  },
+]);
 
 useSeoMeta({ title: 'Dashboard — Jov3 Admin', robots: 'noindex, nofollow' });
 </script>
@@ -43,10 +50,10 @@ useSeoMeta({ title: 'Dashboard — Jov3 Admin', robots: 'noindex, nofollow' });
     <section class="admin-next-step">
       <span>Next stage</span>
       <div>
-        <h2>CV & timeline dataization</h2>
-        <p>友链申请、邮箱验证和社区审核已闭环，下一阶段将把 CV 与 Timeline 接入真实数据。</p>
+        <h2>Real data migration & full QA</h2>
+        <p>全站基础能力已经接入，下一阶段将删除开发期 fixture 并进行全量功能、视觉与安全验收。</p>
       </div>
-      <b>09</b>
+      <b>12</b>
     </section>
   </div>
 </template>

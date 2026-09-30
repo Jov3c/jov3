@@ -18,7 +18,7 @@ const applicationNotice = ref('');
 const applicationError = ref('');
 const isApplying = ref(false);
 
-useSeoMeta({
+usePageSeo({
   title: 'Links — Blog — Jov3',
   description: '一些我会经常拜访的小站。互联网很大，能留下彼此的入口是一件很有意思的事。',
 });

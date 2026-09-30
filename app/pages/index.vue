@@ -34,10 +34,10 @@ if (error.value || !response.value?.data) {
 
 const home = response.value.data;
 
-useSeoMeta({
-  title: () => `${home.homeProfile.nickname} — ${home.homeProfile.role}`,
-  description: () => home.siteProfile.siteDescription,
-});
+usePageSeo(() => ({
+  title: `${home.homeProfile.nickname} — ${home.homeProfile.role}`,
+  description: home.siteProfile.siteDescription,
+}));
 
 function isExternalSocialUrl(url: string) {
   return /^(https?:|mailto:)/i.test(url);

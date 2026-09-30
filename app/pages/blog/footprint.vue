@@ -24,7 +24,7 @@ const hoveredCityName = ref('');
 const visitedCities = computed(() => cities.value.filter((city) => city.visited));
 const selectedSlug = computed(() => selectedCity.value?.slug ?? '');
 
-useSeoMeta({
+usePageSeo({
   title: 'Footprint — Blog — Jov3',
   description: '记录我去过的地方。地图只负责展示足迹，点击已经点亮的区域，就能看到留在那里的记忆。',
 });

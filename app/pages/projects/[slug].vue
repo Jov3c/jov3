@@ -22,7 +22,7 @@ if (!project) {
   throw createError({ statusCode: 404, statusMessage: 'Project not found' });
 }
 
-useSeoMeta({
+usePageSeo({
   title: `${project.name} — Projects — Jov3`,
   description: project.summary,
 });

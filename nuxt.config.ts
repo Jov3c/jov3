@@ -3,6 +3,11 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css', 'maplibre-gl/dist/maplibre-gl.css'],
   devtools: { enabled: false },
   modules: ['@nuxt/eslint'],
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.PUBLIC_SITE_URL ?? 'https://jov3.cloud',
+    },
+  },
   vite: {
     optimizeDeps: { exclude: ['maplibre-gl'] },
   },

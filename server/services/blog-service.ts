@@ -116,6 +116,19 @@ export class BlogService {
     };
   }
 
+  async listPublicFeed() {
+    const posts = await this.repository.listPublishedPostsForFeed();
+    return posts.map((post) => ({
+      status: post.status,
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      contentHtml: renderMarkdown(post.markdownBody),
+      categoryName: post.category.name,
+      publishedAt: post.publishedAt?.toISOString() ?? null,
+    }));
+  }
+
   async listAdminPosts(query: AdminPostListQuery) {
     const result = await this.repository.listAdminPosts(query);
     return { items: result.items.map(toAdminDto), total: result.total };

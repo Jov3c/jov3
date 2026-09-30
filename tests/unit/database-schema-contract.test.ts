@@ -31,6 +31,8 @@ describe('database contract', () => {
     'TimelineEntryMedia',
     'TimelineEntryLink',
     'TimelineEntryProject',
+    'PageViewDaily',
+    'VisitorActivity',
   ])('defines the %s model', (model) => {
     expect(schema).toContain(`model ${model} {`);
   });
@@ -70,6 +72,8 @@ describe('database contract', () => {
     expect(schema).toContain('@@map("timeline_entry_links")');
     expect(schema).toContain('@@map("timeline_entry_projects")');
     expect(schema).toContain('projectId');
+    expect(schema).toContain('@@map("page_view_daily")');
+    expect(schema).toContain('@@map("visitor_activity")');
   });
 
   it('stores email verification tokens as hashes with expiry state', () => {

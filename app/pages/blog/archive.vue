@@ -4,7 +4,7 @@ import ErrorState from '~/components/ui/ErrorState.vue';
 import StandardHero from '~/components/ui/StandardHero.vue';
 import type { PublicArchiveResponse } from '~/types/blog';
 
-useSeoMeta({ title: 'Archive — Blog — Jov3', description: '按时间查看 Jov3 的全部文章。' });
+usePageSeo({ title: 'Archive — Blog — Jov3', description: '按时间查看 Jov3 的全部文章。' });
 const { data, pending, error, refresh } =
   await useFetch<PublicArchiveResponse>('/api/v1/public/archive');
 </script>

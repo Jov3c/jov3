@@ -88,6 +88,14 @@ export class BlogRepository {
     });
   }
 
+  listPublishedPostsForFeed() {
+    return this.prisma.post.findMany({
+      where: { status: 'PUBLISHED', category: { visible: true } },
+      include: postInclude,
+      orderBy: [{ publishedAt: 'desc' }, { id: 'asc' }],
+    });
+  }
+
   async listPublicCategories() {
     const [categories, counts, aggregate] = await Promise.all([
       this.prisma.postCategory.findMany({ where: { visible: true }, orderBy: categoryOrderBy }),

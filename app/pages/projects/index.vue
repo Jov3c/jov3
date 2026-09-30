@@ -14,7 +14,7 @@ if (error.value) {
 const projects = computed(() => data.value?.data.items ?? []);
 const projectCount = computed(() => String(projects.value.length).padStart(2, '0'));
 
-useSeoMeta({
+usePageSeo({
   title: 'Projects — Jov3',
   description: '一些正在构建、持续维护或已经完成的项目。',
 });

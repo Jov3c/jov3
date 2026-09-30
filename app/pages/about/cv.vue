@@ -14,7 +14,7 @@ if (!data.value) {
 
 const cv = computed(() => data.value!.data);
 
-useSeoMeta({
+usePageSeo({
   title: 'CV — About — Jov3',
   description: 'Jov3 的个人工作档案、经历、项目和技能。',
 });

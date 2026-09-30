@@ -33,7 +33,7 @@ function formatWords(value: number | undefined) {
     <div class="socials">
       <a href="https://github.com/Jov3c" target="_blank" rel="noreferrer">GitHub</a>
       <a href="mailto:hello@jov3.cloud">Email</a>
-      <span>RSS</span>
+      <a href="/rss.xml">RSS</a>
     </div>
   </section>
 </template>

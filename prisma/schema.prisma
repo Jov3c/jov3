@@ -480,3 +480,21 @@ model FootprintMemoryMedia {
   @@index([memoryId, sortOrder])
   @@map("footprint_memory_media")
 }
+
+model PageViewDaily {
+  date  DateTime @db.Date
+  path  String   @db.VarChar(500)
+  views BigInt   @default(0)
+
+  @@id([date, path])
+  @@index([date])
+  @@map("page_view_daily")
+}
+
+model VisitorActivity {
+  visitorHash String   @id @map("visitor_hash") @db.Char(64)
+  lastSeenAt  DateTime @map("last_seen_at") @db.Timestamptz(6)
+
+  @@index([lastSeenAt])
+  @@map("visitor_activity")
+}

@@ -17,9 +17,12 @@ if (!post.value?.data) {
 }
 
 const article = post.value.data;
-useSeoMeta({
+usePageSeo({
   title: `${article.seoTitle || article.title} — Jov3`,
   description: article.seoDescription || article.excerpt,
+  type: 'article',
+  image: article.cover?.publicUrl,
+  publishedAt: article.publishedAt,
 });
 </script>
 
