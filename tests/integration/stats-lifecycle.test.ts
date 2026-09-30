@@ -1,7 +1,8 @@
-import { afterAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { StatsRepository } from '../../server/repositories/stats-repository';
 import { StatsService } from '../../server/services/stats-service';
+import { ensureHomeDefaults } from '../../server/services/home-defaults';
 import { createPrismaClient } from '../../server/utils/prisma';
 
 const databaseUrl = process.env.DATABASE_URL ?? '';
@@ -14,6 +15,10 @@ describe('site stats lifecycle', () => {
   const visitorHash = 'a'.repeat(64);
   const otherVisitorHash = 'b'.repeat(64);
   const now = new Date('2099-01-01T12:00:00.000Z');
+
+  beforeAll(async () => {
+    await ensureHomeDefaults(prisma);
+  });
 
   beforeEach(async () => {
     await prisma.visitorActivity.deleteMany({
