@@ -45,7 +45,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', closeOnEscape));
       <span class="category-text">{{ selectedLabel }}</span>
       <span class="chevron" aria-hidden="true">⌄</span>
     </button>
-    <div v-if="isOpen" class="category-popover" role="listbox" aria-label="文章分类">
+    <div v-show="isOpen" class="category-popover" role="listbox" aria-label="文章分类">
       <button
         class="category-option"
         :aria-selected="!selectedSlug"

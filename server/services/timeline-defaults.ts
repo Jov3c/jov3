@@ -36,7 +36,7 @@ const DEFAULT_ENTRIES = [
   {
     eventDate: '2026-12-31',
     datePrecision: 'DAY' as const,
-    title: 'The story continues.',
+    title: '故事仍在继续。',
     bodyMarkdown: '下一段轨迹，等它真的发生以后再写。',
     sortOrder: 50,
     projectSlugs: [],

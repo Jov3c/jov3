@@ -13,3 +13,5 @@ import AppTopbar from '~/components/shell/AppTopbar.vue';
     <AppFooter />
   </div>
 </template>
+
+<style src="~/assets/css/public.css"></style>

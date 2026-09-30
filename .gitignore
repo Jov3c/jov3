@@ -9,11 +9,14 @@ node_modules/
 .env
 .env.*
 !.env.example
+!.env.production.example
 
 # Test output
 coverage/
 test-results/
 playwright-report/
+.playwright-cli/
+output/playwright/
 
 # Generated database client
 server/generated/prisma/

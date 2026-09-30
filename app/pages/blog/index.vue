@@ -7,6 +7,8 @@ import SkeletonBlock from '~/components/ui/SkeletonBlock.vue';
 import StandardHero from '~/components/ui/StandardHero.vue';
 import type { PublicCategoriesResponse, PublicPostsResponse } from '~/types/blog';
 
+definePageMeta({ layout: 'blog-prototype' });
+
 const route = useRoute();
 const selectedCategory = computed(() =>
   typeof route.query.category === 'string' ? route.query.category : '',
@@ -19,6 +21,9 @@ const [{ data: postsResponse, pending, error, refresh }, { data: categoriesRespo
       key: 'public-blog-categories',
     }),
   ]);
+const showPrototypeSkeleton = ref(true);
+
+onMounted(() => window.setTimeout(() => (showPrototypeSkeleton.value = false), 850));
 
 usePageSeo({ title: 'Blog — Jov3', description: '记录 AI、产品、开发和一些值得长期保留的想法。' });
 </script>
@@ -30,13 +35,17 @@ usePageSeo({ title: 'Blog — Jov3', description: '记录 AI、产品、开发�
     </template>
     <template #hero>
       <StandardHero
-        eyebrow="Writing"
+        eyebrow="WRITING"
         title="Blog"
         description="记录 AI、产品、开发和一些值得长期保留的想法。"
       />
     </template>
-    <div v-if="pending" class="post-list post-list--loading" aria-label="正在加载文章">
-      <div v-for="index in 3" :key="index" class="post-card post-card--skeleton">
+    <div
+      v-if="showPrototypeSkeleton || pending"
+      class="post-list post-list--loading"
+      aria-label="正在加载文章"
+    >
+      <div v-for="index in 5" :key="index" class="post-card post-card--skeleton">
         <SkeletonBlock class="post-card__skeleton-cover" />
         <div class="post-card__skeleton-body">
           <SkeletonBlock class="post-card__skeleton-meta" />
@@ -55,7 +64,7 @@ usePageSeo({ title: 'Blog — Jov3', description: '记录 AI、产品、开发�
     </div>
     <div v-else class="post-list">
       <PostCard
-        v-for="(post, index) in postsResponse?.data.items"
+        v-for="(post, index) in postsResponse?.data.items.slice(0, 5)"
         :key="post.slug"
         :post="post"
         :featured="index === 0"

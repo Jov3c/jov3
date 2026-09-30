@@ -19,6 +19,7 @@ export const messageCreateSchema = z.object({
   nickname: nicknameSchema,
   email: emailSchema,
   content: contentSchema,
+  isPrivate: z.boolean().optional().default(false),
 });
 
 export const publicCommunityListQuerySchema = z.object({

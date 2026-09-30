@@ -38,7 +38,6 @@ export class SitePublicationService {
       '/blog/archive',
       '/blog/links',
       '/blog/message',
-      '/blog/footprint',
       '/about/timeline',
       ...(cvIsPublic ? ['/about/cv'] : []),
     ];

@@ -5,3 +5,5 @@
     <p class="admin-auth-caption">Private administration · authorized access only</p>
   </div>
 </template>
+
+<style src="~/assets/css/admin.css"></style>

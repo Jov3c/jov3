@@ -1,15 +1,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-09-29',
-  css: ['~/assets/css/main.css', 'maplibre-gl/dist/maplibre-gl.css'],
+  css: ['~/assets/css/base.css'],
   devtools: { enabled: false },
   modules: ['@nuxt/eslint'],
   runtimeConfig: {
     public: {
       siteUrl: process.env.PUBLIC_SITE_URL ?? 'https://jov3.cloud',
     },
-  },
-  vite: {
-    optimizeDeps: { exclude: ['maplibre-gl'] },
   },
   ssr: true,
   typescript: {

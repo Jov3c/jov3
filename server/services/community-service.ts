@@ -99,6 +99,7 @@ export class CommunityService {
       nickname: parsed.data.nickname.trim(),
       email,
       content: parsed.data.content.trim(),
+      isPrivate: parsed.data.isPrivate,
       ipHash,
     });
     try {
@@ -140,7 +141,11 @@ export class CommunityService {
         throw new CommunityError(404, 'VERIFICATION_TARGET_NOT_FOUND', 'Message not found');
       }
       await this.repository.publishMessage(input.entityId, email, input.verifiedAt);
-      return { published: true, purpose: input.purpose };
+      return {
+        published: !message.isPrivate,
+        private: message.isPrivate,
+        purpose: input.purpose,
+      };
     }
     return { published: false, purpose: input.purpose };
   }
@@ -226,6 +231,7 @@ export class CommunityService {
       await this.repository.createMessageReply({
         parentId: parent.id,
         content: parsed.data.content.trim(),
+        isPrivate: parent.isPrivate,
       }),
     );
   }
@@ -345,6 +351,7 @@ function toAdminMessageDto(record: AdminMessageRecord | Message) {
     nickname: record.nickname,
     email: record.email,
     content: record.content,
+    isPrivate: record.isPrivate,
     authorType: record.authorType,
     status: record.status,
     verifiedAt: record.verifiedAt?.toISOString() ?? null,

@@ -36,6 +36,8 @@ if (error.value || !response.value?.data) {
 
 const home = response.value.data;
 
+definePageMeta({ layout: false });
+
 usePageSeo(() => ({
   title: `${home.homeProfile.nickname} — ${home.homeProfile.role}`,
   description: home.siteProfile.siteDescription,
@@ -47,62 +49,72 @@ function isExternalSocialUrl(url: string) {
 </script>
 
 <template>
-  <div class="home-page page-container">
-    <section class="home-card" aria-label="Jov3 personal homepage">
-      <header class="home-card__top">
-        <span class="home-card__brand"><i /> JOV3</span>
+  <div class="home-prototype">
+    <section class="home-prototype__card" aria-label="Jov3 个人主页">
+      <div class="home-prototype__grain" />
+      <header class="home-prototype__topbar">
+        <span class="home-prototype__brand"><i /> JOV3</span>
         <span
           v-if="home.homeProfile.statusVisible && home.homeProfile.statusText"
-          class="build-status"
+          class="home-prototype__status"
         >
           <i /> {{ home.homeProfile.statusText }}
         </span>
       </header>
 
-      <div class="home-card__body">
-        <div v-if="home.homeProfile.avatar" class="avatar avatar--image">
+      <main class="home-prototype__body">
+        <div
+          v-if="home.homeProfile.avatar"
+          class="home-prototype__avatar home-prototype__avatar--image"
+        >
           <img
             :src="home.homeProfile.avatar.url"
             :alt="home.homeProfile.avatar.altText || home.homeProfile.nickname"
           />
         </div>
-        <div v-else class="avatar" :aria-label="`${home.homeProfile.nickname} avatar`">
-          {{ home.homeProfile.nickname.slice(0, 2).toUpperCase() }}
+        <div
+          v-else
+          class="home-prototype__avatar"
+          :aria-label="`${home.homeProfile.nickname} 头像`"
+        >
+          J3
         </div>
         <h1>{{ home.homeProfile.nickname }}</h1>
-        <p class="home-role">{{ home.homeProfile.role }}</p>
-        <p class="home-intro">{{ home.homeProfile.intro }}</p>
+        <p class="home-prototype__role">{{ home.homeProfile.role }}</p>
+        <p class="home-prototype__intro">{{ home.homeProfile.intro }}</p>
 
-        <nav class="entry-grid" aria-label="站点入口">
+        <nav class="home-prototype__grid" aria-label="站点入口">
           <template v-for="item in home.entries" :key="item.id">
             <NuxtLink
               v-if="item.targetType === 'INTERNAL'"
               :to="item.url"
-              class="entry-card"
+              class="home-prototype__entry"
               :target="item.openNewTab ? '_blank' : undefined"
               :rel="item.openNewTab ? 'noreferrer' : undefined"
             >
-              <span class="entry-card__title"
-                >{{ item.title }} <b aria-hidden="true">{{ item.icon || '↗' }}</b></span
-              >
+              <span class="home-prototype__entry-top">
+                {{ item.title }}
+                <b aria-hidden="true">{{ item.icon || '↗' }}</b>
+              </span>
               <span>{{ item.description }}</span>
             </NuxtLink>
             <a
               v-else
               :href="item.url"
-              class="entry-card"
+              class="home-prototype__entry"
               :target="item.openNewTab ? '_blank' : undefined"
               :rel="item.openNewTab ? 'noreferrer' : undefined"
             >
-              <span class="entry-card__title"
-                >{{ item.title }} <b aria-hidden="true">{{ item.icon || '↗' }}</b></span
-              >
+              <span class="home-prototype__entry-top">
+                {{ item.title }}
+                <b aria-hidden="true">{{ item.icon || '↗' }}</b>
+              </span>
               <span>{{ item.description }}</span>
             </a>
           </template>
         </nav>
 
-        <div class="home-socials" aria-label="外部链接">
+        <div class="home-prototype__links" aria-label="外部链接">
           <template v-for="link in home.socialLinks" :key="link.id">
             <a
               v-if="isExternalSocialUrl(link.url)"
@@ -114,16 +126,20 @@ function isExternalSocialUrl(url: string) {
             </a>
             <NuxtLink v-else :to="link.url">{{ link.name }}</NuxtLink>
           </template>
+          <a href="mailto:hello@example.com">Email</a>
+          <NuxtLink to="/rss.xml">RSS</NuxtLink>
         </div>
-      </div>
+      </main>
 
-      <footer class="home-card__footer">
+      <footer class="home-prototype__footer">
         <span
           >© {{ new Date().getFullYear() }} {{ home.homeProfile.nickname }}. Built with
           curiosity.</span
         >
-        <span>System theme</span>
+        <span><b class="home-prototype__kbd">System</b> theme</span>
       </footer>
     </section>
   </div>
 </template>
+
+<style src="~/assets/css/public.css"></style>

@@ -1,9 +1,9 @@
 import type { PrismaClient } from '../generated/prisma/client';
 
 export const DEFAULT_SITE_PROFILE = {
-  siteTitle: 'Jov3 personal website',
-  siteDescription: 'Building products, tools and ideas on the internet.',
-  foundedAt: new Date('2023-01-01T00:00:00.000Z'),
+  siteTitle: 'Jov3 的个人网站',
+  siteDescription: '在互联网上持续构建产品、工具与想法。',
+  foundedAt: new Date('2026-01-01T00:00:00.000Z'),
 };
 
 export const DEFAULT_HOME_PROFILE = {
@@ -19,7 +19,7 @@ export const DEFAULT_HOME_ENTRIES = [
   {
     title: 'Projects',
     description: '正在做和已经完成的产品、工具与实验。',
-    icon: '⌘',
+    icon: '↗',
     url: '/projects',
     targetType: 'INTERNAL' as const,
     openNewTab: false,
@@ -29,7 +29,7 @@ export const DEFAULT_HOME_ENTRIES = [
   {
     title: 'Blog',
     description: 'AI、产品与开发相关的长内容。',
-    icon: '✎',
+    icon: '↗',
     url: '/blog',
     targetType: 'INTERNAL' as const,
     openNewTab: false,
@@ -39,7 +39,7 @@ export const DEFAULT_HOME_ENTRIES = [
   {
     title: 'Notes',
     description: '持续更新的学习笔记和技术知识。',
-    icon: '◌',
+    icon: '↗',
     url: '/blog/archive',
     targetType: 'INTERNAL' as const,
     openNewTab: false,
@@ -49,7 +49,7 @@ export const DEFAULT_HOME_ENTRIES = [
   {
     title: 'About',
     description: '关于我、经历，以及我正在关注的事情。',
-    icon: '◎',
+    icon: '↗',
     url: '/about/timeline',
     targetType: 'INTERNAL' as const,
     openNewTab: false,

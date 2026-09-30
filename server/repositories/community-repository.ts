@@ -7,6 +7,11 @@ const publicReplies = {
   orderBy: { createdAt: 'asc' as const },
 } as const;
 
+const publicMessageReplies = {
+  where: { status: 'PUBLISHED' as const, isPrivate: false },
+  orderBy: { createdAt: 'asc' as const },
+} as const;
+
 const adminCommentInclude = {
   post: { select: { id: true, slug: true, title: true } },
   parent: { select: { id: true, nickname: true } },
@@ -124,13 +129,15 @@ export class CommunityRepository {
   async listPublicMessages(query: { page: number; pageSize: number }) {
     const [items, total] = await Promise.all([
       this.prisma.message.findMany({
-        where: { parentId: null, status: 'PUBLISHED' },
-        include: { replies: publicReplies },
+        where: { parentId: null, status: 'PUBLISHED', isPrivate: false },
+        include: { replies: publicMessageReplies },
         orderBy: { createdAt: 'desc' },
         skip: (query.page - 1) * query.pageSize,
         take: query.pageSize,
       }),
-      this.prisma.message.count({ where: { parentId: null, status: 'PUBLISHED' } }),
+      this.prisma.message.count({
+        where: { parentId: null, status: 'PUBLISHED', isPrivate: false },
+      }),
     ]);
     return { items, total };
   }
@@ -139,7 +146,13 @@ export class CommunityRepository {
     return this.prisma.message.findUnique({ where: { id } });
   }
 
-  createMessage(input: { nickname: string; email: string; content: string; ipHash: string }) {
+  createMessage(input: {
+    nickname: string;
+    email: string;
+    content: string;
+    isPrivate: boolean;
+    ipHash: string;
+  }) {
     return this.prisma.message.create({
       data: { ...input, status: 'PENDING_EMAIL', authorType: 'VISITOR' },
     });
@@ -152,7 +165,7 @@ export class CommunityRepository {
     });
   }
 
-  createMessageReply(input: { parentId: string; content: string }) {
+  createMessageReply(input: { parentId: string; content: string; isPrivate: boolean }) {
     return this.prisma.message.create({
       data: {
         parentId: input.parentId,
@@ -160,6 +173,7 @@ export class CommunityRepository {
         nickname: 'Jov3',
         email: null,
         content: input.content,
+        isPrivate: input.isPrivate,
         status: 'PUBLISHED',
         verifiedAt: new Date(),
         ipHash: null,

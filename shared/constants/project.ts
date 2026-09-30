@@ -5,10 +5,10 @@ export const PROJECT_STATUSES = ['BUILDING', 'ACTIVE', 'DONE', 'PAUSED'] as cons
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
 
 export const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
-  BUILDING: 'Building',
-  ACTIVE: 'Active',
-  DONE: 'Done',
-  PAUSED: 'Paused',
+  BUILDING: '构建中',
+  ACTIVE: '持续维护',
+  DONE: '已完成',
+  PAUSED: '已暂停',
 };
 
 export const PROJECT_RESERVED_SLUGS = [

@@ -59,6 +59,7 @@ export interface AdminMessage {
   nickname: string;
   email: string | null;
   content: string;
+  isPrivate: boolean;
   authorType: AuthorType;
   status: ModerationStatus;
   verifiedAt: string | null;

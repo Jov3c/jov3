@@ -6,10 +6,12 @@ describe('public navigation contract', () => {
   it('keeps the locked primary navigation order', () => {
     expect(primaryNavigation.map((item) => item.label)).toEqual(['Home', 'Projects', 'Blog']);
     expect(aboutNavigation.map((item) => item.label)).toEqual(['CV', 'Timeline']);
+    expect(primaryNavigation.every((item) => !('englishLabel' in item))).toBe(true);
+    expect(aboutNavigation.every((item) => !('englishLabel' in item))).toBe(true);
   });
 
-  it('exposes every blog utility route without placeholder anchors', () => {
-    expect(blogNavigation.map((item) => item.label)).toEqual(['归档', '友链', '留言', '足迹']);
+  it('exposes the active blog utility routes without placeholder anchors', () => {
+    expect(blogNavigation.map((item) => item.label)).toEqual(['归档', '友链', '留言']);
 
     const destinations = [primaryNavigation, aboutNavigation, blogNavigation]
       .flat()

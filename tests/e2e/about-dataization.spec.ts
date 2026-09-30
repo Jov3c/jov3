@@ -17,8 +17,9 @@ test('public CV and Timeline pages render the persisted About content', async ({
   await expect(page.getByRole('heading', { name: 'CV, but make it mine.' })).toBeVisible();
   await expect(page.getByText('朱鹏 / Jov3')).toBeVisible();
   await expect(page.getByText('天立泰科技股份有限公司')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Edit CV' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Reset' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Print / PDF' })).toBeVisible();
-  await expect(page.getByRole('button', { name: /Edit|Reset/ })).toHaveCount(0);
 
   const timelineResponse = await page.request.get('/api/v1/public/timeline');
   expect(timelineResponse.ok()).toBe(true);
@@ -32,6 +33,6 @@ test('public CV and Timeline pages render the persisted About content', async ({
   await expect(page.getByRole('heading', { name: 'A story still being written.' })).toBeVisible();
   await expect(page.getByText(timeline[0]!.title)).toBeVisible();
   await expect(
-    page.locator('.timeline-year strong', { hasText: timeline[0]!.dateLabel }),
+    page.locator('.life-chapter__year strong', { hasText: timeline[0]!.dateLabel.slice(0, 4) }),
   ).toBeVisible();
 });

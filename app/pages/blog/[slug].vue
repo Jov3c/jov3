@@ -5,6 +5,7 @@ import type { PublicPostDetail } from '~/types/blog';
 import { formatPostDate } from '~/utils/content';
 
 const route = useRoute();
+definePageMeta({ layout: 'blog-prototype' });
 const { data: post, error } = await useFetch<{ data: PublicPostDetail }>(
   `/api/v1/public/posts/${encodeURIComponent(String(route.params.slug))}`,
 );
@@ -12,7 +13,7 @@ const { data: post, error } = await useFetch<{ data: PublicPostDetail }>(
 if (!post.value?.data) {
   throw createError({
     statusCode: error.value?.statusCode === 404 ? 404 : 503,
-    statusMessage: error.value?.statusMessage ?? 'Post not found',
+    statusMessage: error.value?.statusMessage ?? '未找到文章',
   });
 }
 
@@ -27,29 +28,17 @@ usePageSeo({
 </script>
 
 <template>
-  <BlogChrome>
-    <template #hero>
-      <header class="article-header">
-        <NuxtLink class="back-link" to="/blog">← 返回 Blog</NuxtLink>
-        <p class="eyebrow">
-          {{ article.category.name }} · {{ formatPostDate(article.publishedAt ?? '') }}
-        </p>
-        <h1>{{ article.title }}</h1>
-        <p>{{ article.excerpt }}</p>
-        <div class="post-stats">
-          <span>{{ article.viewCount }} views</span><span>{{ article.commentCount }} comments</span
-          ><span>{{ article.wordCount }} words</span>
-        </div>
-        <img
-          v-if="article.cover"
-          class="article-cover"
-          :src="article.cover.publicUrl"
-          :alt="article.cover.altText || article.title"
-        />
-      </header>
-    </template>
+  <BlogChrome :show-sidebar="false" :show-subnav="false">
     <article class="article-page">
-      <NuxtLink class="back-link" to="/blog">← All posts</NuxtLink>
+      <NuxtLink class="back-link" to="/blog">← 返回博客</NuxtLink>
+      <header class="article-page__header">
+        <h1>{{ article.title }}</h1>
+        <p>
+          {{ article.category.name }} · {{ formatPostDate(article.publishedAt ?? '') }} ·
+          {{ article.viewCount }} 次阅读 · {{ article.commentCount }} 条评论 ·
+          {{ article.wordCount }} 字
+        </p>
+      </header>
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div class="article-body readme__content" v-html="article.contentHtml" />
     </article>

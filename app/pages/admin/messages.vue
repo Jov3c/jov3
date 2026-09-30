@@ -140,6 +140,7 @@ onMounted(load);
         </header>
         <p class="moderation-card__meta">
           <span>{{ formatDate(message.createdAt) }}</span>
+          <span v-if="message.isPrivate">悄悄话</span>
           <span v-if="message.parent">回复 {{ message.parent.nickname }}</span>
         </p>
         <p class="moderation-card__content">{{ message.content }}</p>

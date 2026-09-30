@@ -40,6 +40,13 @@ describe('community schemas', () => {
     ).toThrow();
   });
 
+  it('defaults messages to public and preserves an explicit whisper choice', () => {
+    const input = { nickname: 'M', email: 'm@example.com', content: 'x' };
+
+    expect(messageCreateSchema.parse(input).isPrivate).toBe(false);
+    expect(messageCreateSchema.parse({ ...input, isPrivate: true }).isPrivate).toBe(true);
+  });
+
   it('limits moderation actions and admin replies to plain text', () => {
     expect(moderationStatusUpdateSchema.parse({ status: 'HIDDEN' })).toEqual({ status: 'HIDDEN' });
     expect(() => moderationStatusUpdateSchema.parse({ status: 'PENDING_EMAIL' })).toThrow();

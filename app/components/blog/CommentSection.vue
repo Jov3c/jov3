@@ -74,7 +74,7 @@ async function submit() {
     <div class="community-section-heading">
       <div>
         <p class="eyebrow">Conversation</p>
-        <h2 id="comments-title">Comments</h2>
+        <h2 id="comments-title">评论</h2>
       </div>
       <span>{{ count }} 条已公开</span>
     </div>
@@ -108,14 +108,14 @@ async function submit() {
         </p>
         <p v-else>提交后请打开邮件完成验证。</p>
         <button class="button" type="submit" :disabled="isSubmitting">
-          {{ isSubmitting ? 'Sending…' : 'Comment' }}
+          {{ isSubmitting ? '提交中…' : '发表评论' }}
         </button>
       </div>
       <p v-if="notice" class="community-notice" role="status">{{ notice }}</p>
       <p v-if="errorMessage" class="community-error" role="alert">{{ errorMessage }}</p>
     </form>
 
-    <div v-if="isLoading" class="community-list-skeleton" aria-label="Loading comments">
+    <div v-if="isLoading" class="community-list-skeleton" aria-label="正在加载评论">
       <span v-for="item in 3" :key="item" />
     </div>
     <p v-else-if="error" class="community-empty">评论暂时无法加载。</p>

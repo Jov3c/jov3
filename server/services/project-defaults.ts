@@ -8,7 +8,7 @@ export const DEFAULT_PROJECTS = [
     status: 'BUILDING' as const,
     techStack: ['Vue', 'TypeScript', 'MySQL', 'Redis'],
     githubUrl: 'https://github.com/Jov3c',
-    demoUrl: null,
+    demoUrl: 'https://example.com',
     readmeMarkdown: `# Signal Daily
 
 Signal Daily 是一个面向日常信息获取场景的个人项目。项目详情页直接使用 README 作为主体内容。
@@ -95,7 +95,7 @@ Bloeco 是一个 Minecraft Paper 经济底座项目。
   {
     slug: 'reading-plugin',
     name: 'Reading Plugin',
-    summary: '为 Obsidian 提供 RSS 与公众号文章阅读能力。',
+    summary: '一个面向 Obsidian 的订阅阅读插件，重点放在阅读体验而不是摘要。',
     status: 'BUILDING' as const,
     techStack: ['TypeScript', 'Obsidian', 'RSS'],
     githubUrl: 'https://github.com/Jov3c',
@@ -110,11 +110,11 @@ Bloeco 是一个 Minecraft Paper 经济底座项目。
   {
     slug: 'jov3-lab',
     name: 'Jov3 Lab',
-    summary: '个人实验空间，用来放还没有成长为独立产品的小东西。',
+    summary: '用于承载个人实验、小工具和未来未归类想法的开放空间。',
     status: 'ACTIVE' as const,
     techStack: ['Web', 'AI', 'Prototype'],
     githubUrl: 'https://github.com/Jov3c',
-    demoUrl: null,
+    demoUrl: 'https://example.com',
     readmeMarkdown: `# Jov3 Lab
 
 个人实验空间，用来放还没有成长为独立产品的小东西。

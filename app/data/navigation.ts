@@ -18,5 +18,4 @@ export const blogNavigation: NavigationItem[] = [
   { label: '归档', to: '/blog/archive' },
   { label: '友链', to: '/blog/links' },
   { label: '留言', to: '/blog/message' },
-  { label: '足迹', to: '/blog/footprint' },
 ];

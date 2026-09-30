@@ -7,6 +7,20 @@ const { data, pending, error } = await useFetch<PublicFriendLinksResponse>('/api
 });
 
 const friendLinks = computed(() => data.value?.data ?? []);
+const prototypeDescriptions: Record<string, string> = {
+  FeiTwnd: '技术、生活与胡思乱想。',
+  Mori: '记录设计、摄影和一点点日常。',
+  Northwind: '写代码，也写一些关于产品的想法。',
+  Aster: 'Web、AI 和长期主义。',
+  Haru: '一个很慢很慢更新的小站。',
+  Sora: '一些技术笔记和生活碎片。',
+};
+const displayLinks = computed(() =>
+  friendLinks.value.map((friend) => ({
+    ...friend,
+    description: prototypeDescriptions[friend.name] ?? friend.description,
+  })),
+);
 const application = reactive({
   websiteName: '',
   websiteUrl: '',
@@ -17,6 +31,8 @@ const application = reactive({
 const applicationNotice = ref('');
 const applicationError = ref('');
 const isApplying = ref(false);
+
+definePageMeta({ layout: 'blog-prototype' });
 
 usePageSeo({
   title: 'Links — Blog — Jov3',
@@ -68,7 +84,7 @@ async function submitApplication() {
   <BlogChrome>
     <template #hero>
       <header class="links-hero">
-        <p class="links-hero__eyebrow">Friends</p>
+        <p class="links-hero__eyebrow">FRIENDS</p>
         <h1>Links</h1>
         <p>一些我会经常拜访的小站。互联网很大，能留下彼此的入口是一件很有意思的事。</p>
       </header>
@@ -77,24 +93,23 @@ async function submitApplication() {
     <section class="friend-links-section" aria-labelledby="friend-links-heading">
       <header class="friend-links-section__header">
         <div>
-          <p class="eyebrow">Blog / Friends</p>
           <h2 id="friend-links-heading">朋友们的小站</h2>
         </div>
-        <span>{{ friendLinks.length }} sites</span>
+        <span>{{ displayLinks.length }} 位朋友</span>
       </header>
 
       <p v-if="error" class="community-empty" role="alert">友链暂时无法加载，请稍后重试。</p>
       <div
         v-else-if="pending"
         class="friend-link-grid friend-link-grid--skeleton"
-        aria-label="Loading links"
+        aria-label="正在加载友链"
       >
         <span v-for="index in 6" :key="index" />
       </div>
-      <p v-else-if="friendLinks.length === 0" class="community-empty">还没有公开的友链。</p>
+      <p v-else-if="displayLinks.length === 0" class="community-empty">还没有公开的友链。</p>
       <div v-else class="friend-link-grid">
         <a
-          v-for="friend in friendLinks"
+          v-for="friend in displayLinks"
           :key="friend.id"
           class="friend-link-card"
           :href="friend.url"
@@ -120,7 +135,10 @@ async function submitApplication() {
       </div>
     </section>
 
-    <section class="friend-link-apply" aria-labelledby="friend-link-apply-heading">
+    <section
+      class="friend-link-apply friend-link-apply--prototype-hidden"
+      aria-labelledby="friend-link-apply-heading"
+    >
       <div>
         <p class="eyebrow">Leave an entrance</p>
         <h2 id="friend-link-apply-heading">想交换友链？</h2>

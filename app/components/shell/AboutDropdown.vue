@@ -10,7 +10,9 @@ const { data: publicCv } = await useFetch<{ data: unknown }>('/api/v1/public/cv'
   ignoreResponseError: true,
 });
 const visibleAboutNavigation = computed(() =>
-  publicCv.value?.data ? aboutNavigation : aboutNavigation.filter((item) => item.label !== 'CV'),
+  publicCv.value?.data
+    ? aboutNavigation
+    : aboutNavigation.filter((item) => item.to !== '/about/cv'),
 );
 
 function close() {

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { PublicMessage, PublicMessagesResponse } from '~/types/community';
 
-const form = reactive({ nickname: '', email: '', content: '' });
+const form = reactive({ nickname: 'jov3 visitor', email: '', content: '', isPrivate: false });
+const captcha = ref('');
 const messages = ref<PublicMessage[]>([]);
 const isSubmitting = ref(false);
 const notice = ref('');
@@ -18,19 +19,34 @@ function formatDate(value: string) {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Shanghai',
   })
     .format(new Date(value))
-    .replaceAll('/', '.');
+    .replaceAll('/', '-')
+    .replace(',', '');
 }
 
 async function submit() {
   isSubmitting.value = true;
   notice.value = '';
   errorMessage.value = '';
+  if (captcha.value.trim() !== '8') {
+    errorMessage.value = '验证码答案不正确。';
+    isSubmitting.value = false;
+    return;
+  }
   try {
+    const isPrivate = form.isPrivate;
     await $fetch('/api/v1/public/messages', { method: 'POST', body: form });
-    notice.value = '验证邮件已发送。完成邮箱验证后，留言会自动显示。';
+    notice.value = isPrivate
+      ? '验证邮件已发送。完成邮箱验证后，这条悄悄话仅博主可见。'
+      : '验证邮件已发送。完成邮箱验证后，留言会自动显示。';
     form.content = '';
+    form.isPrivate = false;
+    captcha.value = '';
     await refresh();
     messages.value = data.value?.data ?? messages.value;
   } catch (error) {
@@ -47,7 +63,7 @@ async function submit() {
     <form class="community-form message-board__form" @submit.prevent="submit">
       <div class="community-form__heading">
         <h2 id="message-board-title">写留言</h2>
-        <span>纯文本 · 验证邮箱后公开</span>
+        <span>支持 Markdown</span>
       </div>
       <textarea
         v-model="form.content"
@@ -56,7 +72,7 @@ async function submit() {
         placeholder="写点什么…"
         aria-label="留言内容"
       />
-      <div class="community-form__fields">
+      <div class="community-form__fields community-form__fields--message">
         <input v-model="form.nickname" required maxlength="80" placeholder="昵称 *" />
         <input
           v-model="form.email"
@@ -65,11 +81,17 @@ async function submit() {
           maxlength="254"
           placeholder="邮箱 / QQ *（不会公开）"
         />
+        <input v-model="captcha" required inputmode="numeric" placeholder="验证码 3 + 5 = ?" />
+      </div>
+      <div class="message-form-options">
+        <label><input v-model="form.isPrivate" type="checkbox" /> 悄悄话</label>
+        <label><input type="checkbox" checked /> 邮件提醒</label>
+        <label><input type="checkbox" checked /> Markdown</label>
       </div>
       <div class="community-form__actions">
         <p>想说点什么就留下来吧。</p>
         <button class="button" type="submit" :disabled="isSubmitting">
-          {{ isSubmitting ? 'Sending…' : '留言' }}
+          {{ isSubmitting ? '提交中…' : '留言' }}
         </button>
       </div>
       <p v-if="notice" class="community-notice" role="status">{{ notice }}</p>
@@ -79,7 +101,6 @@ async function submit() {
     <section class="message-panel" aria-live="polite">
       <div class="community-section-heading message-panel__heading">
         <div>
-          <p class="eyebrow">Guestbook</p>
           <h2>留言</h2>
         </div>
         <span>{{ data?.meta.total ?? messages.length }} 条</span>

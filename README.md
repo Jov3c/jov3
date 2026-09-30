@@ -2,11 +2,19 @@
 
 JOV3 personal website, built with Nuxt 4, PostgreSQL, and Prisma.
 
+Public pages reproduce the checked-in HTML prototypes. Foundation, Home/Projects,
+prototype-layout, and admin styles are kept in separate bundles. Home and Projects
+load their route styles directly; prototype and admin styles load through their
+respective layouts.
+
 ## Requirements
 
 - Node.js 24.14.0
 - pnpm 11.15.1
 - Docker Desktop or another Docker Compose-compatible runtime
+
+Docker is optional during local frontend development when a compatible
+PostgreSQL instance is already available.
 
 ## Setup
 

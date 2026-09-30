@@ -1,0 +1,15 @@
+.git
+.github
+.data
+.env
+.env.*
+!.env.production.example
+.nuxt
+.output
+.superpowers
+node_modules
+playwright-report
+test-results
+coverage
+work
+*.log

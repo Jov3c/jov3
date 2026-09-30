@@ -29,6 +29,7 @@ describe('comments and message board lifecycle', () => {
   const service = new CommunityService(new CommunityRepository(prisma), verifier);
   let commentId = '';
   let messageId = '';
+  let privateMessageId = '';
   let postId = '';
   let categoryId = '';
   const postSlug = `stage-seven-post-${suffix}`;
@@ -71,6 +72,8 @@ describe('comments and message board lifecycle', () => {
     if (commentId)
       await prisma.articleComment.delete({ where: { id: commentId } }).catch(() => undefined);
     if (messageId) await prisma.message.delete({ where: { id: messageId } }).catch(() => undefined);
+    if (privateMessageId)
+      await prisma.message.delete({ where: { id: privateMessageId } }).catch(() => undefined);
     if (postId) await prisma.articleComment.deleteMany({ where: { postId } });
     if (postId) await prisma.post.delete({ where: { id: postId } }).catch(() => undefined);
     if (categoryId)
@@ -120,7 +123,7 @@ describe('comments and message board lifecycle', () => {
   it('publishes verified messages, keeps email private, and supports moderation', async () => {
     const email = `stage07-${suffix}@example.com`;
     const submitted = await service.submitMessage(
-      { nickname: 'Stage Seven', email, content: 'A guestbook message.' },
+      { nickname: 'Stage Seven', email, content: 'A guestbook message.', isPrivate: false },
       'b'.repeat(64),
     );
     messageId = submitted.id;
@@ -141,5 +144,20 @@ describe('comments and message board lifecycle', () => {
     await service.updateMessageStatus(messageId, 'HIDDEN');
     const hidden = await service.listPublicMessages({ page: 1, pageSize: 50 });
     expect(hidden.items.some((item) => item.id === messageId)).toBe(false);
+
+    const privateSubmitted = await service.submitMessage(
+      { nickname: 'Stage Seven', email, content: 'A private message.', isPrivate: true },
+      'c'.repeat(64),
+    );
+    privateMessageId = privateSubmitted.id;
+    const privateToken = new URL(sender.messages.at(-1)!.text.split('\n')[2]!).searchParams.get(
+      'token',
+    )!;
+    await service.completeEmailVerification(await verifier.verify(privateToken));
+
+    const afterPrivate = await service.listPublicMessages({ page: 1, pageSize: 50 });
+    expect(afterPrivate.items.some((item) => item.id === privateMessageId)).toBe(false);
+    const adminMessages = await service.listAdminMessages({ page: 1, pageSize: 50 });
+    expect(adminMessages.items.find((item) => item.id === privateMessageId)?.isPrivate).toBe(true);
   });
 });

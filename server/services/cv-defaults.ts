@@ -3,19 +3,19 @@ import type { PrismaClient } from '../generated/prisma/client';
 const DEFAULT_PROFILE = {
   isPublic: true,
   name: '朱鹏 / Jov3',
-  headline: 'AI Application · Solutions · Forward Deployed',
+  headline: 'AI 应用 · 解决方案 · 一线交付',
   bio: '喜欢把 AI、产品和工程真正落到可用的东西上。关注部署、集成、工作流和长期维护，而不是只停留在 Demo。',
-  location: 'Chengdu, China',
+  location: '中国成都',
   website: 'https://jov3.cloud',
-  statusText: 'Open to AI roles',
-  statement: 'I like turning vague ideas into systems people can actually use.',
+  statusText: '关注 AI 相关机会',
+  statement: '我喜欢把模糊的想法变成真正有人可以使用的系统。',
 };
 
 const DEFAULT_EXPERIENCES = [
   {
     company: '天立泰科技股份有限公司',
     role: '运维工程师',
-    location: 'Chengdu',
+    location: '成都',
     startDate: '2025-06-01',
     endDate: null,
     isCurrent: true,
@@ -25,8 +25,8 @@ const DEFAULT_EXPERIENCES = [
   },
   {
     company: '四川昊明远创科技有限公司',
-    role: 'Technical / Operations',
-    location: 'Sichuan',
+    role: '技术与运维',
+    location: '四川',
     startDate: '2021-04-01',
     endDate: '2025-04-30',
     isCurrent: false,
@@ -55,12 +55,12 @@ const DEFAULT_SKILLS = [
     sortOrder: 10,
   },
   {
-    title: 'Engineering',
+    title: '工程',
     content: 'Python · Web · API · MySQL · Redis · Docker · Linux',
     sortOrder: 20,
   },
   {
-    title: 'Product',
+    title: '产品',
     content: 'PRD · Information Architecture · Prototyping · UX iteration',
     sortOrder: 30,
   },

@@ -26,7 +26,8 @@ test('home presents the personal entry points', async ({ page }) => {
 test('projects open a README-style detail page', async ({ page }) => {
   await page.goto('/projects');
 
-  await expect(page.getByRole('heading', { name: 'Selected work.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Projects' })).toBeVisible();
+  await expect(page.getByText(/共\s*\d+\s*个项目/)).toBeVisible();
   await page.getByRole('link', { name: /Signal Daily/ }).click();
   await expect(page).toHaveURL(/\/projects\/signal-daily$/);
   await expect(
@@ -38,4 +39,11 @@ test('projects open a README-style detail page', async ({ page }) => {
     '暂无在线预览',
   );
   await expectNoHorizontalOverflow(page);
+});
+
+test('blog cards become visible after the prototype loading state', async ({ page }) => {
+  await page.goto('/blog');
+
+  await expect(page.locator('.blog-prototype-topbar')).toBeVisible();
+  await expect(page.locator('.post-card').first()).toBeVisible();
 });

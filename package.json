@@ -37,7 +37,6 @@
     "@prisma/client": "7.10.0",
     "argon2": "0.45.1",
     "dotenv": "18.0.4",
-    "maplibre-gl": "^6.11.2",
     "marked": "18.0.14",
     "nodemailer": "10.0.12",
     "nuxt": "4.5.2",

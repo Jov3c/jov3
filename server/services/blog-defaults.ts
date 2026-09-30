@@ -14,7 +14,8 @@ const DEFAULT_POSTS = [
     slug: 'server',
     category: 'development',
     title: '博客服务器的自动巡检和基于 Git 的备份',
-    excerpt: '把常见检查、异常提示与内容备份串成一条足够简单、可以长期运行的自动化流程。',
+    excerpt:
+      '整理服务器后意识到未备份，于是把数据库、Nginx 配置和关键文件纳入自动备份，并为历史回滚保留清晰路径。',
     publishedAt: '2026-09-18T16:37:00+08:00',
     markdownBody: `# 博客服务器的自动巡检和基于 Git 的备份
 
@@ -30,7 +31,8 @@ const DEFAULT_POSTS = [
     slug: 'ai',
     category: 'ai',
     title: '本地部署大模型之后，我们应该让它做什么？',
-    excerpt: '从“成功跑起来”继续往前，寻找真正值得长期留在本地的工作流。',
+    excerpt:
+      '模型跑起来只是第一步。真正值得考虑的是哪些任务适合长期留在本地运行，而不是停留在一次聊天。',
     publishedAt: '2026-09-12T21:10:00+08:00',
     markdownBody: `# 本地部署大模型之后，我们应该让它做什么？
 
@@ -42,7 +44,7 @@ const DEFAULT_POSTS = [
     slug: 'product',
     category: 'product',
     title: '我为什么越来越少给产品堆功能',
-    excerpt: '功能数量并不会自然变成产品价值，有时真正困难的是判断哪些东西不应该出现。',
+    excerpt: '功能越来越多并不一定意味着产品越来越完整，有时候反而意味着主线变得越来越模糊。',
     publishedAt: '2026-09-04T12:26:00+08:00',
     markdownBody: `# 我为什么越来越少给产品堆功能
 
@@ -66,13 +68,61 @@ const DEFAULT_POSTS = [
     slug: 'signal',
     category: 'product',
     title: 'Signal Daily：从信息聚合到低噪音阅读',
-    excerpt: '重新整理信息产品中的获取、筛选和阅读，让每天打开它时都更轻一点。',
+    excerpt: '信息产品真正难的地方，不是抓到更多内容，而是决定什么应该被看见，以及什么时候被看见。',
     publishedAt: '2026-08-20T10:08:00+08:00',
     markdownBody: `# Signal Daily：从信息聚合到低噪音阅读
 
 聚合只是入口，减少噪音才是 Signal Daily 真正想解决的问题。
 
 当来源不断增加，产品需要替用户保护注意力，而不是展示自己抓到了多少内容。`,
+  },
+  {
+    slug: 'long-term-projects',
+    category: 'essay',
+    title: '一些关于长期做项目的想法',
+    excerpt: '关于耐心、取舍和持续维护的一些记录。',
+    publishedAt: '2026-08-11T12:00:00+08:00',
+    markdownBody: '# 一些关于长期做项目的想法\n\n真正困难的不是开始，而是持续维护。',
+  },
+  {
+    slug: 'product-boundary',
+    category: 'product',
+    title: '从一个小工具开始理解产品边界',
+    excerpt: '边界清楚的小工具，往往比什么都想做的产品更有生命力。',
+    publishedAt: '2026-07-27T12:00:00+08:00',
+    markdownBody: '# 从一个小工具开始理解产品边界\n\n先把最重要的一件事做好。',
+  },
+  {
+    slug: 'local-model-workflow',
+    category: 'ai',
+    title: '关于本地模型工作流的一次整理',
+    excerpt: '整理本地模型在实际工作中的位置与边界。',
+    publishedAt: '2026-07-09T12:00:00+08:00',
+    markdownBody: '# 关于本地模型工作流的一次整理\n\n模型需要进入工作流，才会产生长期价值。',
+  },
+  {
+    slug: 'things-built-2025',
+    category: 'essay',
+    title: '今年做过的一些东西',
+    excerpt: '回看这一年做过、放弃和留下来的项目。',
+    publishedAt: '2025-12-21T12:00:00+08:00',
+    markdownBody: '# 今年做过的一些东西\n\n有些完成了，有些仍在继续。',
+  },
+  {
+    slug: 'automate-repetition',
+    category: 'development',
+    title: '把重复的工作交给自动化',
+    excerpt: '从最常发生的重复动作开始建立自动化。',
+    publishedAt: '2025-12-05T12:00:00+08:00',
+    markdownBody: '# 把重复的工作交给自动化\n\n自动化应该让结果更容易确认。',
+  },
+  {
+    slug: 'prototype-structure',
+    category: 'product',
+    title: '产品原型为什么应该先解决结构',
+    excerpt: '视觉之前，先把信息与操作关系理清楚。',
+    publishedAt: '2025-11-14T12:00:00+08:00',
+    markdownBody: '# 产品原型为什么应该先解决结构\n\n结构决定了用户如何理解产品。',
   },
 ] as const;
 
@@ -87,23 +137,25 @@ export async function seedBlogDefaults(prisma: PrismaClient) {
     categories.set(record.slug, record.id);
   }
 
-  if ((await prisma.post.count()) > 0) return false;
-
-  await prisma.post.createMany({
-    data: DEFAULT_POSTS.map((post) => ({
-      slug: post.slug,
-      title: post.title,
-      excerpt: post.excerpt,
-      categoryId: categories.get(post.category)!,
-      coverMediaId: null,
-      markdownBody: post.markdownBody,
-      status: 'PUBLISHED' as const,
-      publishedAt: new Date(post.publishedAt),
-      wordCount: countMarkdownWords(post.markdownBody),
-      viewCount: BigInt(0),
-      seoTitle: null,
-      seoDescription: null,
-    })),
-  });
+  for (const post of DEFAULT_POSTS) {
+    await prisma.post.upsert({
+      where: { slug: post.slug },
+      update: {},
+      create: {
+        slug: post.slug,
+        title: post.title,
+        excerpt: post.excerpt,
+        categoryId: categories.get(post.category)!,
+        coverMediaId: null,
+        markdownBody: post.markdownBody,
+        status: 'PUBLISHED' as const,
+        publishedAt: new Date(post.publishedAt),
+        wordCount: countMarkdownWords(post.markdownBody),
+        viewCount: BigInt(0),
+        seoTitle: null,
+        seoDescription: null,
+      },
+    });
+  }
   return true;
 }
