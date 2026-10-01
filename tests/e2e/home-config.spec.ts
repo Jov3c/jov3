@@ -9,6 +9,7 @@ test('admin can add a homepage entry and the public page reads it from the API',
   test.skip(testInfo.project.name !== 'desktop-chromium', 'Homepage configuration flow runs once');
 
   const login = await page.request.post('/api/v1/auth/login', {
+    headers: { 'x-forwarded-for': '10.0.0.23' },
     data: { email: adminEmail, password: adminPassword },
   });
   expect(login.ok()).toBe(true);

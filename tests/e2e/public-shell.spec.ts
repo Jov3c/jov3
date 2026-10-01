@@ -31,13 +31,10 @@ test('projects open a README-style detail page', async ({ page }) => {
   await page.getByRole('link', { name: /Signal Daily/ }).click();
   await expect(page).toHaveURL(/\/projects\/signal-daily$/);
   await expect(
-    page.locator('.project-detail__hero').getByRole('heading', { name: 'Signal Daily' }),
+    page.locator('.project-prototype-readme').getByRole('heading', { name: 'Signal Daily' }),
   ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Features' })).toBeVisible();
-  await expect(page.locator('.project-actions [aria-disabled="true"]')).toHaveAttribute(
-    'title',
-    '暂无在线预览',
-  );
+  await expect(page.getByText('README.md', { exact: true })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 

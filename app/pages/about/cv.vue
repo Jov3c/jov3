@@ -106,7 +106,7 @@ function websiteLabel(value: string | null) {
         </div>
       </aside>
 
-      <main class="cv-stack">
+      <div class="cv-stack">
         <section class="cv-prototype-panel">
           <header><strong>工作经历</strong><span>工作 / 实践</span></header>
           <article v-for="item in cv.experiences" :key="item.id" class="cv-prototype-entry">
@@ -164,7 +164,7 @@ function websiteLabel(value: string | null) {
           <p>{{ cv.profile.statement }}</p>
           <small>JOV3 · 2026</small>
         </blockquote>
-      </main>
+      </div>
     </section>
 
     <footer class="cv-prototype-footer">

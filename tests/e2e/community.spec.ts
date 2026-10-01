@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('public article and guestbook hide private email fields', async ({ page }) => {
   await page.goto('/blog/server');
   await page.waitForLoadState('networkidle');
-  await expect(page.getByRole('heading', { name: 'Comments', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '评论', exact: true })).toBeVisible();
   await expect(page.getByText('把检查拆开之后确实更容易长期维护')).toBeVisible();
   await expect(page.locator('body')).not.toContainText('@example.com');
 

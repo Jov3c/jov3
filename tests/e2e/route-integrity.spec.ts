@@ -22,7 +22,7 @@ test('all Stage 01 public routes render without placeholder links or overflow', 
   for (const route of publicRoutes) {
     const response = await page.goto(route);
     expect(response?.status(), route).toBe(200);
-    await expect(page.locator('main')).toBeVisible();
+    await expect(page.locator('#main-content')).toBeVisible();
     expect(await page.locator('a[href="#"]').count(), `${route} contains href="#"`).toBe(0);
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),

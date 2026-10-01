@@ -11,6 +11,7 @@ test('admin can upload, edit, serve, query, and delete media', async ({ page }, 
   test.skip(testInfo.project.name !== 'desktop-chromium', 'Media API flow runs once');
 
   const login = await page.request.post('/api/v1/auth/login', {
+    headers: { 'x-forwarded-for': '10.0.0.24' },
     data: { email: adminEmail, password: adminPassword },
   });
   expect(login.ok()).toBe(true);

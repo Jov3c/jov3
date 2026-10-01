@@ -11,12 +11,14 @@ test('auth API uses a secure cookie and invalidates the database session on logo
     'API contract runs once per browser engine',
   );
   const invalid = await request.post('/api/v1/auth/login', {
+    headers: { 'x-forwarded-for': '10.0.0.22' },
     data: { email: adminEmail, password: 'incorrect-password' },
   });
   expect(invalid.status()).toBe(401);
   await expect(invalid.json()).resolves.toMatchObject({ error: { code: 'INVALID_CREDENTIALS' } });
 
   const login = await request.post('/api/v1/auth/login', {
+    headers: { 'x-forwarded-for': '10.0.0.22' },
     data: { email: adminEmail, password: adminPassword },
   });
   expect(login.status()).toBe(200);

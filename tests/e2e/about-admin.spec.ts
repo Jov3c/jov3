@@ -16,7 +16,7 @@ test('admin can toggle CV visibility without deleting its content', async ({ pag
   try {
     await page.goto('/admin/cv');
     await expect(page.getByRole('heading', { name: 'CV' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Timeline' })).toBeVisible();
+    await expect(page.getByRole('link', { name: '时间线' })).toBeVisible();
     await expect(page.getByLabel('Public CV')).toBeChecked();
 
     await page.getByLabel('Public CV').uncheck();
