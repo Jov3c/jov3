@@ -20,7 +20,15 @@ test('admin can toggle CV visibility without deleting its content', async ({ pag
     await expect(page.getByLabel('Public CV')).toBeChecked();
 
     await page.getByLabel('Public CV').uncheck();
-    await page.getByRole('button', { name: 'Save profile' }).click();
+    await Promise.all([
+      page.waitForResponse(
+        (response) =>
+          response.url().endsWith('/api/v1/admin/cv/profile') &&
+          response.request().method() === 'PATCH' &&
+          response.ok(),
+      ),
+      page.getByRole('button', { name: 'Save profile' }).click(),
+    ]);
     await expect(page.getByRole('status')).toContainText('已保存');
     expect((await page.request.get('/api/v1/public/cv')).status()).toBe(404);
     const privateSitemap = await page.request.get('/sitemap.xml');
@@ -28,7 +36,15 @@ test('admin can toggle CV visibility without deleting its content', async ({ pag
     await expect(page.getByText('Private 状态下，前台 About dropdown 将隐藏 CV')).toBeVisible();
 
     await page.getByLabel('Public CV').check();
-    await page.getByRole('button', { name: 'Save profile' }).click();
+    await Promise.all([
+      page.waitForResponse(
+        (response) =>
+          response.url().endsWith('/api/v1/admin/cv/profile') &&
+          response.request().method() === 'PATCH' &&
+          response.ok(),
+      ),
+      page.getByRole('button', { name: 'Save profile' }).click(),
+    ]);
     await expect(page.getByRole('status')).toContainText('已保存');
     expect((await page.request.get('/api/v1/public/cv')).ok()).toBe(true);
   } finally {
