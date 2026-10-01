@@ -14,8 +14,8 @@ test('blog index exposes database-backed articles and category filtering', async
   await page.goto('/blog');
   await page.getByRole('link', { name: /博客服务器的自动巡检/ }).click();
   await expect(page).toHaveURL(/\/blog\/server$/);
-  await expect(page.locator('.article-page__header').getByText(/\d+ 字$/)).toBeVisible();
-  await expect(page.locator('.article-header').getByRole('heading')).toContainText(
+  await expect(page.locator('.article-page__header p')).toContainText(/\d+ 字/);
+  await expect(page.locator('.article-page__header').getByRole('heading')).toContainText(
     '博客服务器的自动巡检',
   );
 });
@@ -36,6 +36,6 @@ test('blog utilities preserve archive, links, and guestbook semantics', async ({
   await page.goto('/blog/message');
   await expect(page.getByRole('heading', { name: 'Message', exact: true })).toBeVisible();
   await expect(page.getByText('这个站的整体节奏很舒服')).toBeVisible();
-  await expect(page.getByText('想说点什么就留下来吧。')).toBeVisible();
+  await expect(page.getByText('想说点什么就留下来吧。', { exact: true })).toBeVisible();
   await expect(page.getByLabel('悄悄话')).toBeVisible();
 });

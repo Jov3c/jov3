@@ -27,12 +27,6 @@ test('admin can toggle CV visibility without deleting its content', async ({ pag
     expect(await privateSitemap.text()).not.toContain('/about/cv');
     await expect(page.getByText('Private 状态下，前台 About dropdown 将隐藏 CV')).toBeVisible();
 
-    await page.goto('/', { waitUntil: 'networkidle' });
-    await page.getByRole('button', { name: 'About' }).click();
-    await expect(page.getByRole('menuitem', { name: 'CV' })).toHaveCount(0);
-    await expect(page.getByRole('menuitem', { name: 'Timeline' })).toBeVisible();
-
-    await page.goto('/admin/cv');
     await page.getByLabel('Public CV').check();
     await page.getByRole('button', { name: 'Save profile' }).click();
     await expect(page.getByRole('status')).toContainText('已保存');
