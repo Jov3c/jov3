@@ -1,33 +1,7 @@
 <script setup lang="ts">
-interface HomeEntry {
-  id: string;
-  title: string;
-  description: string;
-  icon: string | null;
-  url: string;
-  targetType: 'INTERNAL' | 'EXTERNAL';
-  openNewTab: boolean;
-}
+import type { PublicHomeResponse } from '~/types/home';
 
-interface HomeData {
-  siteProfile: {
-    siteTitle: string;
-    siteDescription: string;
-    foundedAt: string;
-  };
-  homeProfile: {
-    nickname: string;
-    role: string;
-    intro: string;
-    avatar: { url: string; altText: string | null } | null;
-    statusText: string | null;
-    statusVisible: boolean;
-  };
-  entries: HomeEntry[];
-  socialLinks: Array<{ id: string; name: string; icon: string | null; url: string }>;
-}
-
-const { data: response, error } = await useFetch<{ data: HomeData }>('/api/v1/public/home', {
+const { data: response, error } = await useFetch<PublicHomeResponse>('/api/v1/public/home', {
   key: 'public-home-meta',
 });
 if (error.value || !response.value?.data) {
@@ -126,7 +100,11 @@ function isExternalSocialUrl(url: string) {
             </a>
             <NuxtLink v-else :to="link.url">{{ link.name }}</NuxtLink>
           </template>
-          <a href="mailto:hello@example.com">Email</a>
+          <a
+            v-if="home.siteProfile.publicContactEmail"
+            :href="`mailto:${home.siteProfile.publicContactEmail}`"
+            >Email</a
+          >
           <NuxtLink to="/rss.xml">RSS</NuxtLink>
         </div>
       </main>

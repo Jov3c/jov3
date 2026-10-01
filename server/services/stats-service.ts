@@ -33,6 +33,9 @@ export class StatsService {
     return {
       onlineVisitors: result.onlineVisitors,
       totalPageViews: Number(result.totalPageViews),
+      totalPosts: result.totalPosts,
+      totalCategories: result.totalCategories,
+      totalWords: result.totalWords,
       foundedAt: result.foundedAt.toISOString().slice(0, 10),
       uptime: { ...uptime, label: formatUptime(uptime) },
     };

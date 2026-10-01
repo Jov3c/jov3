@@ -6,14 +6,9 @@ import type {
   SiteProfileInput,
   SocialLinkInput,
 } from '../../shared/schemas/home';
-import { ensureHomeDefaults } from '../services/home-defaults';
 
 export class HomeRepository {
   constructor(private readonly prisma: PrismaClient) {}
-
-  ensureDefaults() {
-    return ensureHomeDefaults(this.prisma);
-  }
 
   findSiteProfile() {
     return this.prisma.siteProfile.findFirst();
@@ -48,6 +43,10 @@ export class HomeRepository {
     return this.prisma.homeEntry.findMany({
       orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
     });
+  }
+
+  countVisibleHomeEntries() {
+    return this.prisma.homeEntry.count({ where: { visible: true } });
   }
 
   createHomeEntry(input: HomeEntryInput) {

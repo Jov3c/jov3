@@ -3,7 +3,7 @@ import type { PublicCvResponse } from '~/types/cv';
 
 definePageMeta({ layout: 'blog-prototype' });
 
-const { data, error, refresh } = await useFetch<PublicCvResponse>('/api/v1/public/cv', {
+const { data, error } = await useFetch<PublicCvResponse>('/api/v1/public/cv', {
   key: 'public-cv',
 });
 
@@ -25,10 +25,6 @@ function printCv() {
   window.print();
 }
 
-function resetCv() {
-  void refresh();
-}
-
 function formatMonth(value: string) {
   const [year, month] = value.split('-');
   return `${year}.${month}`;
@@ -46,6 +42,8 @@ function websiteLabel(value: string | null) {
     return value;
   }
 }
+
+const updatedYear = computed(() => new Date(cv.value.profile.updatedAt).getFullYear());
 </script>
 
 <template>
@@ -60,8 +58,6 @@ function websiteLabel(value: string | null) {
           </p>
         </div>
         <div class="cv-prototype-actions">
-          <NuxtLink class="cv-prototype-button" to="/admin/cv">Edit CV</NuxtLink>
-          <button class="cv-prototype-button" type="button" @click="resetCv">Reset</button>
           <button
             class="cv-prototype-button cv-prototype-button--dark"
             type="button"
@@ -97,12 +93,23 @@ function websiteLabel(value: string | null) {
           </div>
         </div>
         <div class="cv-tags">
-          <span>AI 应用</span><span>产品</span><span>运维</span><span>自动化</span>
+          <span v-for="skill in cv.skills" :key="skill.id">{{ skill.title }}</span>
         </div>
         <div class="cv-links">
-          <a href="https://github.com/Jov3c" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="mailto:hello@example.com">邮箱</a>
-          <a href="/blog">博客</a>
+          <a
+            v-for="link in cv.links"
+            :key="link.id"
+            :href="link.url"
+            :target="/^https?:/i.test(link.url) ? '_blank' : undefined"
+            :rel="/^https?:/i.test(link.url) ? 'noreferrer' : undefined"
+          >
+            {{ link.name }}
+          </a>
+          <a v-if="cv.profile.contactEmail" :href="`mailto:${cv.profile.contactEmail}`">邮箱</a>
+          <a v-if="cv.profile.website" :href="cv.profile.website" target="_blank" rel="noreferrer"
+            >网站</a
+          >
+          <NuxtLink to="/blog">博客</NuxtLink>
         </div>
       </aside>
 
@@ -117,7 +124,7 @@ function websiteLabel(value: string | null) {
             </div>
             <div>
               <h3>{{ item.role }} · {{ item.company }}</h3>
-              <small>技术 / 运维</small>
+              <small>{{ item.location }}</small>
               <p>{{ item.description }}</p>
             </div>
           </article>
@@ -168,7 +175,7 @@ function websiteLabel(value: string | null) {
     </section>
 
     <footer class="cv-prototype-footer">
-      <span>JOV3 / 个人简历</span><span>最后更新 · 2026</span>
+      <span>JOV3 / 个人简历</span><span>最后更新 · {{ updatedYear }}</span>
     </footer>
   </div>
 </template>

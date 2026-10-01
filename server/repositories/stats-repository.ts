@@ -27,11 +27,20 @@ export class StatsRepository {
     const onlineVisitors = await this.prisma.visitorActivity.count({
       where: { lastSeenAt: { gte: new Date(now.getTime() - ONLINE_WINDOW_MS) } },
     });
+    const totalPosts = await this.prisma.post.count({ where: { status: 'PUBLISHED' } });
+    const totalCategories = await this.prisma.postCategory.count({ where: { visible: true } });
+    const totalWords = await this.prisma.post.aggregate({
+      where: { status: 'PUBLISHED' },
+      _sum: { wordCount: true },
+    });
     const siteProfile = await this.prisma.siteProfile.findFirst({ select: { foundedAt: true } });
 
     return {
       totalPageViews: pageViews._sum.views ?? BigInt(0),
       onlineVisitors,
+      totalPosts,
+      totalCategories,
+      totalWords: totalWords._sum.wordCount ?? 0,
       foundedAt: siteProfile?.foundedAt ?? null,
     };
   }

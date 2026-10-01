@@ -4,12 +4,18 @@ set -eu
 : "${JOV3_DATA_ROOT:=/srv/jov3/data}"
 : "${JOV3_BACKUP_ROOT:=/srv/jov3/backups}"
 : "${COMPOSE_FILE:=docker-compose.production.yml}"
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 timestamp=$(date -u +%Y%m%dT%H%M%SZ)
 daily="$JOV3_BACKUP_ROOT/daily/$timestamp"
 mkdir -p "$daily"
 
-docker compose -f "$COMPOSE_FILE" exec -T postgres pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" > "$daily/database.sql"
+if [ -n "${JOV3_DATABASE_URL:-}" ]; then
+  dump_url=$(node "$script_dir/pg-dump-url.mjs" "$JOV3_DATABASE_URL")
+  pg_dump "$dump_url" > "$daily/database.sql"
+else
+  docker compose -f "$COMPOSE_FILE" exec -T postgres pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB" > "$daily/database.sql"
+fi
 tar -C "$JOV3_DATA_ROOT" -czf "$daily/uploads-geo.tgz" uploads geo
 
 find "$JOV3_BACKUP_ROOT/daily" -mindepth 1 -maxdepth 1 -type d -mtime +6 -exec rm -rf {} +

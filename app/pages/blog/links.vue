@@ -7,20 +7,7 @@ const { data, pending, error } = await useFetch<PublicFriendLinksResponse>('/api
 });
 
 const friendLinks = computed(() => data.value?.data ?? []);
-const prototypeDescriptions: Record<string, string> = {
-  FeiTwnd: '技术、生活与胡思乱想。',
-  Mori: '记录设计、摄影和一点点日常。',
-  Northwind: '写代码，也写一些关于产品的想法。',
-  Aster: 'Web、AI 和长期主义。',
-  Haru: '一个很慢很慢更新的小站。',
-  Sora: '一些技术笔记和生活碎片。',
-};
-const displayLinks = computed(() =>
-  friendLinks.value.map((friend) => ({
-    ...friend,
-    description: prototypeDescriptions[friend.name] ?? friend.description,
-  })),
-);
+const displayLinks = computed(() => friendLinks.value);
 const application = reactive({
   websiteName: '',
   websiteUrl: '',
@@ -135,10 +122,7 @@ async function submitApplication() {
       </div>
     </section>
 
-    <section
-      class="friend-link-apply friend-link-apply--prototype-hidden"
-      aria-labelledby="friend-link-apply-heading"
-    >
+    <section class="friend-link-apply" aria-labelledby="friend-link-apply-heading">
       <div>
         <p class="eyebrow">Leave an entrance</p>
         <h2 id="friend-link-apply-heading">想交换友链？</h2>

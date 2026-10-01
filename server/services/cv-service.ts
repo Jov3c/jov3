@@ -37,7 +37,11 @@ export class CvService {
   async getPublic() {
     const aggregate = await this.requireAggregate();
     if (!aggregate.isPublic) throw new CvError(404, 'CV_NOT_PUBLIC', 'CV is not public');
-    return toPublicDto(aggregate);
+    const [contactEmail, socialLinks] = await Promise.all([
+      this.repository.findPublicContactEmail(),
+      this.repository.listPublicSocialLinks(),
+    ]);
+    return toPublicDto(aggregate, contactEmail, socialLinks);
   }
 
   async getAdmin() {
@@ -158,7 +162,11 @@ export function cvApiError(error: unknown) {
   return null;
 }
 
-function toPublicDto(aggregate: CvAggregate) {
+function toPublicDto(
+  aggregate: CvAggregate,
+  contactEmail: string | null,
+  socialLinks: Array<{ id: string; name: string; url: string }>,
+) {
   return {
     profile: {
       name: aggregate.name,
@@ -166,8 +174,10 @@ function toPublicDto(aggregate: CvAggregate) {
       bio: aggregate.bio,
       location: aggregate.location,
       website: aggregate.website,
+      contactEmail,
       statusText: aggregate.statusText,
       statement: aggregate.statement,
+      updatedAt: aggregate.updatedAt.toISOString(),
       portrait: aggregate.portraitMedia
         ? {
             id: aggregate.portraitMedia.id,
@@ -182,6 +192,7 @@ function toPublicDto(aggregate: CvAggregate) {
     projects: aggregate.projectRefs
       .filter((ref) => ref.project.visible)
       .map((ref) => toProjectDto(ref.project)),
+    links: socialLinks,
   };
 }
 

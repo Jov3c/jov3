@@ -16,6 +16,7 @@ test('public Links reads published friend links without exposing applicant conta
   await page.goto('/blog/links');
   await expect(page.getByRole('heading', { name: 'Links', exact: true })).toBeVisible();
   await expect(page.getByText('朋友们的小站')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '想交换友链？' })).toBeVisible();
   await expect(page.getByRole('link', { name: /FeiTwnd/ })).toHaveAttribute(
     'href',
     'https://feitwnd.cc',

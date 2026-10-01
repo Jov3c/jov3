@@ -1,10 +1,24 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const statefulE2eFiles = [
+  '**/about-admin.spec.ts',
+  '**/admin-shell.spec.ts',
+  '**/auth-api.spec.ts',
+  '**/blog-admin.spec.ts',
+  '**/community.spec.ts',
+  '**/footprint-admin.spec.ts',
+  '**/friend-links.spec.ts',
+  '**/home-config.spec.ts',
+  '**/media-library.spec.ts',
+  '**/projects-admin.spec.ts',
+  '**/seo-stats.spec.ts',
+];
+
 export default defineConfig({
   testDir: './tests/e2e',
   outputDir: './test-results',
-  fullyParallel: true,
-  workers: process.env.CI ? 1 : undefined,
+  fullyParallel: false,
+  workers: 1,
   timeout: process.env.CI ? 60_000 : 30_000,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
@@ -21,6 +35,7 @@ export default defineConfig({
     },
     {
       name: 'mobile-chromium',
+      testIgnore: statefulE2eFiles,
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 390, height: 844 },
@@ -28,6 +43,7 @@ export default defineConfig({
     },
     {
       name: 'tablet-chromium',
+      testIgnore: statefulE2eFiles,
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 920, height: 1000 },

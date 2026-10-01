@@ -12,6 +12,10 @@ test('public article and guestbook hide private email fields', async ({ page }) 
   await expect(page.getByRole('heading', { name: 'Message', exact: true })).toBeVisible();
   await expect(page.getByText('这个站的整体节奏很舒服')).toBeVisible();
   await expect(page.locator('body')).not.toContainText('@example.com');
+  await expect(page.getByText('邮件提醒')).toHaveCount(0);
+  await expect(page.getByText('支持 Markdown')).toHaveCount(0);
+  await expect(page.getByPlaceholder('验证码 3 + 5 = ?')).toHaveCount(0);
+  await expect(page.getByPlaceholder('邮箱 / QQ *（不会公开）')).toHaveCount(0);
 });
 
 test('admin can open moderation queues and see seeded content', async ({ page }, testInfo) => {

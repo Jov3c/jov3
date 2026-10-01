@@ -72,11 +72,31 @@ jobs:
       - name: Run database integration tests
         run: pnpm test:integration
 
+      - name: Reset browser test database
+        env:
+          JOV3_BROWSER_RESET: '1'
+        run: pnpm test:reset-browser-data
+
       - name: Bootstrap test administrator
         run: pnpm admin:bootstrap
 
       - name: Seed browser test fixtures
         run: pnpm test:seed-browser-data
+
+      - name: Verify browser fixture idempotence
+        run: pnpm test:seed-browser-data
+
+      - name: Create restore backup fixture
+        run: |
+          mkdir -p /tmp/jov3-backup/uploads /tmp/jov3-backup/geo
+          pg_dump "postgresql://jov3:jov3_ci_only@127.0.0.1:5432/jov3" > /tmp/jov3-backup/database.sql
+          tar -C /tmp/jov3-backup -czf /tmp/jov3-backup/uploads-geo.tgz uploads geo
+
+      - name: Run real PostgreSQL restore test
+        env:
+          JOV3_RESTORE_ADMIN_DATABASE_URL: postgresql://jov3:jov3_ci_only@127.0.0.1:5432/postgres
+          JOV3_RESTORE_ROOT: /tmp/jov3-restore-test
+        run: sh scripts/backup/restore-test.sh /tmp/jov3-backup
 
       - name: Install browser for end-to-end tests
         run: pnpm exec playwright install --with-deps chromium

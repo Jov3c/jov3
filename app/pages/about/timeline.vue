@@ -20,55 +20,20 @@ const activeIndex = ref(0);
 const railProgress = ref(0);
 let revealObserver: IntersectionObserver | null = null;
 
-const chapterCopy = [
-  {
-    label: 'START',
-    kicker: 'Beginning',
-    heading: '开始认真把想法做出来。',
-    description: '从“想做一个东西”到真正开始拆需求、画页面、写代码，这大概是很多事情的起点。',
-    tag: 'LIFE / BUILD',
-  },
-  {
-    label: 'EXPLORE',
-    kicker: 'Exploration',
-    heading: '开始在产品和技术之间来回走。',
-    description: '不再只是关注“能不能做”，而是开始在意为什么这样设计、用户会怎么用、以后怎么维护。',
-    tag: 'PRODUCT',
-  },
-  {
-    label: 'BUILD',
-    kicker: 'Independent projects',
-    heading: '开始做更多真正属于自己的东西。',
-    description:
-      '一些项目被留下，一些项目被废弃。它们慢慢变成一种判断：什么值得继续，什么应该及时停下来。',
-    tag: 'PROJECT',
-  },
-  {
-    label: 'NOW',
-    kicker: 'AI · Product · Developer',
-    heading: '把 AI、产品和开发放到同一件事里。',
-    description: '现在更关心的是：能不能把一个想法做成真正有人愿意持续使用的东西。',
-    tag: 'PROJECT',
-  },
-  {
-    label: 'CONTINUE',
-    kicker: 'To be continued',
-    heading: '故事仍在继续。',
-    description: '后面的事情还没有发生，所以这里不需要写满。',
-    tag: 'CONTINUE BUILDING',
-  },
-];
+function chapterLabel(entry: PublicTimelineResponse['data'][number], index: number) {
+  return index === entries.value.length - 1 ? 'CONTINUE' : entry.dateLabel;
+}
 
-function chapterFor(entry: PublicTimelineResponse['data'][number], index: number) {
-  return (
-    chapterCopy[index] ?? {
-      label: 'CHAPTER',
-      kicker: entry.title,
-      heading: entry.title,
-      description: `记录于 ${entry.dateLabel}。`,
-      tag: 'LIFE / BUILD',
-    }
-  );
+function chapterKicker(entry: PublicTimelineResponse['data'][number]) {
+  if (entry.projects.length) return entry.projects.map((project) => project.name).join(' · ');
+  if (entry.links.length) return 'LINKS';
+  return entry.datePrecision;
+}
+
+function chapterTag(entry: PublicTimelineResponse['data'][number]) {
+  if (entry.projects.length) return 'PROJECT';
+  if (entry.links.length) return 'LINK';
+  return 'LIFE / BUILD';
 }
 
 function yearOf(value: string) {
@@ -151,28 +116,60 @@ usePageSeo({
           }"
         >
           <div class="life-chapter__year">
-            {{ chapterFor(entry, index).label
+            {{ chapterLabel(entry, index)
             }}<strong>{{ index === entries.length - 1 ? 'NOW' : yearOf(entry.dateLabel) }}</strong>
           </div>
           <div class="life-chapter__node"><span /></div>
           <div class="life-chapter__content">
-            <div class="life-chapter__kicker">{{ chapterFor(entry, index).kicker }}</div>
-            <h2>{{ chapterFor(entry, index).heading }}</h2>
-            <p class="life-chapter__description">{{ chapterFor(entry, index).description }}</p>
+            <div class="life-chapter__kicker">{{ chapterKicker(entry) }}</div>
+            <h2>{{ entry.title }}</h2>
+            <!-- Timeline HTML is rendered and sanitized by the shared server Markdown pipeline. -->
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-if="index < entries.length - 1"
+              class="life-chapter__description"
+              v-html="entry.bodyHtml"
+            />
+            <!-- eslint-enable vue/no-v-html -->
             <div v-if="index < entries.length - 1" class="life-story-card">
               <div class="life-story-card__meta">
-                <span>{{ chapterFor(entry, index).tag }}</span
-                ><span>{{ yearOf(entry.dateLabel) }}</span>
+                <span>{{ chapterTag(entry) }}</span
+                ><span>{{ entry.dateLabel }}</span>
               </div>
-              <h3>{{ entry.title }}</h3>
-              <!-- Timeline HTML is rendered and sanitized by the shared server Markdown pipeline. -->
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <div class="life-story-card__text" v-html="entry.bodyHtml" />
-              <div v-if="index === 2" class="life-story-card__image" />
+              <div
+                v-if="entry.media.length"
+                class="life-story-card__media"
+                :class="{ 'life-story-card__media--multiple': entry.media.length > 1 }"
+              >
+                <figure v-for="media in entry.media" :key="media.id">
+                  <img :src="media.publicUrl" :alt="media.altText || entry.title" loading="lazy" />
+                </figure>
+              </div>
+              <div
+                v-if="entry.links.length || entry.projects.length"
+                class="life-story-card__references"
+              >
+                <a
+                  v-for="link in entry.links"
+                  :key="`${entry.id}-${link.url}`"
+                  :href="link.url"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {{ link.label }} ↗
+                </a>
+                <NuxtLink
+                  v-for="project in entry.projects"
+                  :key="project.id"
+                  :to="`/projects/${project.slug}`"
+                >
+                  {{ project.name }} →
+                </NuxtLink>
+              </div>
             </div>
             <div v-else class="life-now-card">
-              <strong>继续构建。</strong
-              ><span>{{ entry.title }} 下一段轨迹，等它真的发生以后再写。</span>
+              <strong>{{ entry.title }}</strong
+              ><span>{{ entry.dateLabel }}</span>
               <!-- Timeline HTML is rendered and sanitized by the shared server Markdown pipeline. -->
               <!-- eslint-disable-next-line vue/no-v-html -->
               <div class="life-now-card__body" v-html="entry.bodyHtml" />

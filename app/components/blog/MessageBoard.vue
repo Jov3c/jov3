@@ -2,7 +2,6 @@
 import type { PublicMessage, PublicMessagesResponse } from '~/types/community';
 
 const form = reactive({ nickname: 'jov3 visitor', email: '', content: '', isPrivate: false });
-const captcha = ref('');
 const messages = ref<PublicMessage[]>([]);
 const isSubmitting = ref(false);
 const notice = ref('');
@@ -33,11 +32,6 @@ async function submit() {
   isSubmitting.value = true;
   notice.value = '';
   errorMessage.value = '';
-  if (captcha.value.trim() !== '8') {
-    errorMessage.value = '验证码答案不正确。';
-    isSubmitting.value = false;
-    return;
-  }
   try {
     const isPrivate = form.isPrivate;
     await $fetch('/api/v1/public/messages', { method: 'POST', body: form });
@@ -46,7 +40,6 @@ async function submit() {
       : '验证邮件已发送。完成邮箱验证后，留言会自动显示。';
     form.content = '';
     form.isPrivate = false;
-    captcha.value = '';
     await refresh();
     messages.value = data.value?.data ?? messages.value;
   } catch (error) {
@@ -63,7 +56,7 @@ async function submit() {
     <form class="community-form message-board__form" @submit.prevent="submit">
       <div class="community-form__heading">
         <h2 id="message-board-title">写留言</h2>
-        <span>支持 Markdown</span>
+        <span>邮箱验证后发布</span>
       </div>
       <textarea
         v-model="form.content"
@@ -79,14 +72,11 @@ async function submit() {
           required
           type="email"
           maxlength="254"
-          placeholder="邮箱 / QQ *（不会公开）"
+          placeholder="邮箱 *（不会公开）"
         />
-        <input v-model="captcha" required inputmode="numeric" placeholder="验证码 3 + 5 = ?" />
       </div>
       <div class="message-form-options">
         <label><input v-model="form.isPrivate" type="checkbox" /> 悄悄话</label>
-        <label><input type="checkbox" checked /> 邮件提醒</label>
-        <label><input type="checkbox" checked /> Markdown</label>
       </div>
       <div class="community-form__actions">
         <p>想说点什么就留下来吧。</p>

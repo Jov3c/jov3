@@ -5,6 +5,18 @@ test('blog index exposes database-backed articles and category filtering', async
   await page.waitForLoadState('networkidle');
 
   await expect(page.getByRole('heading', { name: 'Blog', exact: true })).toBeVisible();
+  const postsResponse = await page.request.get('/api/v1/public/posts?page=1&pageSize=20');
+  const postsPayload = (await postsResponse.json()) as {
+    data: {
+      items: Array<{ excerpt: string; viewCount: number; commentCount: number; wordCount: number }>;
+    };
+  };
+  const firstPost = postsPayload.data.items[0];
+  expect(firstPost).toBeDefined();
+  await expect(page.locator('.post-card').first()).toContainText(firstPost!.excerpt);
+  await expect(page.locator('.post-card').first()).toContainText(`${firstPost!.viewCount}`);
+  await expect(page.locator('.post-card').first()).toContainText(`${firstPost!.commentCount}`);
+  await expect(page.locator('.post-card').first()).toContainText(`${firstPost!.wordCount} 字`);
   await expect(page.getByRole('navigation', { name: '博客导航' }).getByRole('link')).toHaveCount(3);
   await page.getByRole('button', { name: '全部分类' }).click();
   await expect(page.locator('.category-option').filter({ hasText: 'AI' })).toBeVisible();

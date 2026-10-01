@@ -4,8 +4,10 @@ export interface PublicCvProfile {
   bio: string;
   location: string;
   website: string | null;
+  contactEmail: string | null;
   statusText: string | null;
   statement: string;
+  updatedAt: string;
   portrait: { id: string; publicUrl: string; altText: string | null } | null;
 }
 
@@ -53,6 +55,7 @@ export interface PublicCv {
   educations: PublicCvEducation[];
   skills: PublicCvSkillGroup[];
   projects: PublicCvProject[];
+  links: Array<{ id: string; name: string; url: string }>;
 }
 
 export interface PublicCvResponse {

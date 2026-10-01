@@ -54,9 +54,17 @@ function createAggregate(isPublic = true) {
   };
 }
 
+function createRepository(aggregate: ReturnType<typeof createAggregate>) {
+  return {
+    getAggregate: async () => aggregate,
+    findPublicContactEmail: async () => null,
+    listPublicSocialLinks: async () => [],
+  };
+}
+
 describe('CV service', () => {
   it('sanitizes the public DTO and keeps current project names', async () => {
-    const service = new CvService({ getAggregate: async () => createAggregate() } as never);
+    const service = new CvService(createRepository(createAggregate()) as never);
 
     const result = await service.getPublic();
 
@@ -71,7 +79,7 @@ describe('CV service', () => {
 
   it('returns a 404 boundary when the CV is private without deleting content', async () => {
     const aggregate = createAggregate(false);
-    const service = new CvService({ getAggregate: async () => aggregate } as never);
+    const service = new CvService(createRepository(aggregate) as never);
 
     await expect(service.getPublic()).rejects.toMatchObject<CvError>({
       statusCode: 404,
@@ -82,5 +90,24 @@ describe('CV service', () => {
       name: '朱鹏 / Jov3',
       experiences: [expect.objectContaining({ company: 'JOV3' })],
     });
+  });
+
+  it('includes configured contact and social links in the public profile', async () => {
+    const aggregate = createAggregate();
+    const repository = {
+      ...createRepository(aggregate),
+      findPublicContactEmail: async () => 'contact@jov3.cloud',
+      listPublicSocialLinks: async () => [
+        { id: 'github', name: 'GitHub', url: 'https://github.com/Jov3c' },
+      ],
+    };
+
+    const result = await new CvService(repository as never).getPublic();
+
+    expect(result.profile.contactEmail).toBe('contact@jov3.cloud');
+    expect(result.profile.updatedAt).toBe('2026-09-29T00:00:00.000Z');
+    expect(result.links).toEqual([
+      { id: 'github', name: 'GitHub', url: 'https://github.com/Jov3c' },
+    ]);
   });
 });

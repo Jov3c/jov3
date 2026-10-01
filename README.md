@@ -11,10 +11,10 @@ respective layouts.
 
 - Node.js 24.14.0
 - pnpm 11.15.1
-- Docker Desktop or another Docker Compose-compatible runtime
+- PostgreSQL 16
 
-Docker is optional during local frontend development when a compatible
-PostgreSQL instance is already available.
+Docker Compose is optional. Local development can use any compatible
+PostgreSQL instance configured through `DATABASE_URL`.
 
 ## Setup
 
@@ -23,10 +23,14 @@ corepack enable
 corepack prepare pnpm@11.15.1 --activate
 pnpm install
 cp .env.example .env
-pnpm db:up
 pnpm prisma:generate
 pnpm prisma:migrate:deploy
+pnpm admin:bootstrap
+pnpm site:init
 ```
+
+If Docker is available, `pnpm db:up` can be used before the migration step;
+the application does not seed or rewrite site content during startup.
 
 On Windows PowerShell, replace the environment copy command with:
 

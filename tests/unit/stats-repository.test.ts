@@ -19,6 +19,13 @@ describe('stats repository', () => {
       pageViewDaily: {
         aggregate: () => query({ _sum: { views: BigInt(7) } }),
       },
+      post: {
+        count: () => query(18),
+        aggregate: () => query({ _sum: { wordCount: 28_510 } }),
+      },
+      postCategory: {
+        count: () => query(4),
+      },
       visitorActivity: {
         count: () => query(3),
       },
@@ -35,6 +42,9 @@ describe('stats repository', () => {
       totalPageViews: BigInt(7),
       onlineVisitors: 3,
       foundedAt: new Date('2026-01-01T00:00:00.000Z'),
+      totalPosts: 18,
+      totalCategories: 4,
+      totalWords: 28_510,
     });
     expect(maxInFlight).toBe(1);
   });

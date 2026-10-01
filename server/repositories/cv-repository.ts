@@ -38,6 +38,20 @@ export class CvRepository {
     return this.prisma.cvProfile.findFirst({ include: aggregateInclude });
   }
 
+  findPublicContactEmail() {
+    return this.prisma.siteProfile
+      .findFirst({ select: { publicContactEmail: true } })
+      .then((profile) => profile?.publicContactEmail ?? null);
+  }
+
+  listPublicSocialLinks() {
+    return this.prisma.socialLink.findMany({
+      where: { visible: true },
+      select: { id: true, name: true, url: true },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
+    });
+  }
+
   updateProfile(id: string, input: CvProfileUpdateInput) {
     return this.prisma.cvProfile.update({
       where: { id },

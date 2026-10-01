@@ -9,6 +9,8 @@ import type {
 } from '../../shared/schemas/home';
 import type { HomeRepository } from '../repositories/home-repository';
 
+export const MAX_VISIBLE_HOME_ENTRIES = 8;
+
 type AvatarMedia = { id: string; publicUrl: string; altText: string | null } | null;
 
 export class HomeError extends Error {
@@ -27,7 +29,6 @@ export class HomeService {
   constructor(private readonly repository: HomeRepository) {}
 
   async getPublicHome() {
-    await this.repository.ensureDefaults();
     const [siteProfile, homeProfile, entries, socialLinks] = await Promise.all([
       this.repository.findSiteProfile(),
       this.repository.findHomeProfile(),
@@ -41,16 +42,12 @@ export class HomeService {
     return {
       siteProfile: toSiteProfileDto(siteProfile),
       homeProfile: toHomeProfileDto(homeProfile, homeProfile.avatarMedia),
-      entries: entries
-        .filter((entry) => entry.visible)
-        .slice(0, 8)
-        .map(toHomeEntryDto),
+      entries: entries.filter((entry) => entry.visible).map(toHomeEntryDto),
       socialLinks: socialLinks.filter((link) => link.visible).map(toSocialLinkDto),
     };
   }
 
   async getAdminSiteProfile() {
-    await this.repository.ensureDefaults();
     const siteProfile = await this.repository.findSiteProfile();
     if (!siteProfile)
       throw new HomeError(503, 'HOME_NOT_CONFIGURED', 'Site profile is not available');
@@ -58,7 +55,6 @@ export class HomeService {
   }
 
   async updateSiteProfile(input: Partial<SiteProfileInput>) {
-    await this.repository.ensureDefaults();
     const current = await this.repository.findSiteProfile();
     if (!current) throw new HomeError(503, 'HOME_NOT_CONFIGURED', 'Site profile is not available');
     const updated = await this.repository.updateSiteProfile(current.id, input);
@@ -66,7 +62,6 @@ export class HomeService {
   }
 
   async getAdminHomeProfile() {
-    await this.repository.ensureDefaults();
     const homeProfile = await this.repository.findHomeProfile();
     if (!homeProfile)
       throw new HomeError(503, 'HOME_NOT_CONFIGURED', 'Home profile is not available');
@@ -74,7 +69,6 @@ export class HomeService {
   }
 
   async updateHomeProfile(input: Partial<HomeProfileInput>) {
-    await this.repository.ensureDefaults();
     if (input.avatarMediaId) {
       const media = await this.repository.findMedia(input.avatarMediaId);
       if (!media) throw new HomeError(400, 'MEDIA_NOT_FOUND', 'Avatar media asset was not found');
@@ -86,12 +80,12 @@ export class HomeService {
   }
 
   async listAdminEntries() {
-    await this.repository.ensureDefaults();
     return (await this.repository.listHomeEntries()).map(toHomeEntryDto);
   }
 
   async createEntry(input: HomeEntryInput) {
     validateEntryUrl(input.targetType, input.url);
+    await this.ensureVisibleEntryCapacity(input.visible);
     return toHomeEntryDto(await this.repository.createHomeEntry(normalizeEntry(input)));
   }
 
@@ -100,6 +94,7 @@ export class HomeService {
     if (!current) throw new HomeError(404, 'HOME_ENTRY_NOT_FOUND', 'Home entry not found');
     const next = { ...current, ...input };
     validateEntryUrl(next.targetType, next.url);
+    await this.ensureVisibleEntryCapacity(next.visible && !current.visible);
     return toHomeEntryDto(await this.repository.updateHomeEntry(id, normalizeEntry(input)));
   }
 
@@ -111,7 +106,6 @@ export class HomeService {
   }
 
   async listAdminSocialLinks() {
-    await this.repository.ensureDefaults();
     return (await this.repository.listSocialLinks()).map(toSocialLinkDto);
   }
 
@@ -132,6 +126,18 @@ export class HomeService {
     if (!current) throw new HomeError(404, 'SOCIAL_LINK_NOT_FOUND', 'Social link not found');
     await this.repository.deleteSocialLink(id);
     return { deleted: true };
+  }
+
+  private async ensureVisibleEntryCapacity(willAddVisibleEntry: boolean) {
+    if (!willAddVisibleEntry) return;
+    const visibleCount = await this.repository.countVisibleHomeEntries();
+    if (visibleCount >= MAX_VISIBLE_HOME_ENTRIES) {
+      throw new HomeError(
+        409,
+        'HOME_ENTRY_LIMIT_REACHED',
+        `最多只能有 ${MAX_VISIBLE_HOME_ENTRIES} 个可见首页入口`,
+      );
+    }
   }
 }
 

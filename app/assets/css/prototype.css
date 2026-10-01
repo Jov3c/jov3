@@ -332,6 +332,16 @@
   font-weight: 800;
 }
 
+.profile-card__avatar--image {
+  overflow: hidden;
+}
+
+.profile-card__avatar--image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .profile-card h3 {
   margin: 0 0 7px;
   color: var(--color-text);
@@ -386,34 +396,6 @@
 
 .socials a:hover {
   color: var(--color-text);
-}
-
-.sidebar-label {
-  margin: 0 0 10px;
-  color: var(--color-muted);
-  font-size: 0.64rem;
-  font-weight: 800;
-  letter-spacing: 0.13em;
-}
-
-.sidebar-list {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.sidebar-list li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 34px;
-  border-bottom: 1px solid var(--color-line);
-  font-size: 0.72rem;
-}
-
-.sidebar-list b {
-  color: var(--color-text);
-  font-size: 0.68rem;
 }
 
 .site-info-card {
@@ -1462,10 +1444,6 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.friend-link-apply--prototype-hidden {
-  display: none;
-}
-
 .community-form__fields--message {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -2142,24 +2120,45 @@
   font-size: 1.125rem;
   letter-spacing: -0.025em;
 }
-.life-story-card__text {
-  color: #747a74;
-  font-size: 0.75rem;
-  line-height: 1.7;
-}
-.life-story-card__text p {
-  margin: 0;
-}
-.life-story-card__image {
-  position: relative;
-  height: 210px;
-  overflow: hidden;
+.life-story-card__media {
+  display: grid;
+  gap: 10px;
   margin-top: 16px;
+}
+.life-story-card__media--multiple {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.life-story-card__media figure {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
   border: 1px solid #e8ebe6;
   border-radius: 12px;
-  background:
-    radial-gradient(circle at 32% 26%, rgb(255 255 255 / 84%), transparent 20%),
-    linear-gradient(145deg, #d8e2dc, #eef2ec 50%, #c7d2c8);
+  background: #eef2ec;
+}
+.life-story-card__media img {
+  display: block;
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+}
+.life-story-card__references {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.life-story-card__references a {
+  padding: 7px 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+}
+.life-story-card__references a:hover {
+  border-color: #c4cec0;
+  color: var(--color-text);
 }
 .life-chapter.is-visible .life-chapter__year {
   opacity: 0.7;
@@ -2298,7 +2297,10 @@
   .life-chapter__year strong {
     font-size: 1rem;
   }
-  .life-story-card__image {
+  .life-story-card__media--multiple {
+    grid-template-columns: 1fr;
+  }
+  .life-story-card__media img {
     height: 160px;
   }
 }

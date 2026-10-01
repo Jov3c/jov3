@@ -64,7 +64,7 @@ usePageSeo({ title: 'Blog — Jov3', description: '记录 AI、产品、开发�
     </div>
     <div v-else class="post-list">
       <PostCard
-        v-for="(post, index) in postsResponse?.data.items.slice(0, 5)"
+        v-for="(post, index) in postsResponse?.data.items"
         :key="post.slug"
         :post="post"
         :featured="index === 0"
