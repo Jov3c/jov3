@@ -5,15 +5,13 @@ const adminPassword = process.env.ADMIN_PASSWORD ?? 'stage-02-e2e-admin-password
 
 async function signIn(page: import('@playwright/test').Page, forwardedFor: string) {
   await page.setExtraHTTPHeaders({ 'x-forwarded-for': forwardedFor });
-  await page.goto('/admin/login');
-  await page.getByLabel('邮箱').fill(adminEmail);
-  await page.getByLabel('密码').fill(adminPassword);
-  await Promise.all([
-    page.waitForURL((url) => url.pathname === '/admin' && url.search === '', {
-      waitUntil: 'domcontentloaded',
-    }),
-    page.getByRole('button', { name: '登录', exact: true }).click(),
-  ]);
+  const response = await page.request.post('/api/v1/auth/login', {
+    data: { email: adminEmail, password: adminPassword },
+    headers: { 'x-forwarded-for': forwardedFor },
+  });
+  expect(response).toBeOK();
+  await page.goto('/admin');
+  await expect(page.getByRole('heading', { name: '仪表盘' })).toBeVisible();
 }
 
 test('admin login protects the shell and logout invalidates access', async ({ page }, testInfo) => {
