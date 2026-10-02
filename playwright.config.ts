@@ -13,6 +13,10 @@ const statefulE2eFiles = [
   '**/projects-admin.spec.ts',
   '**/seo-stats.spec.ts',
 ];
+const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL;
+const allowExternalStatefulTests = process.env.PLAYWRIGHT_ALLOW_EXTERNAL_WRITES === 'true';
+const externalStatefulIgnore =
+  externalBaseURL && !allowExternalStatefulTests ? statefulE2eFiles : [];
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -24,13 +28,14 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   use: {
-    baseURL: 'https://127.0.0.1:3000',
+    baseURL: externalBaseURL ?? 'https://127.0.0.1:3000',
     ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
   },
   projects: [
     {
       name: 'desktop-chromium',
+      testIgnore: externalStatefulIgnore,
       use: { ...devices['Desktop Chrome'] },
     },
     {
@@ -50,11 +55,14 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    command: 'pnpm dev --host 127.0.0.1 --port 3000 --https --https.domains=127.0.0.1,localhost',
-    url: 'https://127.0.0.1:3000',
-    ignoreHTTPSErrors: true,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  webServer: externalBaseURL
+    ? undefined
+    : {
+        command:
+          'pnpm dev --host 127.0.0.1 --port 3000 --https --https.domains=127.0.0.1,localhost',
+        url: 'https://127.0.0.1:3000',
+        ignoreHTTPSErrors: true,
+        reuseExistingServer: !process.env.CI,
+        timeout: 120_000,
+      },
 });

@@ -273,10 +273,8 @@ svg {
 }
 
 .project-card:not(.project-card--skeleton),
-.post-card:not(.post-card--skeleton),
 .archive-year,
 .timeline-chapter,
-.friend-link-card,
 .message-card {
   opacity: 0;
   transform: translateY(14px);
@@ -286,10 +284,8 @@ svg {
 }
 
 .project-card.is-revealed,
-.post-card.is-revealed,
 .archive-year.is-revealed,
 .timeline-chapter.is-revealed,
-.friend-link-card.is-revealed,
 .message-card.is-revealed {
   opacity: 1;
   transform: translateY(0);
@@ -471,6 +467,11 @@ svg {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .skeleton-block {
+    animation: none !important;
+    background: var(--color-line);
   }
 }
 

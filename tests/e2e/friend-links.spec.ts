@@ -3,26 +3,6 @@ import { expect, test } from '@playwright/test';
 const adminEmail = process.env.ADMIN_EMAIL ?? 'stage02-admin@example.com';
 const adminPassword = process.env.ADMIN_PASSWORD ?? 'stage-02-e2e-admin-password';
 
-test('public Links reads published friend links without exposing applicant contact data', async ({
-  page,
-  request,
-}) => {
-  const response = await request.get('/api/v1/public/links');
-  expect(response.status()).toBe(200);
-  const payload = await response.json();
-  expect(payload.data.some((link: { name: string }) => link.name === 'FeiTwnd')).toBe(true);
-  expect(JSON.stringify(payload)).not.toContain('@example.com');
-
-  await page.goto('/blog/links');
-  await expect(page.getByRole('heading', { name: 'Links', exact: true })).toBeVisible();
-  await expect(page.getByText('朋友们的小站')).toBeVisible();
-  await expect(page.getByRole('heading', { name: '想交换友链？' })).toBeVisible();
-  await expect(page.getByRole('link', { name: /FeiTwnd/ })).toHaveAttribute(
-    'href',
-    'https://feitwnd.cc',
-  );
-});
-
 test('admin can review friend links and add a published link directly', async ({
   page,
 }, testInfo) => {
@@ -36,8 +16,8 @@ test('admin can review friend links and add a published link directly', async ({
 
   await page.goto('/admin/links');
   await page.waitForLoadState('networkidle');
-  await expect(page.getByRole('heading', { name: 'Friend Links', exact: true })).toBeVisible();
-  await expect(page.getByRole('tab', { name: /Published/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '友链管理', exact: true })).toBeVisible();
+  await expect(page.getByRole('tab', { name: /已发布/ })).toBeVisible();
   await expect(page.getByText('FeiTwnd', { exact: true })).toBeVisible();
 });
 

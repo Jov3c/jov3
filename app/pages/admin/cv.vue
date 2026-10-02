@@ -117,7 +117,7 @@ const busyKey = ref('');
 const notice = ref('');
 const errorMessage = ref('');
 
-useSeoMeta({ title: 'CV — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '个人简历 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function load() {
   isLoading.value = true;
@@ -157,7 +157,7 @@ async function saveProfile() {
       },
     });
     applyAggregate(result.data);
-    notice.value = 'CV profile 已保存。';
+    notice.value = '简历资料已保存。';
   });
 }
 
@@ -380,56 +380,56 @@ onMounted(load);
   <div class="about-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Profile / About</p>
-        <h1>CV</h1>
+        <p>资料管理 / 关于</p>
+        <h1>个人简历</h1>
       </div>
       <NuxtLink class="admin-secondary-button" to="/about/cv" target="_blank">
         View public CV ↗
       </NuxtLink>
     </header>
 
-    <p v-if="isLoading" class="media-empty">Loading CV…</p>
+    <p v-if="isLoading" class="media-empty">正在加载简历…</p>
     <template v-else>
       <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
       <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
       <p v-if="!profile.isPublic" class="admin-notice about-admin-private-note">
-        Private 状态下，前台 About dropdown 将隐藏 CV
+        设为私密后，前台“关于”菜单将隐藏个人简历
       </p>
 
       <section class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Profile</p>
-            <h2>让 About 先说清楚你是谁。</h2>
+            <p class="eyebrow">个人资料</p>
+            <h2>让关于页面先说清楚你是谁。</h2>
           </div>
-          <span>Public / private is reversible</span>
+          <span>公开状态可随时调整</span>
         </div>
         <form class="about-admin-form-grid" @submit.prevent="saveProfile">
           <label class="home-checkbox about-admin-form-grid__wide"
-            ><input v-model="profile.isPublic" type="checkbox" /><span>Public CV</span></label
+            ><input v-model="profile.isPublic" type="checkbox" /><span>公开简历</span></label
           >
-          <label><span>Name</span><input v-model="profile.name" required /></label>
-          <label><span>Headline</span><input v-model="profile.headline" required /></label>
-          <label><span>Location</span><input v-model="profile.location" required /></label>
-          <label><span>Website</span><input v-model="profile.website" type="url" /></label>
-          <label><span>Status text</span><input v-model="profile.statusText" /></label>
+          <label><span>姓名</span><input v-model="profile.name" required /></label>
+          <label><span>个人标题</span><input v-model="profile.headline" required /></label>
+          <label><span>所在地</span><input v-model="profile.location" required /></label>
+          <label><span>个人网站</span><input v-model="profile.website" type="url" /></label>
+          <label><span>状态文字</span><input v-model="profile.statusText" /></label>
           <label
-            ><span>Portrait</span
+            ><span>个人照片</span
             ><select v-model="profile.portraitMediaId">
-              <option :value="null">No portrait</option>
+              <option :value="null">不使用个人照片</option>
               <option v-for="item in media" :key="item.id" :value="item.id">
                 {{ item.originalName }}
               </option>
             </select></label
           >
           <label class="about-admin-form-grid__wide"
-            ><span>Bio</span><textarea v-model="profile.bio" rows="5" required />
+            ><span>个人简介</span><textarea v-model="profile.bio" rows="5" required />
           </label>
           <label class="about-admin-form-grid__wide"
-            ><span>Statement</span><textarea v-model="profile.statement" rows="3" required />
+            ><span>个人陈述</span><textarea v-model="profile.statement" rows="3" required />
           </label>
           <div class="about-admin-actions about-admin-form-grid__wide">
-            <button class="button" type="submit" :disabled="!!busyKey">Save profile</button>
+            <button class="button" type="submit" :disabled="!!busyKey">保存资料</button>
           </div>
         </form>
       </section>
@@ -437,15 +437,15 @@ onMounted(load);
       <section class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Experience</p>
-            <h2>Work that has a place in the story.</h2>
+            <p class="eyebrow">工作经历</p>
+            <h2>记录职业经历与职责</h2>
           </div>
           <span>{{ experiences.length }} entries</span>
         </div>
         <div class="about-admin-collection">
           <article v-for="item in experiences" :key="item.id" class="about-admin-card">
             <div class="about-admin-card__heading">
-              <strong>{{ item.company || 'Untitled experience' }}</strong>
+              <strong>{{ item.company || '未命名工作经历' }}</strong>
               <div>
                 <button
                   class="admin-secondary-button"
@@ -453,7 +453,7 @@ onMounted(load);
                   :disabled="!!busyKey"
                   @click="saveExperience(item)"
                 >
-                  Save
+                  保存
                 </button>
                 <button
                   class="admin-danger-button"
@@ -461,48 +461,48 @@ onMounted(load);
                   :disabled="!!busyKey"
                   @click="deleteExperience(item)"
                 >
-                  Delete
+                  删除
                 </button>
               </div>
             </div>
             <div class="about-admin-form-grid">
-              <label><span>Company</span><input v-model="item.company" required /></label>
-              <label><span>Role</span><input v-model="item.role" required /></label>
-              <label><span>Location</span><input v-model="item.location" required /></label>
+              <label><span>公司</span><input v-model="item.company" required /></label>
+              <label><span>职位</span><input v-model="item.role" required /></label>
+              <label><span>地点</span><input v-model="item.location" required /></label>
               <label
-                ><span>Sort</span><input v-model.number="item.sortOrder" type="number" min="0"
+                ><span>排序</span><input v-model.number="item.sortOrder" type="number" min="0"
               /></label>
               <label
-                ><span>Start</span><input v-model="item.startDate" type="date" required
+                ><span>开始日期</span><input v-model="item.startDate" type="date" required
               /></label>
               <label
-                ><span>End</span
+                ><span>结束日期</span
                 ><input v-model="item.endDate" type="date" :disabled="item.isCurrent"
               /></label>
               <label class="home-checkbox"
-                ><input v-model="item.isCurrent" type="checkbox" /><span>Current role</span></label
+                ><input v-model="item.isCurrent" type="checkbox" /><span>目前任职</span></label
               >
               <label class="about-admin-form-grid__wide"
-                ><span>Description</span><textarea v-model="item.description" rows="3" required />
+                ><span>描述</span><textarea v-model="item.description" rows="3" required />
               </label>
             </div>
           </article>
         </div>
         <article class="about-admin-card about-admin-card--new">
-          <div class="about-admin-card__heading"><strong>Add experience</strong></div>
+          <div class="about-admin-card__heading"><strong>添加工作经历</strong></div>
           <div class="about-admin-form-grid">
-            <label><span>Company</span><input v-model="newExperience.company" required /></label>
-            <label><span>Role</span><input v-model="newExperience.role" required /></label>
-            <label><span>Location</span><input v-model="newExperience.location" required /></label>
+            <label><span>公司</span><input v-model="newExperience.company" required /></label>
+            <label><span>职位</span><input v-model="newExperience.role" required /></label>
+            <label><span>地点</span><input v-model="newExperience.location" required /></label>
             <label
-              ><span>Sort</span
+              ><span>排序</span
               ><input v-model.number="newExperience.sortOrder" type="number" min="0"
             /></label>
             <label
-              ><span>Start</span><input v-model="newExperience.startDate" type="date" required
+              ><span>开始日期</span><input v-model="newExperience.startDate" type="date" required
             /></label>
             <label
-              ><span>End</span
+              ><span>结束日期</span
               ><input
                 v-model="newExperience.endDate"
                 type="date"
@@ -510,16 +510,15 @@ onMounted(load);
             /></label>
             <label class="home-checkbox"
               ><input v-model="newExperience.isCurrent" type="checkbox" /><span
-                >Current role</span
+                >目前任职</span
               ></label
             >
             <label class="about-admin-form-grid__wide"
-              ><span>Description</span
-              ><textarea v-model="newExperience.description" rows="3" required />
+              ><span>描述</span><textarea v-model="newExperience.description" rows="3" required />
             </label>
           </div>
           <button class="button" type="button" :disabled="!!busyKey" @click="addExperience">
-            Add experience
+            添加工作经历
           </button>
         </article>
       </section>
@@ -527,8 +526,8 @@ onMounted(load);
       <section class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Selected work</p>
-            <h2>Choose the projects shown on CV.</h2>
+            <p class="eyebrow">精选项目</p>
+            <h2>选择简历中展示的项目</h2>
           </div>
           <span>{{ selectedProjectIds.length }} selected</span>
         </div>
@@ -543,7 +542,7 @@ onMounted(load);
         </div>
         <div class="about-admin-actions">
           <button class="button" type="button" :disabled="!!busyKey" @click="saveProjects">
-            Save project references
+            保存项目关联
           </button>
         </div>
       </section>
@@ -551,15 +550,15 @@ onMounted(load);
       <section class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Skills</p>
-            <h2>Group skills by how you use them.</h2>
+            <p class="eyebrow">专业技能</p>
+            <h2>按照实际用途整理技能</h2>
           </div>
           <span>{{ skills.length }} groups</span>
         </div>
         <div class="about-admin-collection">
           <article v-for="item in skills" :key="item.id" class="about-admin-card">
             <div class="about-admin-card__heading">
-              <strong>{{ item.title || 'Untitled skill group' }}</strong>
+              <strong>{{ item.title || '未命名技能分组' }}</strong>
               <div>
                 <button
                   class="admin-secondary-button"
@@ -567,7 +566,7 @@ onMounted(load);
                   :disabled="!!busyKey"
                   @click="saveSkill(item)"
                 >
-                  Save
+                  保存
                 </button>
                 <button
                   class="admin-danger-button"
@@ -575,34 +574,34 @@ onMounted(load);
                   :disabled="!!busyKey"
                   @click="deleteSkill(item)"
                 >
-                  Delete
+                  删除
                 </button>
               </div>
             </div>
             <div class="about-admin-form-grid">
-              <label><span>Title</span><input v-model="item.title" required /></label>
+              <label><span>标题</span><input v-model="item.title" required /></label>
               <label
-                ><span>Sort</span><input v-model.number="item.sortOrder" type="number" min="0"
+                ><span>排序</span><input v-model.number="item.sortOrder" type="number" min="0"
               /></label>
               <label class="about-admin-form-grid__wide"
-                ><span>Content</span><textarea v-model="item.content" rows="3" required />
+                ><span>内容</span><textarea v-model="item.content" rows="3" required />
               </label>
             </div>
           </article>
         </div>
         <article class="about-admin-card about-admin-card--new">
-          <div class="about-admin-card__heading"><strong>Add skill group</strong></div>
+          <div class="about-admin-card__heading"><strong>添加技能分组</strong></div>
           <div class="about-admin-form-grid">
-            <label><span>Title</span><input v-model="newSkill.title" required /></label>
+            <label><span>标题</span><input v-model="newSkill.title" required /></label>
             <label
-              ><span>Sort</span><input v-model.number="newSkill.sortOrder" type="number" min="0"
+              ><span>排序</span><input v-model.number="newSkill.sortOrder" type="number" min="0"
             /></label>
             <label class="about-admin-form-grid__wide"
-              ><span>Content</span><textarea v-model="newSkill.content" rows="3" required />
+              ><span>内容</span><textarea v-model="newSkill.content" rows="3" required />
             </label>
           </div>
           <button class="button" type="button" :disabled="!!busyKey" @click="addSkill">
-            Add skill group
+            添加技能分组
           </button>
         </article>
       </section>
@@ -610,15 +609,15 @@ onMounted(load);
       <section class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Education</p>
-            <h2>Keep the foundation visible.</h2>
+            <p class="eyebrow">教育经历</p>
+            <h2>记录教育背景</h2>
           </div>
           <span>{{ educations.length }} entries</span>
         </div>
         <div class="about-admin-collection">
           <article v-for="item in educations" :key="item.id" class="about-admin-card">
             <div class="about-admin-card__heading">
-              <strong>{{ item.school || 'Untitled education' }}</strong>
+              <strong>{{ item.school || '未命名教育经历' }}</strong>
               <div>
                 <button
                   class="admin-secondary-button"
@@ -626,7 +625,7 @@ onMounted(load);
                   :disabled="!!busyKey"
                   @click="saveEducation(item)"
                 >
-                  Save
+                  保存
                 </button>
                 <button
                   class="admin-danger-button"
@@ -634,48 +633,47 @@ onMounted(load);
                   :disabled="!!busyKey"
                   @click="deleteEducation(item)"
                 >
-                  Delete
+                  删除
                 </button>
               </div>
             </div>
             <div class="about-admin-form-grid">
-              <label><span>School</span><input v-model="item.school" required /></label>
-              <label><span>Major</span><input v-model="item.major" required /></label>
-              <label><span>Degree</span><input v-model="item.degree" required /></label>
+              <label><span>学校</span><input v-model="item.school" required /></label>
+              <label><span>专业</span><input v-model="item.major" required /></label>
+              <label><span>学历</span><input v-model="item.degree" required /></label>
               <label
-                ><span>Sort</span><input v-model.number="item.sortOrder" type="number" min="0"
+                ><span>排序</span><input v-model.number="item.sortOrder" type="number" min="0"
               /></label>
               <label
-                ><span>Start</span><input v-model="item.startDate" type="date" required
+                ><span>开始日期</span><input v-model="item.startDate" type="date" required
               /></label>
-              <label><span>End</span><input v-model="item.endDate" type="date" /></label>
+              <label><span>结束日期</span><input v-model="item.endDate" type="date" /></label>
               <label class="about-admin-form-grid__wide"
-                ><span>Description</span><textarea v-model="item.description" rows="3" required />
+                ><span>描述</span><textarea v-model="item.description" rows="3" required />
               </label>
             </div>
           </article>
         </div>
         <article class="about-admin-card about-admin-card--new">
-          <div class="about-admin-card__heading"><strong>Add education</strong></div>
+          <div class="about-admin-card__heading"><strong>添加教育经历</strong></div>
           <div class="about-admin-form-grid">
-            <label><span>School</span><input v-model="newEducation.school" required /></label>
-            <label><span>Major</span><input v-model="newEducation.major" required /></label>
-            <label><span>Degree</span><input v-model="newEducation.degree" required /></label>
+            <label><span>学校</span><input v-model="newEducation.school" required /></label>
+            <label><span>专业</span><input v-model="newEducation.major" required /></label>
+            <label><span>学历</span><input v-model="newEducation.degree" required /></label>
             <label
-              ><span>Sort</span
+              ><span>排序</span
               ><input v-model.number="newEducation.sortOrder" type="number" min="0"
             /></label>
             <label
-              ><span>Start</span><input v-model="newEducation.startDate" type="date" required
+              ><span>开始日期</span><input v-model="newEducation.startDate" type="date" required
             /></label>
-            <label><span>End</span><input v-model="newEducation.endDate" type="date" /></label>
+            <label><span>结束日期</span><input v-model="newEducation.endDate" type="date" /></label>
             <label class="about-admin-form-grid__wide"
-              ><span>Description</span
-              ><textarea v-model="newEducation.description" rows="3" required />
+              ><span>描述</span><textarea v-model="newEducation.description" rows="3" required />
             </label>
           </div>
           <button class="button" type="button" :disabled="!!busyKey" @click="addEducation">
-            Add education
+            添加教育经历
           </button>
         </article>
       </section>

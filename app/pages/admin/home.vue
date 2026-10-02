@@ -76,7 +76,7 @@ const busyKey = ref('');
 const notice = ref('');
 const errorMessage = ref('');
 
-useSeoMeta({ title: 'Homepage — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '首页资料 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function load() {
   isLoading.value = true;
@@ -299,13 +299,13 @@ onMounted(load);
   <div class="home-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Profile / Homepage</p>
-        <h1>Homepage</h1>
+        <p>资料管理 / 首页</p>
+        <h1>首页资料</h1>
       </div>
-      <span>Content is configurable · design stays fixed</span>
+      <span>内容可配置，页面设计保持不变</span>
     </header>
 
-    <p v-if="isLoading" class="media-empty">Loading homepage configuration…</p>
+    <p v-if="isLoading" class="media-empty">正在加载首页配置…</p>
     <template v-else>
       <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
       <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
@@ -313,71 +313,69 @@ onMounted(load);
       <section class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Site profile</p>
-            <h2>What the site says about itself.</h2>
+            <p class="eyebrow">站点资料</p>
+            <h2>设置网站的基本信息</h2>
           </div>
-          <span>SEO and public contact basics</span>
+          <span>SEO 与公开联系方式</span>
         </div>
         <form class="home-form-grid" @submit.prevent="saveSite">
           <label
-            ><span>Site title</span><input v-model="site.siteTitle" maxlength="120" required
+            ><span>站点标题</span><input v-model="site.siteTitle" maxlength="120" required
           /></label>
           <label
-            ><span>Founded at</span><input v-model="site.foundedAt" type="date" required
+            ><span>建站日期</span><input v-model="site.foundedAt" type="date" required
           /></label>
           <label class="home-form-grid__wide"
-            ><span>Site description</span
+            ><span>站点描述</span
             ><textarea v-model="site.siteDescription" rows="2" maxlength="300" required />
           </label>
           <label
-            ><span>Public contact email</span
+            ><span>公开联系邮箱</span
             ><input v-model="site.publicContactEmail" type="email" placeholder="公开邮箱（可选）"
           /></label>
-          <button class="button" type="submit" :disabled="busyKey === 'site'">
-            Save site profile
-          </button>
+          <button class="button" type="submit" :disabled="busyKey === 'site'">保存站点资料</button>
         </form>
       </section>
 
       <section class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Identity</p>
-            <h2>The first impression.</h2>
+            <p class="eyebrow">个人身份</p>
+            <h2>设置访客看到的第一印象</h2>
           </div>
-          <span>Avatar uses a Media Library asset</span>
+          <span>头像从媒体库中选择</span>
         </div>
         <form class="home-form-grid" @submit.prevent="saveIdentity">
           <label
-            ><span>Nickname</span><input v-model="identity.nickname" maxlength="80" required
+            ><span>昵称</span><input v-model="identity.nickname" maxlength="80" required
           /></label>
           <label
-            ><span>Role / headline</span><input v-model="identity.role" maxlength="160" required
+            ><span>身份 / 标题</span><input v-model="identity.role" maxlength="160" required
           /></label>
           <label class="home-form-grid__wide"
-            ><span>Intro</span
+            ><span>简介</span
             ><textarea v-model="identity.intro" rows="4" maxlength="2000" required />
           </label>
           <label
-            ><span>Avatar</span
+            ><span>头像</span
             ><select v-model="identity.avatarMediaId">
-              <option :value="null">No avatar / initials</option>
+              <option :value="null">不使用头像，显示名称缩写</option>
               <option v-for="media in mediaItems" :key="media.id" :value="media.id">
                 {{ media.originalName }}
               </option>
             </select></label
           >
           <label
-            ><span>Status text</span
-            ><input v-model="identity.statusText" maxlength="120" placeholder="currently building"
+            ><span>状态文字</span
+            ><input v-model="identity.statusText" maxlength="120" placeholder="最近正在做什么"
           /></label>
           <label class="home-checkbox"
             ><input v-model="identity.statusVisible" type="checkbox" /><span
-              >Show status on the public homepage</span
+              >在公开首页显示状态</span
             ></label
           >
           <button class="button" type="submit" :disabled="busyKey === 'identity'">
-            Save identity
+            保存个人身份
           </button>
         </form>
       </section>
@@ -385,8 +383,8 @@ onMounted(load);
       <section class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Entry cards</p>
-            <h2>Make the homepage point somewhere useful.</h2>
+            <p class="eyebrow">首页入口</p>
+            <h2>管理首页中的功能入口</h2>
           </div>
           <span
             >{{ entries.filter((entry) => entry.visible).length }} visible · maximum 8 public</span
@@ -411,28 +409,26 @@ onMounted(load);
               </button>
             </div>
             <div class="home-entry-editor__fields">
-              <label><span>Title</span><input v-model="entry.title" maxlength="80" /></label>
+              <label><span>标题</span><input v-model="entry.title" maxlength="80" /></label>
+              <label><span>描述</span><input v-model="entry.description" maxlength="180" /></label>
+              <label><span>图标</span><input v-model="entry.icon" maxlength="80" /></label>
+              <label><span>地址</span><input v-model="entry.url" maxlength="500" /></label>
               <label
-                ><span>Description</span><input v-model="entry.description" maxlength="180"
-              /></label>
-              <label><span>Icon</span><input v-model="entry.icon" maxlength="80" /></label>
-              <label><span>URL</span><input v-model="entry.url" maxlength="500" /></label>
-              <label
-                ><span>Type</span
+                ><span>类型</span
                 ><select v-model="entry.targetType">
-                  <option value="INTERNAL">Internal</option>
-                  <option value="EXTERNAL">External</option>
+                  <option value="INTERNAL">站内链接</option>
+                  <option value="EXTERNAL">外部链接</option>
                 </select></label
               >
               <label
-                ><span>Sort</span><input v-model.number="entry.sortOrder" type="number" min="0"
+                ><span>排序</span><input v-model.number="entry.sortOrder" type="number" min="0"
               /></label>
               <label class="home-checkbox"
-                ><input v-model="entry.visible" type="checkbox" /><span>Visible</span></label
+                ><input v-model="entry.visible" type="checkbox" /><span>显示</span></label
               >
               <label class="home-checkbox"
                 ><input v-model="entry.openNewTab" type="checkbox" /><span
-                  >Open new tab</span
+                  >在新标签页打开</span
                 ></label
               >
             </div>
@@ -443,46 +439,45 @@ onMounted(load);
                 :disabled="busyKey === 'entry-' + entry.id"
                 @click="saveEntry(entry)"
               >
-                Save</button
+                保存</button
               ><button class="admin-danger-button" type="button" @click="deleteEntry(entry)">
-                Delete
+                删除
               </button>
             </div>
           </article>
         </div>
         <form class="home-new-entry" @submit.prevent="addEntry">
-          <strong>Add entry</strong>
+          <strong>添加入口</strong>
           <div class="home-entry-editor__fields">
             <label
-              ><span>Title</span><input v-model="newEntry.title" maxlength="80" required /></label
+              ><span>标题</span><input v-model="newEntry.title" maxlength="80" required /></label
             ><label
-              ><span>Description</span
+              ><span>描述</span
               ><input v-model="newEntry.description" maxlength="180" required /></label
-            ><label><span>Icon</span><input v-model="newEntry.icon" maxlength="80" /></label
-            ><label><span>URL</span><input v-model="newEntry.url" maxlength="500" required /></label
+            ><label><span>图标</span><input v-model="newEntry.icon" maxlength="80" /></label
             ><label
-              ><span>Type</span
+              ><span>地址</span><input v-model="newEntry.url" maxlength="500" required /></label
+            ><label
+              ><span>类型</span
               ><select v-model="newEntry.targetType">
-                <option value="INTERNAL">Internal</option>
-                <option value="EXTERNAL">External</option>
+                <option value="INTERNAL">站内链接</option>
+                <option value="EXTERNAL">外部链接</option>
               </select></label
             ><label
-              ><span>Sort</span><input v-model.number="newEntry.sortOrder" type="number" min="0"
+              ><span>排序</span><input v-model.number="newEntry.sortOrder" type="number" min="0"
             /></label>
           </div>
-          <button class="button" type="submit" :disabled="busyKey === 'new-entry'">
-            Add entry
-          </button>
+          <button class="button" type="submit" :disabled="busyKey === 'new-entry'">添加入口</button>
         </form>
       </section>
 
       <section id="social-links" class="home-admin-section">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Social links</p>
-            <h2>Keep the quiet links current.</h2>
+            <p class="eyebrow">社交链接</p>
+            <h2>维护公开的社交入口</h2>
           </div>
-          <span>GitHub, Email, RSS, and other destinations</span>
+          <span>GitHub、邮箱、RSS 与其他地址</span>
         </div>
         <div class="social-link-list">
           <article v-for="(link, index) in socialLinks" :key="link.id" class="social-link-editor">
@@ -503,39 +498,39 @@ onMounted(load);
               </button>
             </div>
             <div class="social-link-editor__fields">
-              <label><span>Name</span><input v-model="link.name" maxlength="80" /></label
-              ><label><span>Icon</span><input v-model="link.icon" maxlength="80" /></label
-              ><label><span>URL</span><input v-model="link.url" maxlength="500" /></label
+              <label><span>名称</span><input v-model="link.name" maxlength="80" /></label
+              ><label><span>图标</span><input v-model="link.icon" maxlength="80" /></label
+              ><label><span>地址</span><input v-model="link.url" maxlength="500" /></label
               ><label
-                ><span>Sort</span
+                ><span>排序</span
                 ><input v-model.number="link.sortOrder" type="number" min="0" /></label
               ><label class="home-checkbox"
-                ><input v-model="link.visible" type="checkbox" /><span>Visible</span></label
+                ><input v-model="link.visible" type="checkbox" /><span>显示</span></label
               >
             </div>
             <div class="home-entry-editor__actions">
               <button class="admin-secondary-button" type="button" @click="saveSocialLink(link)">
-                Save</button
+                保存</button
               ><button class="admin-danger-button" type="button" @click="deleteSocialLink(link)">
-                Delete
+                删除
               </button>
             </div>
           </article>
         </div>
         <form class="home-new-entry" @submit.prevent="addSocialLink">
-          <strong>Add social link</strong>
+          <strong>添加社交链接</strong>
           <div class="social-link-editor__fields">
             <label
-              ><span>Name</span><input v-model="newSocial.name" maxlength="80" required /></label
-            ><label><span>Icon</span><input v-model="newSocial.icon" maxlength="80" /></label
+              ><span>名称</span><input v-model="newSocial.name" maxlength="80" required /></label
+            ><label><span>图标</span><input v-model="newSocial.icon" maxlength="80" /></label
             ><label
-              ><span>URL</span><input v-model="newSocial.url" maxlength="500" required /></label
+              ><span>地址</span><input v-model="newSocial.url" maxlength="500" required /></label
             ><label
-              ><span>Sort</span><input v-model.number="newSocial.sortOrder" type="number" min="0"
+              ><span>排序</span><input v-model.number="newSocial.sortOrder" type="number" min="0"
             /></label>
           </div>
           <button class="button" type="submit" :disabled="busyKey === 'new-social'">
-            Add social link
+            添加社交链接
           </button>
         </form>
       </section>

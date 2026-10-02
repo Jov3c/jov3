@@ -2,7 +2,7 @@
 import type { PublicPost } from '~/types/blog';
 import { formatPostDateTime } from '~/utils/content';
 
-defineProps<{ post: PublicPost; featured?: boolean }>();
+defineProps<{ post: PublicPost; featured?: boolean; coverVariant?: number }>();
 </script>
 
 <template>
@@ -11,11 +11,14 @@ defineProps<{ post: PublicPost; featured?: boolean }>();
     :class="{ 'post-card--featured': featured }"
     :to="`/blog/${post.slug}`"
   >
-    <div
-      class="post-card__cover"
-      :data-cover="post.category.slug"
-      :style="post.cover ? { backgroundImage: `url(${post.cover.publicUrl})` } : undefined"
-    />
+    <div class="post-card__cover">
+      <div
+        class="post-card__cover-art"
+        :data-cover="post.category.slug"
+        :data-cover-index="coverVariant"
+        :style="post.cover ? { backgroundImage: `url(${post.cover.publicUrl})` } : undefined"
+      />
+    </div>
     <div class="post-card__content">
       <p class="post-meta">
         <span class="post-meta__category">▱ {{ post.category.name }}</span>

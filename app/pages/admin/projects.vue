@@ -38,7 +38,7 @@ const errorMessage = ref('');
 const markdownFileInput = ref<HTMLInputElement | null>(null);
 const form = reactive<ProjectForm>(createEmptyForm());
 
-useSeoMeta({ title: 'Projects — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '项目管理 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 const selectedProject = computed(() =>
   projects.value.find((project) => project.id === selectedProjectId.value),
@@ -226,15 +226,15 @@ onMounted(load);
   <div class="projects-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Content / Projects</p>
-        <h1>Projects</h1>
+        <p>内容管理 / 项目</p>
+        <h1>项目管理</h1>
       </div>
       <button class="button" type="button" :disabled="isLoading" @click="startNewProject">
-        New project
+        新建项目
       </button>
     </header>
 
-    <p v-if="isLoading" class="media-empty">Loading projects…</p>
+    <p v-if="isLoading" class="media-empty">正在加载项目…</p>
     <template v-else>
       <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
       <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
@@ -243,10 +243,10 @@ onMounted(load);
         <section class="home-admin-section projects-admin-list-panel">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">Project index</p>
-              <h2>Selected work.</h2>
+              <p class="eyebrow">项目列表</p>
+              <h2>精选项目与作品。</h2>
             </div>
-            <span>{{ projects.length }} total</span>
+            <span>共 {{ projects.length }} 个项目</span>
           </div>
 
           <div v-if="!projects.length" class="media-empty">还没有项目，先创建一个。</div>
@@ -262,13 +262,13 @@ onMounted(load);
                 <strong>{{ project.name }}</strong>
                 <small :data-status="project.status.toLowerCase()">
                   {{ PROJECT_STATUS_LABELS[project.status] }} ·
-                  {{ project.visible ? 'Visible' : 'Hidden' }}
+                  {{ project.visible ? '已显示' : '已隐藏' }}
                 </small>
               </button>
               <div class="projects-admin-list__order">
                 <button
                   type="button"
-                  :aria-label="`Move ${project.name} up`"
+                  :aria-label="`上移 ${project.name}`"
                   :disabled="index === 0 || busyKey === 'order'"
                   @click="moveProject(index, -1)"
                 >
@@ -276,7 +276,7 @@ onMounted(load);
                 </button>
                 <button
                   type="button"
-                  :aria-label="`Move ${project.name} down`"
+                  :aria-label="`下移 ${project.name}`"
                   :disabled="index === projects.length - 1 || busyKey === 'order'"
                   @click="moveProject(index, 1)"
                 >
@@ -290,17 +290,19 @@ onMounted(load);
         <form class="home-admin-section project-editor" @submit.prevent="saveProject">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">{{ isNewProject ? 'New project' : 'Edit project' }}</p>
-              <h2>{{ isNewProject ? 'Give the work a clear home.' : form.name }}</h2>
+              <p class="eyebrow">{{ isNewProject ? '新建项目' : '编辑项目' }}</p>
+              <h2>{{ isNewProject ? '为作品建立清晰的展示页' : form.name }}</h2>
             </div>
-            <span>README is the single source of truth</span>
+            <span>README 是项目详情的唯一来源</span>
           </div>
 
           <div class="project-form-grid">
-            <label><span>Name</span><input v-model="form.name" maxlength="120" required /></label>
-            <label><span>Slug</span><input v-model="form.slug" maxlength="120" required /></label>
+            <label><span>名称</span><input v-model="form.name" maxlength="120" required /></label>
             <label
-              ><span>Status</span
+              ><span>路径标识</span><input v-model="form.slug" maxlength="120" required
+            /></label>
+            <label
+              ><span>状态</span
               ><select v-model="form.status">
                 <option v-for="status in PROJECT_STATUSES" :key="status" :value="status">
                   {{ PROJECT_STATUS_LABELS[status] }}
@@ -308,27 +310,25 @@ onMounted(load);
               </select></label
             >
             <label
-              ><span>Sort</span><input v-model.number="form.sortOrder" type="number" min="0"
+              ><span>排序</span><input v-model.number="form.sortOrder" type="number" min="0"
             /></label>
             <label class="project-form-grid__wide"
-              ><span>Summary</span
+              ><span>摘要</span
               ><textarea v-model="form.summary" rows="3" maxlength="400" required />
             </label>
             <label class="project-form-grid__wide"
-              ><span>Tech stack · comma separated</span
+              ><span>技术栈（使用英文逗号分隔）</span
               ><input v-model="form.techStack" placeholder="Vue, TypeScript, PostgreSQL"
             /></label>
             <label
-              ><span>GitHub URL</span
+              ><span>GitHub 地址</span
               ><input v-model="form.githubUrl" type="url" placeholder="https://github.com/…"
             /></label>
             <label
-              ><span>Demo URL</span><input v-model="form.demoUrl" type="url" placeholder="Optional"
+              ><span>演示地址</span><input v-model="form.demoUrl" type="url" placeholder="选填"
             /></label>
             <label class="home-checkbox project-form-grid__wide"
-              ><input v-model="form.visible" type="checkbox" /><span
-                >Show this project publicly</span
-              ></label
+              ><input v-model="form.visible" type="checkbox" /><span>公开显示此项目</span></label
             >
           </div>
 
@@ -336,10 +336,10 @@ onMounted(load);
             <div class="project-editor__subheading">
               <div>
                 <p class="eyebrow">README.md</p>
-                <h3>Write once, render everywhere.</h3>
+                <h3>一次编写，多处展示。</h3>
               </div>
               <label class="admin-secondary-button project-import-button">
-                Import .md
+                导入 .md
                 <input
                   ref="markdownFileInput"
                   class="project-file-input"
@@ -351,16 +351,16 @@ onMounted(load);
             </div>
             <div class="project-editor__markdown-grid">
               <label class="project-markdown-input"
-                ><span>Markdown source</span
+                ><span>Markdown 源码</span
                 ><textarea
                   v-model="form.readmeMarkdown"
                   rows="22"
                   spellcheck="false"
-                  aria-label="README Markdown"
+                  aria-label="README Markdown 源码"
                 />
               </label>
               <div class="project-markdown-preview">
-                <span>Live preview</span>
+                <span>实时预览</span>
                 <!-- The shared renderer sanitizes the browser preview and the public API output. -->
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div class="readme__content" v-html="previewHtml" />
@@ -370,7 +370,7 @@ onMounted(load);
 
           <div class="project-editor__actions">
             <button class="button" type="submit" :disabled="busyKey === 'save'">
-              {{ isNewProject ? 'Create project' : 'Save project' }}
+              {{ isNewProject ? '创建项目' : '保存项目' }}
             </button>
             <button
               v-if="!isNewProject"
@@ -379,7 +379,7 @@ onMounted(load);
               :disabled="busyKey === 'delete'"
               @click="deleteProject"
             >
-              Delete project
+              删除项目
             </button>
           </div>
         </form>

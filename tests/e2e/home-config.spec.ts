@@ -17,12 +17,12 @@ test('admin can add a homepage entry and the public page reads it from the API',
   let createdId = '';
   try {
     await page.goto('/admin/home');
-    await expect(page.getByRole('heading', { name: 'Homepage' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '首页资料' })).toBeVisible();
     const entryForm = page.locator('form.home-new-entry').first();
-    await entryForm.getByLabel('Title').fill('Stage 04 Custom');
-    await entryForm.getByLabel('Description').fill('A configurable homepage destination.');
-    await entryForm.getByLabel('URL').fill('/projects');
-    await entryForm.getByRole('button', { name: 'Add entry' }).click();
+    await entryForm.getByLabel('标题').fill('Stage 04 Custom');
+    await entryForm.getByLabel('描述').fill('A configurable homepage destination.');
+    await entryForm.getByLabel('地址').fill('/projects');
+    await entryForm.getByRole('button', { name: '添加入口' }).click();
     await expect(page.getByRole('status')).toContainText('首页入口已新增');
 
     const entriesResponse = await page.request.get('/api/v1/admin/home-entries');

@@ -13,7 +13,7 @@ const route = useRoute();
 const selectedCategory = computed(() =>
   typeof route.query.category === 'string' ? route.query.category : '',
 );
-const categoryQuery = computed(() => ({ page: 1, pageSize: 20, category: selectedCategory.value }));
+const categoryQuery = computed(() => ({ page: 1, pageSize: 5, category: selectedCategory.value }));
 const [{ data: postsResponse, pending, error, refresh }, { data: categoriesResponse }] =
   await Promise.all([
     useFetch<PublicPostsResponse>('/api/v1/public/posts', { query: categoryQuery }),
@@ -23,7 +23,21 @@ const [{ data: postsResponse, pending, error, refresh }, { data: categoriesRespo
   ]);
 const showPrototypeSkeleton = ref(true);
 
-onMounted(() => window.setTimeout(() => (showPrototypeSkeleton.value = false), 850));
+let skeletonTimer: number | undefined;
+
+onMounted(() => {
+  skeletonTimer = window.setTimeout(() => (showPrototypeSkeleton.value = false), 900);
+});
+onBeforeUnmount(() => window.clearTimeout(skeletonTimer));
+
+function coverVariant(slug: string) {
+  const prototypeOrder = ['server', 'ai', 'product', 'wechat', 'signal'];
+  const prototypeIndex = prototypeOrder.indexOf(slug);
+  if (prototypeIndex >= 0) return prototypeIndex + 1;
+
+  const hash = [...slug].reduce((total, character) => total + character.charCodeAt(0), 0);
+  return (hash % 5) + 1;
+}
 
 usePageSeo({ title: 'Blog — Jov3', description: '记录 AI、产品、开发和一些值得长期保留的想法。' });
 </script>
@@ -68,6 +82,7 @@ usePageSeo({ title: 'Blog — Jov3', description: '记录 AI、产品、开发�
         :key="post.slug"
         :post="post"
         :featured="index === 0"
+        :cover-variant="coverVariant(post.slug)"
       />
     </div>
   </BlogChrome>

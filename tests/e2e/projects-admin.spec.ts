@@ -18,24 +18,24 @@ test('admin can create a README project and publish or hide it', async ({ page }
 
   try {
     await page.goto('/admin/projects');
-    await expect(page.getByRole('heading', { name: 'Projects' })).toBeVisible();
-    await page.getByRole('button', { name: 'New project' }).click();
+    await expect(page.getByRole('heading', { name: '项目管理' })).toBeVisible();
+    await page.getByRole('button', { name: '新建项目' }).click();
 
-    await page.getByLabel('Name').fill('Stage Five E2E');
-    await page.getByLabel('Slug').fill(slug);
-    await page.getByLabel('Summary').fill('A project created through the protected editor.');
-    await page.getByLabel('Tech stack · comma separated').fill('Vue, Markdown, Vitest');
-    await page.getByLabel('GitHub URL').fill('https://github.com/Jov3c/stage-five-e2e');
+    await page.getByLabel('名称').fill('Stage Five E2E');
+    await page.getByLabel('路径标识').fill(slug);
+    await page.getByLabel('摘要').fill('A project created through the protected editor.');
+    await page.getByLabel('技术栈（使用英文逗号分隔）').fill('Vue, Markdown, Vitest');
+    await page.getByLabel('GitHub 地址').fill('https://github.com/Jov3c/stage-five-e2e');
 
     await page.locator('input[type="file"]').setInputFiles({
       name: 'README.md',
       mimeType: 'text/markdown',
       buffer: Buffer.from('# Stage Five README\n\n- Imported from a Markdown file\n'),
     });
-    await expect(page.getByLabel('README Markdown')).toHaveValue(/Stage Five README/);
+    await expect(page.getByLabel('README Markdown 源码')).toHaveValue(/Stage Five README/);
     await expect(page.getByText('Imported from a Markdown file').last()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Create project' }).click();
+    await page.getByRole('button', { name: '创建项目' }).click();
     await expect(page.getByRole('status')).toContainText('已创建');
 
     const listResponse = await page.request.get('/api/v1/admin/projects');

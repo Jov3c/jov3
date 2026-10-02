@@ -80,7 +80,7 @@ const errorMessage = ref('');
 const isNewCity = computed(() => selectedCityId.value === null);
 const isNewMemory = computed(() => selectedMemoryId.value === null);
 
-useSeoMeta({ title: 'Footprint — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '足迹数据 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function load() {
   isLoading.value = true;
@@ -351,15 +351,15 @@ onMounted(load);
   <div class="footprint-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Places / Footprint</p>
-        <h1>Footprint</h1>
+        <p>系统管理 / 足迹</p>
+        <h1>足迹数据</h1>
       </div>
       <button class="button" type="button" :disabled="isLoading" @click="startNewCity">
-        New city
+        新建城市
       </button>
     </header>
 
-    <p v-if="isLoading" class="media-empty">Loading footprint…</p>
+    <p v-if="isLoading" class="media-empty">正在加载足迹数据…</p>
     <template v-else>
       <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
       <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
@@ -368,8 +368,8 @@ onMounted(load);
         <section class="home-admin-section footprint-admin-list-panel">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">City index</p>
-              <h2>Places remembered.</h2>
+              <p class="eyebrow">城市列表</p>
+              <h2>记录去过的地方。</h2>
             </div>
             <span>{{ cities.length }} cities</span>
           </div>
@@ -393,46 +393,42 @@ onMounted(load);
         <section class="home-admin-section footprint-admin-editor">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">{{ isNewCity ? 'New city' : 'Edit city' }}</p>
-              <h2>{{ isNewCity ? 'Add a place.' : cityForm.cityName }}</h2>
+              <p class="eyebrow">{{ isNewCity ? '新建城市' : '编辑城市' }}</p>
+              <h2>{{ isNewCity ? '添加去过的地方' : cityForm.cityName }}</h2>
             </div>
-            <span>City boundaries only</span>
+            <span>仅使用城市边界数据</span>
           </div>
           <form class="about-admin-form-grid" @submit.prevent="saveCity">
             <label
-              ><span>City name</span><input v-model="cityForm.cityName" required maxlength="120"
+              ><span>城市名称</span><input v-model="cityForm.cityName" required maxlength="120"
             /></label>
             <label
-              ><span>Slug</span><input v-model="cityForm.slug" required maxlength="140"
+              ><span>路径标识</span><input v-model="cityForm.slug" required maxlength="140"
             /></label>
             <label
-              ><span>Country code</span
-              ><input v-model="cityForm.countryCode" required maxlength="2"
+              ><span>国家代码</span><input v-model="cityForm.countryCode" required maxlength="2"
             /></label>
             <label
-              ><span>Country</span><input v-model="cityForm.countryName" required maxlength="100"
+              ><span>国家</span><input v-model="cityForm.countryName" required maxlength="100"
+            /></label>
+            <label><span>地区</span><input v-model="cityForm.regionName" maxlength="120" /></label>
+            <label
+              ><span>排序</span><input v-model.number="cityForm.sortOrder" type="number" min="0"
             /></label>
             <label
-              ><span>Region</span><input v-model="cityForm.regionName" maxlength="120"
-            /></label>
-            <label
-              ><span>Sort</span><input v-model.number="cityForm.sortOrder" type="number" min="0"
-            /></label>
-            <label
-              ><span>Geo provider</span
+              ><span>地理数据来源</span
               ><input v-model="cityForm.geoProvider" required maxlength="80"
             /></label>
             <label
-              ><span>Geo code / fixture lng,lat</span
-              ><input v-model="cityForm.geoCode" maxlength="160"
+              ><span>地理编码 / 测试经纬度</span><input v-model="cityForm.geoCode" maxlength="160"
             /></label>
             <label class="about-admin-form-grid__wide"
-              ><span>Local GeoJSON path (optional)</span
+              ><span>本地 GeoJSON 路径（选填）</span
               ><input v-model="cityForm.localGeoJsonPath" maxlength="500"
             /></label>
             <div class="about-admin-actions about-admin-form-grid__wide">
               <button class="button" type="submit" :disabled="!!busyKey">
-                {{ isNewCity ? 'Create city' : 'Save city' }}
+                {{ isNewCity ? '创建城市' : '保存城市' }}
               </button>
               <button
                 v-if="!isNewCity"
@@ -441,7 +437,7 @@ onMounted(load);
                 :disabled="!!busyKey"
                 @click="deleteCity"
               >
-                Delete city
+                删除城市
               </button>
             </div>
           </form>
@@ -451,8 +447,8 @@ onMounted(load);
       <section v-if="selectedCity" class="home-admin-section footprint-memory-admin">
         <div class="home-admin-section__heading">
           <div>
-            <p class="eyebrow">Memories / {{ selectedCity.cityName }}</p>
-            <h2>{{ isNewMemory ? 'Add a memory.' : memoryForm.title }}</h2>
+            <p class="eyebrow">城市记忆 / {{ selectedCity.cityName }}</p>
+            <h2>{{ isNewMemory ? '添加一段记忆' : memoryForm.title }}</h2>
           </div>
           <button
             class="admin-secondary-button"
@@ -460,7 +456,7 @@ onMounted(load);
             :disabled="!!busyKey"
             @click="startNewMemory"
           >
-            New memory
+            新建记忆
           </button>
         </div>
         <div class="footprint-memory-admin-layout">
@@ -481,30 +477,30 @@ onMounted(load);
                 >
                   <span>{{ memory.occurredOn || 'No date' }}</span>
                   <strong>{{ memory.title }}</strong>
-                  <small>{{ memory.visible ? 'Visible' : 'Hidden' }}</small>
+                  <small>{{ memory.visible ? '已显示' : '已隐藏' }}</small>
                 </button>
               </li>
             </ol>
           </div>
           <form class="about-admin-form-grid" @submit.prevent="saveMemory">
-            <label><span>Date</span><input v-model="memoryForm.occurredOn" type="date" /></label>
+            <label><span>日期</span><input v-model="memoryForm.occurredOn" type="date" /></label>
             <label
-              ><span>Sort</span><input v-model.number="memoryForm.sortOrder" type="number" min="0"
+              ><span>排序</span><input v-model.number="memoryForm.sortOrder" type="number" min="0"
             /></label>
             <label class="about-admin-form-grid__wide"
-              ><span>Title</span><input v-model="memoryForm.title" required maxlength="180"
+              ><span>标题</span><input v-model="memoryForm.title" required maxlength="180"
             /></label>
             <label class="about-admin-form-grid__wide"
-              ><span>Body</span
+              ><span>正文</span
               ><textarea v-model="memoryForm.body" rows="8" required maxlength="200000" />
             </label>
             <label class="home-checkbox about-admin-form-grid__wide"
               ><input v-model="memoryForm.visible" type="checkbox" /><span
-                >Visible on public Footprint</span
+                >在公开足迹页面显示</span
               ></label
             >
             <label class="about-admin-form-grid__wide"
-              ><span>Images</span
+              ><span>图片</span
               ><select
                 v-model="memoryForm.mediaIds"
                 multiple
@@ -518,7 +514,7 @@ onMounted(load);
             >
             <div class="about-admin-actions about-admin-form-grid__wide">
               <button class="button" type="submit" :disabled="!!busyKey">
-                {{ isNewMemory ? 'Create memory' : 'Save memory' }}
+                {{ isNewMemory ? '创建记忆' : '保存记忆' }}
               </button>
               <button
                 v-if="!isNewMemory"
@@ -527,7 +523,7 @@ onMounted(load);
                 :disabled="!!busyKey"
                 @click="deleteMemory"
               >
-                Delete memory
+                删除记忆
               </button>
             </div>
           </form>

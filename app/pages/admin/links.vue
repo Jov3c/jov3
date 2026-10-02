@@ -10,9 +10,9 @@ import type {
 definePageMeta({ layout: 'admin', middleware: 'admin' });
 
 const tabs: Array<{ value: AdminFriendLinkStatus; label: string }> = [
-  { value: 'PENDING_REVIEW', label: 'Pending Review' },
-  { value: 'PUBLISHED', label: 'Published' },
-  { value: 'REJECTED', label: 'Rejected' },
+  { value: 'PENDING_REVIEW', label: '待审核' },
+  { value: 'PUBLISHED', label: '已发布' },
+  { value: 'REJECTED', label: '已拒绝' },
 ];
 const links = ref<AdminFriendLink[]>([]);
 const media = ref<AdminMediaOption[]>([]);
@@ -32,7 +32,7 @@ const form = reactive({
   visible: true,
 });
 
-useSeoMeta({ title: 'Friend Links — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '友链管理 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function load() {
   isLoading.value = true;
@@ -176,50 +176,47 @@ onMounted(async () => {
   <div class="friend-links-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Community / Friend Links</p>
-        <h1>Friend Links</h1>
+        <p>互动管理 / 友链</p>
+        <h1>友链管理</h1>
       </div>
       <button class="button" type="button" @click="showCreate = !showCreate">
-        {{ showCreate ? 'Close form' : 'Add link' }}
+        {{ showCreate ? '收起表单' : '添加友链' }}
       </button>
     </header>
 
     <section v-if="showCreate" class="friend-link-create-panel">
       <div>
-        <p class="eyebrow">Administrator publish</p>
+        <p class="eyebrow">管理员发布</p>
         <h2>直接添加一个公开入口</h2>
-        <p>管理员新增默认无需邮箱验证，保存后会直接进入 Published。</p>
+        <p>管理员新增无需邮箱验证，保存后会直接发布。</p>
       </div>
       <form class="friend-link-create-form" @submit.prevent="createLink">
         <div class="form-row">
-          <label><span>Name</span><input v-model="form.name" required maxlength="120" /></label>
+          <label><span>名称</span><input v-model="form.name" required maxlength="120" /></label>
           <label
-            ><span>URL</span><input v-model="form.url" required type="url" maxlength="500"
+            ><span>网站地址</span><input v-model="form.url" required type="url" maxlength="500"
           /></label>
         </div>
         <label
-          ><span>Description</span><input v-model="form.description" required maxlength="300"
+          ><span>描述</span><input v-model="form.description" required maxlength="300"
         /></label>
         <div class="form-row">
           <label>
-            <span>Logo media</span>
+            <span>站点图标</span>
             <select v-model="form.logoMediaId">
-              <option value="">No logo / initials fallback</option>
+              <option value="">不使用图标，显示名称缩写</option>
               <option v-for="asset in media" :key="asset.id" :value="asset.id">
                 {{ asset.originalName }}
               </option>
             </select>
           </label>
-          <label
-            ><span>Sort order</span><input v-model.number="form.sortOrder" type="number"
-          /></label>
+          <label><span>排序</span><input v-model.number="form.sortOrder" type="number" /></label>
         </div>
         <label class="friend-link-checkbox"
-          ><input v-model="form.visible" type="checkbox" />
-          <span>Visible on public Links page</span></label
+          ><input v-model="form.visible" type="checkbox" /> <span>在公开友链页面显示</span></label
         >
         <button class="button" type="submit" :disabled="isCreating">
-          {{ isCreating ? 'Saving…' : 'Publish link' }}
+          {{ isCreating ? '正在保存…' : '发布友链' }}
         </button>
       </form>
     </section>
@@ -227,7 +224,7 @@ onMounted(async () => {
     <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
     <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
 
-    <nav class="friend-link-tabs" aria-label="Friend link status">
+    <nav class="friend-link-tabs" aria-label="友链状态">
       <button
         v-for="tab in tabs"
         :key="tab.value"
@@ -241,7 +238,7 @@ onMounted(async () => {
       </button>
     </nav>
 
-    <p v-if="isLoading" class="media-empty">Loading friend links…</p>
+    <p v-if="isLoading" class="media-empty">正在加载友链…</p>
     <p v-else-if="!links.length" class="media-empty">当前状态下没有友链。</p>
     <section v-else class="friend-link-admin-list">
       <article v-for="link in links" :key="link.id" class="friend-link-admin-card">
@@ -261,10 +258,10 @@ onMounted(async () => {
           </header>
           <p>{{ link.description }}</p>
           <small
-            >{{ link.source === 'APPLICATION' ? 'Visitor application' : 'Admin entry' }} ·
+            >{{ link.source === 'APPLICATION' ? '访客申请' : '管理员添加' }} ·
             {{ formatDate(link.createdAt) }}</small
           >
-          <small v-if="link.contactEmail">Contact: {{ link.contactEmail }}</small>
+          <small v-if="link.contactEmail">联系方式：{{ link.contactEmail }}</small>
           <blockquote v-if="link.applicantNote">{{ link.applicantNote }}</blockquote>
           <div class="friend-link-admin-card__actions">
             <button
@@ -274,7 +271,7 @@ onMounted(async () => {
               :disabled="!!busyKey"
               @click="approve(link)"
             >
-              Approve
+              通过
             </button>
             <button
               v-if="link.status === 'PENDING_REVIEW'"
@@ -283,7 +280,7 @@ onMounted(async () => {
               :disabled="!!busyKey"
               @click="reject(link)"
             >
-              Reject
+              拒绝
             </button>
             <button
               v-if="link.status === 'PUBLISHED'"
@@ -292,7 +289,7 @@ onMounted(async () => {
               :disabled="!!busyKey"
               @click="toggleVisible(link)"
             >
-              {{ link.visible ? 'Hide' : 'Show' }}
+              {{ link.visible ? '隐藏' : '显示' }}
             </button>
             <button
               class="admin-danger-button"
@@ -300,7 +297,7 @@ onMounted(async () => {
               :disabled="!!busyKey"
               @click="remove(link)"
             >
-              Delete
+              删除
             </button>
           </div>
         </div>

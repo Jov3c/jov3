@@ -15,11 +15,11 @@ test('admin can toggle CV visibility without deleting its content', async ({ pag
   const original = (await (await page.request.get('/api/v1/admin/cv/profile')).json()).data;
   try {
     await page.goto('/admin/cv');
-    await expect(page.getByRole('heading', { name: 'CV' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '个人简历' })).toBeVisible();
     await expect(page.getByRole('link', { name: '时间线' })).toBeVisible();
-    await expect(page.getByLabel('Public CV')).toBeChecked();
+    await expect(page.getByLabel('公开简历')).toBeChecked();
 
-    await page.getByLabel('Public CV').uncheck();
+    await page.getByLabel('公开简历').uncheck();
     await Promise.all([
       page.waitForResponse(
         (response) =>
@@ -27,15 +27,15 @@ test('admin can toggle CV visibility without deleting its content', async ({ pag
           response.request().method() === 'PATCH' &&
           response.ok(),
       ),
-      page.getByRole('button', { name: 'Save profile' }).click(),
+      page.getByRole('button', { name: '保存资料' }).click(),
     ]);
     await expect(page.getByRole('status')).toContainText('已保存');
     expect((await page.request.get('/api/v1/public/cv')).status()).toBe(404);
     const privateSitemap = await page.request.get('/sitemap.xml');
     expect(await privateSitemap.text()).not.toContain('/about/cv');
-    await expect(page.getByText('Private 状态下，前台 About dropdown 将隐藏 CV')).toBeVisible();
+    await expect(page.getByText('设为私密后，前台“关于”菜单将隐藏个人简历')).toBeVisible();
 
-    await page.getByLabel('Public CV').check();
+    await page.getByLabel('公开简历').check();
     await Promise.all([
       page.waitForResponse(
         (response) =>
@@ -43,7 +43,7 @@ test('admin can toggle CV visibility without deleting its content', async ({ pag
           response.request().method() === 'PATCH' &&
           response.ok(),
       ),
-      page.getByRole('button', { name: 'Save profile' }).click(),
+      page.getByRole('button', { name: '保存资料' }).click(),
     ]);
     await expect(page.getByRole('status')).toContainText('已保存');
     expect((await page.request.get('/api/v1/public/cv')).ok()).toBe(true);
@@ -77,13 +77,13 @@ test('admin can create and remove a Timeline entry', async ({ page }, testInfo) 
   let createdId = '';
   try {
     await page.goto('/admin/timeline');
-    await expect(page.getByRole('heading', { name: 'Timeline', exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'New entry' }).click();
-    await page.getByLabel('Date').fill('2026-09-29');
-    await page.getByLabel('Precision').selectOption('DAY');
-    await page.getByLabel('Title').fill(title);
-    await page.getByLabel('Body').fill('Created from the Timeline editor.');
-    await page.getByRole('button', { name: 'Create entry' }).click();
+    await expect(page.getByRole('heading', { name: '时间线管理', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: '新建条目' }).click();
+    await page.getByLabel('日期').fill('2026-09-29');
+    await page.getByLabel('日期精度').selectOption('DAY');
+    await page.getByLabel('标题').fill(title);
+    await page.getByLabel('正文').fill('Created from the Timeline editor.');
+    await page.getByRole('button', { name: '创建条目' }).click();
     await expect(page.getByRole('status')).toContainText('已创建');
 
     const adminItems = (await (await page.request.get('/api/v1/admin/timeline')).json())

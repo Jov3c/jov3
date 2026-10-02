@@ -22,7 +22,7 @@ const selectedCategory = computed(() =>
   categories.value.find((category) => category.id === selectedId.value),
 );
 
-useSeoMeta({ title: 'Categories — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '分类管理 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function load() {
   isLoading.value = true;
@@ -133,15 +133,13 @@ onMounted(load);
   <div class="categories-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Content / Categories</p>
-        <h1>Categories</h1>
+        <p>内容管理 / 分类</p>
+        <h1>分类管理</h1>
       </div>
-      <button class="button" type="button" :disabled="isLoading" @click="startNew">
-        New category
-      </button>
+      <button class="button" type="button" :disabled="isLoading" @click="startNew">新建分类</button>
     </header>
 
-    <p v-if="isLoading" class="media-empty">Loading categories…</p>
+    <p v-if="isLoading" class="media-empty">正在加载分类…</p>
     <template v-else>
       <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
       <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
@@ -149,10 +147,10 @@ onMounted(load);
         <section class="home-admin-section">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">Taxonomy</p>
-              <h2>Only what helps reading.</h2>
+              <p class="eyebrow">分类列表</p>
+              <h2>保持内容结构清晰。</h2>
             </div>
-            <span>{{ categories.length }} total</span>
+            <span>共 {{ categories.length }} 个分类</span>
           </div>
           <ol class="categories-admin-list">
             <li v-for="category in categories" :key="category.id">
@@ -163,7 +161,7 @@ onMounted(load);
                 @click="selectCategory(category)"
               >
                 <strong>{{ category.name }}</strong>
-                <small>{{ category.slug }} · {{ category.postCount }} posts</small>
+                <small>{{ category.slug }} · {{ category.postCount }} 篇文章</small>
               </button>
             </li>
           </ol>
@@ -172,24 +170,26 @@ onMounted(load);
         <form class="home-admin-section category-editor" @submit.prevent="save">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">{{ selectedId ? 'Edit category' : 'New category' }}</p>
-              <h2>{{ form.name || 'Name this category.' }}</h2>
+              <p class="eyebrow">{{ selectedId ? '编辑分类' : '新建分类' }}</p>
+              <h2>{{ form.name || '为分类命名' }}</h2>
             </div>
-            <span>Categories keep the archive legible</span>
+            <span>分类用于整理文章和归档</span>
           </div>
           <div class="category-form-grid">
-            <label><span>Name</span><input v-model="form.name" maxlength="80" required /></label>
-            <label><span>Slug</span><input v-model="form.slug" maxlength="80" required /></label>
+            <label><span>名称</span><input v-model="form.name" maxlength="80" required /></label>
             <label
-              ><span>Sort</span><input v-model.number="form.sortOrder" type="number" min="0"
+              ><span>路径标识</span><input v-model="form.slug" maxlength="80" required
+            /></label>
+            <label
+              ><span>排序</span><input v-model.number="form.sortOrder" type="number" min="0"
             /></label>
             <label class="home-checkbox"
-              ><input v-model="form.visible" type="checkbox" /><span>Show publicly</span></label
+              ><input v-model="form.visible" type="checkbox" /><span>公开显示</span></label
             >
           </div>
           <div class="project-editor__actions">
             <button class="button" type="submit" :disabled="busyKey === 'save'">
-              {{ selectedId ? 'Save category' : 'Create category' }}
+              {{ selectedId ? '保存分类' : '创建分类' }}
             </button>
             <button
               v-if="selectedId"
@@ -199,7 +199,7 @@ onMounted(load);
               :title="selectedCategory?.postCount ? '有文章引用此分类，不能删除' : undefined"
               @click="remove"
             >
-              {{ selectedCategory?.postCount ? 'Category in use' : 'Delete category' }}
+              {{ selectedCategory?.postCount ? '分类正在使用' : '删除分类' }}
             </button>
           </div>
         </form>

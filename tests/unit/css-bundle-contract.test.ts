@@ -33,7 +33,7 @@ describe('CSS bundle contract', () => {
 
   it('does not retain prototype page selectors in the Home/Projects stylesheet', () => {
     expect(read('app/assets/css/public.css')).not.toMatch(
-      /\.(?:post-card|blog-subnav|archive-group|friend-link-card|life-chapter|cv-prototype)/,
+      /\.(?:post-card|blog-subnav|archive-group|link-card|life-chapter|cv-prototype)/,
     );
   });
 });

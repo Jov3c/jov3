@@ -31,7 +31,7 @@ const selectedPost = computed(() => posts.value.find((post) => post.id === selec
 const isNewPost = computed(() => selectedPostId.value === null);
 const previewHtml = computed(() => renderMarkdown(form.markdownBody));
 
-useSeoMeta({ title: 'Posts — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '文章管理 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function load() {
   isLoading.value = true;
@@ -206,7 +206,7 @@ function createEmptyForm(): PostForm {
     categoryId: categories.value[0]?.id ?? '',
     coverMediaId: '',
     status: 'DRAFT',
-    markdownBody: '# New post\n\nWrite the article here.',
+    markdownBody: '# 新文章\n\n在这里编写文章内容。',
     seoTitle: '',
     seoDescription: '',
   };
@@ -223,18 +223,18 @@ onMounted(load);
   <div class="posts-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Content / Posts</p>
-        <h1>Posts</h1>
+        <p>内容管理 / 文章</p>
+        <h1>文章管理</h1>
       </div>
       <div class="admin-heading-actions">
-        <NuxtLink class="admin-secondary-button" to="/admin/categories">Manage categories</NuxtLink>
+        <NuxtLink class="admin-secondary-button" to="/admin/categories">管理分类</NuxtLink>
         <button class="button" type="button" :disabled="isLoading" @click="startNewPost">
-          New post
+          新建文章
         </button>
       </div>
     </header>
 
-    <p v-if="isLoading" class="media-empty">Loading posts…</p>
+    <p v-if="isLoading" class="media-empty">正在加载文章…</p>
     <template v-else>
       <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
       <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
@@ -243,10 +243,10 @@ onMounted(load);
         <section class="home-admin-section posts-admin-list-panel">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">Article index</p>
-              <h2>Writing, slowly.</h2>
+              <p class="eyebrow">文章列表</p>
+              <h2>持续记录，慢慢书写。</h2>
             </div>
-            <span>{{ posts.length }} total</span>
+            <span>共 {{ posts.length }} 篇文章</span>
           </div>
           <div v-if="!posts.length" class="media-empty">还没有文章，先创建一篇草稿。</div>
           <ol v-else class="posts-admin-list">
@@ -270,29 +270,31 @@ onMounted(load);
         <form class="home-admin-section post-editor" @submit.prevent="savePost">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">{{ isNewPost ? 'New post' : 'Edit post' }}</p>
-              <h2>{{ isNewPost ? 'Make space for a clear idea.' : form.title }}</h2>
+              <p class="eyebrow">{{ isNewPost ? '新建文章' : '编辑文章' }}</p>
+              <h2>{{ isNewPost ? '记录一个清晰的想法' : form.title }}</h2>
             </div>
-            <span>Markdown is the single source of truth</span>
+            <span>Markdown 是文章内容的唯一来源</span>
           </div>
 
           <div v-if="!categories.length" class="admin-error">
-            请先在 <NuxtLink to="/admin/categories">Categories</NuxtLink> 中创建分类。
+            请先在 <NuxtLink to="/admin/categories">分类管理</NuxtLink> 中创建分类。
           </div>
           <div class="post-form-grid">
-            <label><span>Title</span><input v-model="form.title" maxlength="220" required /></label>
-            <label><span>Slug</span><input v-model="form.slug" maxlength="160" required /></label>
+            <label><span>标题</span><input v-model="form.title" maxlength="220" required /></label>
             <label
-              ><span>Category</span
+              ><span>路径标识</span><input v-model="form.slug" maxlength="160" required
+            /></label>
+            <label
+              ><span>分类</span
               ><select v-model="form.categoryId" required>
-                <option disabled value="">Select a category</option>
+                <option disabled value="">请选择分类</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">
                   {{ category.name }}
                 </option>
               </select></label
             >
             <label
-              ><span>Status</span
+              ><span>状态</span
               ><select v-model="form.status">
                 <option v-for="status in POST_STATUSES" :key="status" :value="status">
                   {{ POST_STATUS_LABELS[status] }}
@@ -300,32 +302,32 @@ onMounted(load);
               </select></label
             >
             <label class="post-form-grid__wide"
-              ><span>Excerpt</span
+              ><span>摘要</span
               ><textarea v-model="form.excerpt" rows="2" maxlength="500" required />
             </label>
             <label class="post-form-grid__wide"
-              ><span>Cover media</span
+              ><span>封面图片</span
               ><select v-model="form.coverMediaId">
-                <option value="">No cover — use the editorial fallback</option>
+                <option value="">不使用封面，显示默认样式</option>
                 <option v-for="item in media" :key="item.id" :value="item.id">
                   {{ item.originalName }}
                 </option>
               </select></label
             >
-            <label><span>SEO title</span><input v-model="form.seoTitle" maxlength="220" /></label>
+            <label><span>SEO 标题</span><input v-model="form.seoTitle" maxlength="220" /></label>
             <label
-              ><span>SEO description</span><input v-model="form.seoDescription" maxlength="320"
+              ><span>SEO 描述</span><input v-model="form.seoDescription" maxlength="320"
             /></label>
           </div>
 
           <section class="post-editor__markdown">
             <div class="project-editor__subheading">
               <div>
-                <p class="eyebrow">Article Markdown</p>
-                <h3>Write once, render safely.</h3>
+                <p class="eyebrow">文章 Markdown</p>
+                <h3>一次编写，安全渲染。</h3>
               </div>
               <label class="admin-secondary-button project-import-button">
-                Import .md
+                导入 .md
                 <input
                   class="project-file-input"
                   type="file"
@@ -336,16 +338,16 @@ onMounted(load);
             </div>
             <div class="project-editor__markdown-grid">
               <label class="project-markdown-input"
-                ><span>Markdown source</span
+                ><span>Markdown 源码</span
                 ><textarea
                   v-model="form.markdownBody"
                   rows="22"
                   spellcheck="false"
-                  aria-label="Markdown source"
+                  aria-label="Markdown 源码"
                 />
               </label>
               <div class="project-markdown-preview">
-                <span>Live preview</span>
+                <span>实时预览</span>
                 <!-- The shared renderer sanitizes the browser preview and the public API output. -->
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div class="readme__content" v-html="previewHtml" />
@@ -359,7 +361,7 @@ onMounted(load);
               type="submit"
               :disabled="busyKey === 'save' || !categories.length"
             >
-              {{ isNewPost ? 'Create post' : 'Save post' }}
+              {{ isNewPost ? '创建文章' : '保存文章' }}
             </button>
             <button
               v-if="!isNewPost && form.status === 'DRAFT'"
@@ -368,7 +370,7 @@ onMounted(load);
               :disabled="busyKey === 'publish'"
               @click="publishPost"
             >
-              Publish now
+              立即发布
             </button>
             <button
               v-if="!isNewPost && form.status === 'PUBLISHED'"
@@ -377,7 +379,7 @@ onMounted(load);
               :disabled="busyKey === 'unpublish'"
               @click="unpublishPost"
             >
-              Move to draft
+              转为草稿
             </button>
             <button
               v-if="!isNewPost"
@@ -386,7 +388,7 @@ onMounted(load);
               :disabled="busyKey === 'delete'"
               @click="deletePost"
             >
-              Delete post
+              删除文章
             </button>
           </div>
         </form>

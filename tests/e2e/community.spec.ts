@@ -32,11 +32,11 @@ test('admin can open moderation queues and see seeded content', async ({ page },
 
   await page.goto('/admin/comments');
   await page.waitForLoadState('networkidle');
-  await expect(page.getByRole('heading', { name: 'Comments', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '评论管理', exact: true })).toBeVisible();
   await expect(page.getByText('mori@example.com')).toBeVisible();
 
   await page.goto('/admin/messages');
   await page.waitForLoadState('networkidle');
-  await expect(page.getByRole('heading', { name: 'Messages', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '留言管理', exact: true })).toBeVisible();
   await expect(page.getByText('mori@example.com')).toBeVisible();
 });

@@ -35,7 +35,7 @@ const notice = ref('');
 const errorMessage = ref('');
 const total = ref(0);
 
-useSeoMeta({ title: 'Media Library — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '媒体库 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function loadMedia() {
   isLoading.value = true;
@@ -131,20 +131,20 @@ onMounted(loadMedia);
   <div class="media-library">
     <header class="admin-page-heading">
       <div>
-        <p>System / Media</p>
-        <h1>Media Library</h1>
+        <p>系统管理 / 媒体</p>
+        <h1>媒体库</h1>
       </div>
       <span>{{ total }} assets · stored outside the build</span>
     </header>
 
     <section class="media-upload-panel">
       <div>
-        <p class="eyebrow">Persistent server storage</p>
-        <h2>Bring an image into the library.</h2>
+        <p class="eyebrow">服务器持久存储</p>
+        <h2>上传图片到媒体库</h2>
         <p>JPEG、PNG、WebP 和 GIF，单张不超过 10 MB。SVG 默认关闭。</p>
       </div>
       <form class="media-upload-form" @submit.prevent="uploadMedia">
-        <label for="media-file">Image file</label>
+        <label for="media-file">图片文件</label>
         <input
           id="media-file"
           type="file"
@@ -153,7 +153,7 @@ onMounted(loadMedia);
         />
         <div class="media-upload-form__row">
           <label>
-            <span>Folder</span>
+            <span>目录</span>
             <select v-model="selectedCategory">
               <option v-for="category in categories" :key="category.value" :value="category.value">
                 {{ category.label }}
@@ -161,33 +161,33 @@ onMounted(loadMedia);
             </select>
           </label>
           <label>
-            <span>Alt text</span>
-            <input v-model="altText" type="text" maxlength="300" placeholder="Describe the image" />
+            <span>替代文字</span>
+            <input v-model="altText" type="text" maxlength="300" placeholder="描述图片内容" />
           </label>
         </div>
         <button class="button" type="submit" :disabled="isUploading">
-          {{ isUploading ? 'Uploading…' : 'Upload image' }}
+          {{ isUploading ? '正在上传…' : '上传图片' }}
         </button>
       </form>
     </section>
 
     <div class="media-toolbar">
       <label class="media-search">
-        <span>Search media</span>
+        <span>搜索媒体</span>
         <input
           v-model="query"
           type="search"
-          placeholder="filename or alt text"
+          placeholder="文件名或替代文字"
           @keyup.enter="loadMedia"
         />
       </label>
-      <button class="admin-secondary-button" type="button" @click="loadMedia">Refresh</button>
+      <button class="admin-secondary-button" type="button" @click="loadMedia">刷新</button>
     </div>
 
     <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
     <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
-    <p v-if="isLoading" class="media-empty">Loading media…</p>
-    <p v-else-if="items.length === 0" class="media-empty">No media assets yet.</p>
+    <p v-if="isLoading" class="media-empty">正在加载媒体…</p>
+    <p v-else-if="items.length === 0" class="media-empty">还没有媒体文件。</p>
     <section v-else class="media-grid" aria-label="Media assets">
       <article v-for="item in items" :key="item.id" class="media-card">
         <div class="media-card__preview">
@@ -200,13 +200,13 @@ onMounted(loadMedia);
             v-model="item.altText"
             type="text"
             maxlength="300"
-            placeholder="Alt text"
+            placeholder="替代文字"
             @change="updateAltText(item)"
           />
           <div class="media-card__actions">
-            <button type="button" @click="copyUrl(item)">Copy URL</button>
+            <button type="button" @click="copyUrl(item)">复制地址</button>
             <button type="button" :disabled="item.isReferenced" @click="deleteMedia(item)">
-              {{ item.isReferenced ? `${item.referenceCount} references` : 'Delete' }}
+              {{ item.isReferenced ? `${item.referenceCount} 处引用` : '删除' }}
             </button>
           </div>
         </div>

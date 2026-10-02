@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test('blog index exposes database-backed articles and category filtering', async ({ page }) => {
+test('blog index exposes database-backed articles and category filtering', async ({
+  page,
+}, testInfo) => {
   await page.goto('/blog');
   await page.waitForLoadState('networkidle');
 
@@ -17,6 +19,26 @@ test('blog index exposes database-backed articles and category filtering', async
   await expect(page.locator('.post-card').first()).toContainText(`${firstPost!.viewCount}`);
   await expect(page.locator('.post-card').first()).toContainText(`${firstPost!.commentCount}`);
   await expect(page.locator('.post-card').first()).toContainText(`${firstPost!.wordCount} 字`);
+  await expect(page.locator('.post-card')).toHaveCount(5);
+  if (testInfo.project.name === 'desktop-chromium') {
+    const card = page.locator('.post-card').first();
+    const cover = card.locator('.post-card__cover');
+    const content = card.locator('.post-card__content');
+    await expect(card).toHaveCSS('display', 'grid');
+    const [cardBox, coverBox, contentBox] = await Promise.all([
+      card.boundingBox(),
+      cover.boundingBox(),
+      content.boundingBox(),
+    ]);
+    expect(cardBox).not.toBeNull();
+    expect(coverBox).not.toBeNull();
+    expect(contentBox).not.toBeNull();
+    expect(coverBox!.width).toBeGreaterThanOrEqual(188);
+    expect(coverBox!.width).toBeLessThanOrEqual(192);
+    expect(contentBox!.x).toBeGreaterThan(coverBox!.x + coverBox!.width - 1);
+    expect(cardBox!.height).toBeGreaterThanOrEqual(152);
+    expect(cardBox!.height).toBeLessThanOrEqual(160);
+  }
   await expect(page.getByRole('navigation', { name: '博客导航' }).getByRole('link')).toHaveCount(3);
   await page.getByRole('button', { name: '全部分类' }).click();
   await expect(page.locator('.category-option').filter({ hasText: 'AI' })).toBeVisible();

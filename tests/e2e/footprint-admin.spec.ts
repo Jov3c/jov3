@@ -20,11 +20,11 @@ test('admin can create, hide, and remove a city memory', async ({ page }, testIn
 
   try {
     await page.goto('/admin/footprint');
-    await expect(page.getByRole('heading', { name: 'Footprint', exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'New city' }).click();
-    await page.getByLabel('City name').fill('Stage Ten City');
-    await page.getByLabel('Slug').fill(slug);
-    await page.getByRole('button', { name: 'Create city' }).click();
+    await expect(page.getByRole('heading', { name: '足迹数据', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: '新建城市' }).click();
+    await page.getByLabel('城市名称').fill('Stage Ten City');
+    await page.getByLabel('路径标识').fill(slug);
+    await page.getByRole('button', { name: '创建城市' }).click();
     await expect(page.getByRole('status')).toContainText('已创建');
 
     const cities = (await (await page.request.get('/api/v1/admin/footprint/cities')).json())
@@ -35,10 +35,10 @@ test('admin can create, hide, and remove a city memory', async ({ page }, testIn
     cityId = cities.find((city) => city.slug === slug)?.id ?? '';
     expect(cityId).not.toBe('');
 
-    await page.getByRole('button', { name: 'New memory' }).click();
-    await page.getByLabel('Title').fill('Stage Ten Memory');
-    await page.getByLabel('Body').fill('A memory created from the Footprint editor.');
-    await page.getByRole('button', { name: 'Create memory' }).click();
+    await page.getByRole('button', { name: '新建记忆' }).click();
+    await page.getByLabel('标题').fill('Stage Ten Memory');
+    await page.getByLabel('正文').fill('A memory created from the Footprint editor.');
+    await page.getByRole('button', { name: '创建记忆' }).click();
     await expect(page.getByRole('status')).toContainText('已创建');
 
     const publicCities = (await (await page.request.get('/api/v1/public/footprint/cities')).json())
@@ -59,8 +59,8 @@ test('admin can create, hide, and remove a city memory', async ({ page }, testIn
     memoryId = memories.find((memory) => memory.title === 'Stage Ten Memory')?.id ?? '';
     expect(memoryId).not.toBe('');
 
-    await page.getByLabel('Visible on public Footprint').uncheck();
-    await page.getByRole('button', { name: 'Save memory' }).click();
+    await page.getByLabel('在公开足迹页面显示').uncheck();
+    await page.getByRole('button', { name: '保存记忆' }).click();
     await expect(page.getByRole('status')).toContainText('已保存');
 
     const hiddenCities = (await (await page.request.get('/api/v1/public/footprint/cities')).json())

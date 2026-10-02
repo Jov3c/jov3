@@ -17,7 +17,7 @@ const busyKey = ref('');
 const notice = ref('');
 const errorMessage = ref('');
 
-useSeoMeta({ title: 'Comments — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '评论管理 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function load() {
   isLoading.value = true;
@@ -98,15 +98,15 @@ onMounted(load);
   <div class="moderation-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Community / Comments</p>
-        <h1>Comments</h1>
+        <p>互动管理 / 评论</p>
+        <h1>评论管理</h1>
       </div>
-      <NuxtLink class="admin-secondary-button" to="/admin/messages">Messages →</NuxtLink>
+      <NuxtLink class="admin-secondary-button" to="/admin/messages">留言管理 →</NuxtLink>
     </header>
 
     <section class="home-admin-section moderation-toolbar">
       <div>
-        <p class="eyebrow">Moderation queue</p>
+        <p class="eyebrow">审核队列</p>
         <h2>文章里的每一次回应</h2>
       </div>
       <label
@@ -122,7 +122,7 @@ onMounted(load);
 
     <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
     <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
-    <p v-if="isLoading" class="media-empty">Loading comments…</p>
+    <p v-if="isLoading" class="media-empty">正在加载评论…</p>
     <p v-else-if="!comments.length" class="media-empty">当前筛选下没有评论。</p>
     <section v-else class="moderation-list">
       <article
@@ -154,7 +154,7 @@ onMounted(load);
             :disabled="!!busyKey"
             @click="updateStatus(comment.id, 'HIDDEN')"
           >
-            Hide
+            隐藏
           </button>
           <button
             v-if="comment.status !== 'SPAM'"
@@ -163,7 +163,7 @@ onMounted(load);
             :disabled="!!busyKey"
             @click="updateStatus(comment.id, 'SPAM')"
           >
-            Spam
+            标记垃圾内容
           </button>
           <button
             v-if="comment.status === 'HIDDEN' || comment.status === 'SPAM'"
@@ -172,7 +172,7 @@ onMounted(load);
             :disabled="!!busyKey"
             @click="updateStatus(comment.id, 'PUBLISHED')"
           >
-            Restore
+            恢复
           </button>
           <button
             class="admin-danger-button"
@@ -180,7 +180,7 @@ onMounted(load);
             :disabled="!!busyKey"
             @click="remove(comment)"
           >
-            Delete
+            删除
           </button>
         </div>
         <form
@@ -189,7 +189,7 @@ onMounted(load);
           @submit.prevent="reply(comment)"
         >
           <textarea v-model="replyDrafts[comment.id]" rows="2" placeholder="回复这条评论…" />
-          <button class="button" type="submit" :disabled="!!busyKey">Reply</button>
+          <button class="button" type="submit" :disabled="!!busyKey">回复</button>
         </form>
       </article>
     </section>

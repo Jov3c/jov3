@@ -17,7 +17,7 @@ test('admin can upload, edit, serve, query, and delete media', async ({ page }, 
   expect(login.ok()).toBe(true);
 
   await page.goto('/admin/media');
-  await expect(page.getByRole('heading', { name: 'Media Library' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '媒体库' })).toBeVisible();
 
   const invalid = await page.request.post('/api/v1/admin/media/upload', {
     multipart: {

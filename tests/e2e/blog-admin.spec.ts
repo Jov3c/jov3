@@ -17,19 +17,19 @@ test('admin can create, publish, and remove a database-backed post', async ({ pa
   try {
     await page.goto('/admin/posts');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('heading', { name: 'Posts', exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'New post' }).click();
+    await expect(page.getByRole('heading', { name: '文章管理', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: '新建文章' }).click();
+    await page.getByRole('textbox', { name: '标题', exact: true }).fill(`Stage Six Post ${suffix}`);
     await page
-      .getByRole('textbox', { name: 'Title', exact: true })
-      .fill(`Stage Six Post ${suffix}`);
-    await page.getByRole('textbox', { name: 'Slug', exact: true }).fill(`stage-six-e2e-${suffix}`);
+      .getByRole('textbox', { name: '路径标识', exact: true })
+      .fill(`stage-six-e2e-${suffix}`);
     await page
-      .getByRole('textbox', { name: 'Excerpt', exact: true })
+      .getByRole('textbox', { name: '摘要', exact: true })
       .fill('A post created by the Stage 06 browser flow.');
     await page
-      .getByLabel('Markdown source')
+      .getByLabel('Markdown 源码')
       .fill(`# Stage Six E2E\n\nCreated from the admin editor.`);
-    await page.getByRole('button', { name: 'Create post' }).click();
+    await page.getByRole('button', { name: '创建文章' }).click();
     await expect(page.getByRole('status')).toContainText('已创建');
 
     const postsResponse = await page.request.get('/api/v1/admin/posts');
@@ -37,8 +37,8 @@ test('admin can create, publish, and remove a database-backed post', async ({ pa
     createdId = posts.find((post) => post.slug === `stage-six-e2e-${suffix}`)?.id ?? '';
     expect(createdId).not.toBe('');
 
-    await expect(page.getByRole('button', { name: 'Publish now' })).toBeVisible();
-    await page.getByRole('button', { name: 'Publish now' }).click();
+    await expect(page.getByRole('button', { name: '立即发布' })).toBeVisible();
+    await page.getByRole('button', { name: '立即发布' }).click();
     await expect(page.getByRole('status')).toContainText('已发布');
     const publicResponse = await page.request.get(`/api/v1/public/posts/stage-six-e2e-${suffix}`);
     expect(publicResponse.ok()).toBe(true);
@@ -57,6 +57,6 @@ test('admin categories page shows post usage before deletion', async ({ page }, 
   expect(login.ok()).toBe(true);
 
   await page.goto('/admin/categories');
-  await expect(page.getByRole('heading', { name: 'Categories', exact: true })).toBeVisible();
-  await expect(page.getByText(/posts$/).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: '分类管理', exact: true })).toBeVisible();
+  await expect(page.getByText(/篇文章$/).first()).toBeVisible();
 });

@@ -67,7 +67,7 @@ const selectedEntry = computed(() =>
 );
 const isNewEntry = computed(() => selectedEntryId.value === null);
 
-useSeoMeta({ title: 'Timeline — Jov3 Admin', robots: 'noindex, nofollow' });
+useSeoMeta({ title: '时间线管理 — JOV3 管理后台', robots: 'noindex, nofollow' });
 
 async function load() {
   isLoading.value = true;
@@ -237,15 +237,15 @@ onMounted(load);
   <div class="timeline-admin">
     <header class="admin-page-heading">
       <div>
-        <p>Content / Timeline</p>
-        <h1>Timeline</h1>
+        <p>内容管理 / 时间线</p>
+        <h1>时间线管理</h1>
       </div>
       <button class="button" type="button" :disabled="isLoading" @click="startNewEntry">
-        New entry
+        新建条目
       </button>
     </header>
 
-    <p v-if="isLoading" class="media-empty">Loading timeline…</p>
+    <p v-if="isLoading" class="media-empty">正在加载时间线…</p>
     <template v-else>
       <p v-if="notice" class="admin-notice" role="status">{{ notice }}</p>
       <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
@@ -254,8 +254,8 @@ onMounted(load);
         <section class="home-admin-section timeline-admin-list-panel">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">Life / Work / Notes</p>
-              <h2>Story index.</h2>
+              <p class="eyebrow">生活 / 工作 / 记录</p>
+              <h2>时间线条目</h2>
             </div>
             <span>{{ entries.length }} entries</span>
           </div>
@@ -270,7 +270,7 @@ onMounted(load);
               >
                 <span>{{ entry.dateLabel }}</span>
                 <strong>{{ entry.title }}</strong>
-                <small>{{ entry.visible ? 'Visible' : 'Hidden' }}</small>
+                <small>{{ entry.visible ? '已显示' : '已隐藏' }}</small>
               </button>
             </li>
           </ol>
@@ -279,38 +279,36 @@ onMounted(load);
         <section class="home-admin-section timeline-admin-editor">
           <div class="home-admin-section__heading">
             <div>
-              <p class="eyebrow">{{ isNewEntry ? 'New entry' : 'Edit entry' }}</p>
-              <h2>{{ isNewEntry ? 'Add the next marker.' : form.title }}</h2>
+              <p class="eyebrow">{{ isNewEntry ? '新建条目' : '编辑条目' }}</p>
+              <h2>{{ isNewEntry ? '添加新的时间节点' : form.title }}</h2>
             </div>
-            <span>Public page renders Markdown safely</span>
+            <span>公开页面会安全渲染 Markdown</span>
           </div>
           <form class="about-admin-form-grid" @submit.prevent="saveEntry">
-            <label><span>Date</span><input v-model="form.eventDate" type="date" required /></label>
+            <label><span>日期</span><input v-model="form.eventDate" type="date" required /></label>
             <label
-              ><span>Precision</span
+              ><span>日期精度</span
               ><select v-model="form.datePrecision">
-                <option value="YEAR">Year</option>
-                <option value="MONTH">Month</option>
-                <option value="DAY">Day</option>
+                <option value="YEAR">年</option>
+                <option value="MONTH">月</option>
+                <option value="DAY">日</option>
               </select></label
             >
-            <label><span>Title</span><input v-model="form.title" required maxlength="180" /></label>
+            <label><span>标题</span><input v-model="form.title" required maxlength="180" /></label>
             <label
-              ><span>Sort</span><input v-model.number="form.sortOrder" type="number" min="0"
+              ><span>排序</span><input v-model.number="form.sortOrder" type="number" min="0"
             /></label>
             <label class="home-checkbox about-admin-form-grid__wide"
-              ><input v-model="form.visible" type="checkbox" /><span
-                >Visible on public Timeline</span
-              ></label
+              ><input v-model="form.visible" type="checkbox" /><span>在公开时间线显示</span></label
             >
             <label class="about-admin-form-grid__wide"
-              ><span>Body</span
-              ><textarea v-model="form.bodyMarkdown" rows="14" placeholder="Markdown body" />
+              ><span>正文</span
+              ><textarea v-model="form.bodyMarkdown" rows="14" placeholder="Markdown 正文" />
             </label>
 
             <div class="timeline-admin-relations about-admin-form-grid__wide">
               <div class="timeline-admin-relation-group">
-                <strong>Media</strong>
+                <strong>媒体</strong>
                 <select v-model="form.mediaIds" multiple size="5" aria-label="Timeline media">
                   <option v-for="item in media" :key="item.id" :value="item.id">
                     {{ item.originalName }}
@@ -318,7 +316,7 @@ onMounted(load);
                 </select>
               </div>
               <div class="timeline-admin-relation-group">
-                <strong>Projects</strong>
+                <strong>关联项目</strong>
                 <select v-model="form.projectIds" multiple size="5" aria-label="Timeline projects">
                   <option v-for="project in projects" :key="project.id" :value="project.id">
                     {{ project.name }}{{ project.visible ? '' : ' · hidden' }}
@@ -329,24 +327,24 @@ onMounted(load);
 
             <div class="timeline-admin-links about-admin-form-grid__wide">
               <div class="about-admin-card__heading">
-                <strong>External links</strong>
+                <strong>外部链接</strong>
                 <button class="admin-secondary-button" type="button" @click="addLink">
-                  Add link
+                  添加链接
                 </button>
               </div>
-              <div v-if="!form.links.length" class="media-empty">No external links.</div>
+              <div v-if="!form.links.length" class="media-empty">没有外部链接。</div>
               <div v-for="(link, index) in form.links" :key="index" class="timeline-admin-link-row">
-                <label><span>Label</span><input v-model="link.label" required /></label>
-                <label><span>URL</span><input v-model="link.url" type="url" required /></label>
+                <label><span>名称</span><input v-model="link.label" required /></label>
+                <label><span>地址</span><input v-model="link.url" type="url" required /></label>
                 <button class="admin-danger-button" type="button" @click="removeLink(index)">
-                  Remove
+                  移除
                 </button>
               </div>
             </div>
 
             <div class="about-admin-actions about-admin-form-grid__wide">
               <button class="button" type="submit" :disabled="!!busyKey">
-                {{ isNewEntry ? 'Create entry' : 'Save entry' }}
+                {{ isNewEntry ? '创建条目' : '保存条目' }}
               </button>
               <button
                 v-if="!isNewEntry"
@@ -355,7 +353,7 @@ onMounted(load);
                 :disabled="!!busyKey"
                 @click="deleteEntry"
               >
-                Delete entry
+                删除条目
               </button>
             </div>
           </form>

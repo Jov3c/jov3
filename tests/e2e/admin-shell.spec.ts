@@ -11,18 +11,18 @@ test('admin login protects the shell and logout invalidates access', async ({ pa
   await expect(page).toHaveURL(
     (url) => url.pathname === '/admin/login' && url.searchParams.get('redirect') === '/admin',
   );
-  await expect(page.getByRole('heading', { name: 'Welcome back.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '欢迎回来' })).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 
-  await page.getByLabel('Email').fill(adminEmail);
-  await page.getByLabel('Password').fill(adminPassword);
+  await page.getByLabel('邮箱').fill(adminEmail);
+  await page.getByLabel('密码').fill(adminPassword);
   await Promise.all([
     page.waitForURL((url) => url.pathname === '/admin' && url.search === '', {
       waitUntil: 'domcontentloaded',
     }),
-    page.getByRole('button', { name: 'Sign in' }).click(),
+    page.getByRole('button', { name: '登录', exact: true }).click(),
   ]);
-  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '仪表盘' })).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await expect(page.getByText(adminEmail, { exact: true }).first()).toBeVisible();
   expect(await page.evaluate(() => localStorage.getItem('admin_token'))).toBeNull();

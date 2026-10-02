@@ -3,7 +3,7 @@ const revealSelector = [
   '.post-card:not(.post-card--skeleton)',
   '.archive-year',
   '.timeline-chapter',
-  '.friend-link-card',
+  '.link-card:not(.link-card--skeleton)',
   '.message-card',
 ].join(', ');
 
@@ -12,10 +12,19 @@ export default defineNuxtPlugin((nuxtApp) => {
   let mutationObserver: MutationObserver | undefined;
 
   const observeCandidates = () => {
-    document.querySelectorAll<HTMLElement>(revealSelector).forEach((element, index) => {
+    document.querySelectorAll<HTMLElement>(revealSelector).forEach((element) => {
       if (element.classList.contains('is-revealed')) return;
 
-      element.style.setProperty('--reveal-delay', `${Math.min(index * 55, 220)}ms`);
+      const siblings = [
+        ...document.querySelectorAll<HTMLElement>(`.${element.classList[0]}`),
+      ].filter((candidate) => !candidate.classList.contains(`${element.classList[0]}--skeleton`));
+      const index = siblings.indexOf(element);
+      const delay = element.classList.contains('post-card')
+        ? Math.min(index * 35, 140)
+        : element.classList.contains('link-card')
+          ? (index % 2) * 40
+          : Math.min(index * 55, 220);
+      element.style.setProperty('--reveal-delay', `${delay}ms`);
       observer?.observe(element);
     });
   };

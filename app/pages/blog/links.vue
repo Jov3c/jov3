@@ -1,23 +1,24 @@
 <script setup lang="ts">
 import BlogChrome from '~/components/blog/BlogChrome.vue';
+import SkeletonBlock from '~/components/ui/SkeletonBlock.vue';
+import StandardHero from '~/components/ui/StandardHero.vue';
 import type { PublicFriendLinksResponse } from '~/types/friend-links';
 
 const { data, pending, error } = await useFetch<PublicFriendLinksResponse>('/api/v1/public/links', {
   key: 'public-friend-links',
+  query: { page: 1, pageSize: 6 },
 });
 
 const friendLinks = computed(() => data.value?.data ?? []);
-const displayLinks = computed(() => friendLinks.value);
-const application = reactive({
-  websiteName: '',
-  websiteUrl: '',
-  description: '',
-  contactEmail: '',
-  note: '',
+const displayLinks = computed(() => friendLinks.value.slice(0, 6));
+const showPrototypeSkeleton = ref(true);
+
+let skeletonTimer: number | undefined;
+
+onMounted(() => {
+  skeletonTimer = window.setTimeout(() => (showPrototypeSkeleton.value = false), 850);
 });
-const applicationNotice = ref('');
-const applicationError = ref('');
-const isApplying = ref(false);
+onBeforeUnmount(() => window.clearTimeout(skeletonTimer));
 
 definePageMeta({ layout: 'blog-prototype' });
 
@@ -44,66 +45,50 @@ function domain(url: string) {
   }
 }
 
-async function submitApplication() {
-  isApplying.value = true;
-  applicationNotice.value = '';
-  applicationError.value = '';
-  try {
-    await $fetch('/api/v1/public/links/apply', { method: 'POST', body: application });
-    applicationNotice.value = '申请已收到，请先检查邮箱完成验证。';
-    Object.assign(application, {
-      websiteName: '',
-      websiteUrl: '',
-      description: '',
-      contactEmail: '',
-      note: '',
-    });
-  } catch (requestError) {
-    const fetchError = requestError as { data?: { error?: { message?: string } } };
-    applicationError.value = fetchError.data?.error?.message || '申请提交失败，请稍后重试。';
-  } finally {
-    isApplying.value = false;
-  }
+function avatarClass(index: number) {
+  return `avatar-${String.fromCharCode(97 + (index % 6))}`;
 }
 </script>
 
 <template>
   <BlogChrome>
     <template #hero>
-      <header class="links-hero">
-        <p class="links-hero__eyebrow">FRIENDS</p>
-        <h1>Links</h1>
-        <p>一些我会经常拜访的小站。互联网很大，能留下彼此的入口是一件很有意思的事。</p>
-      </header>
+      <StandardHero
+        eyebrow="FRIENDS"
+        title="Links"
+        description="一些我会经常拜访的小站。互联网很大，能留下彼此的入口是一件很有意思的事。"
+      />
     </template>
 
-    <section class="friend-links-section" aria-labelledby="friend-links-heading">
-      <header class="friend-links-section__header">
-        <div>
-          <h2 id="friend-links-heading">朋友们的小站</h2>
-        </div>
-        <span>{{ displayLinks.length }} 位朋友</span>
+    <section class="links-card" aria-labelledby="friend-links-heading">
+      <header class="links-head">
+        <h2 id="friend-links-heading">朋友们的小站</h2>
+        <small>{{
+          showPrototypeSkeleton || pending ? 'Loading…' : `${displayLinks.length} 位朋友`
+        }}</small>
       </header>
 
-      <p v-if="error" class="community-empty" role="alert">友链暂时无法加载，请稍后重试。</p>
-      <div
-        v-else-if="pending"
-        class="friend-link-grid friend-link-grid--skeleton"
-        aria-label="正在加载友链"
-      >
-        <span v-for="index in 6" :key="index" />
+      <div v-if="showPrototypeSkeleton || pending" class="link-grid" aria-label="正在加载友链">
+        <div v-for="index in 6" :key="index" class="link-card link-card--skeleton">
+          <SkeletonBlock class="link-card__skeleton-avatar" />
+          <div class="link-card__skeleton-text">
+            <SkeletonBlock class="link-card__skeleton-name" />
+            <SkeletonBlock class="link-card__skeleton-description" />
+          </div>
+        </div>
       </div>
+      <p v-else-if="error" class="community-empty" role="alert">友链暂时无法加载，请稍后重试。</p>
       <p v-else-if="displayLinks.length === 0" class="community-empty">还没有公开的友链。</p>
-      <div v-else class="friend-link-grid">
+      <div v-else class="link-grid">
         <a
-          v-for="friend in displayLinks"
+          v-for="(friend, index) in displayLinks"
           :key="friend.id"
-          class="friend-link-card"
+          class="link-card"
           :href="friend.url"
           target="_blank"
           rel="noreferrer"
         >
-          <span class="friend-link-card__avatar">
+          <span class="link-avatar" :class="avatarClass(index)">
             <img
               v-if="friend.logo"
               :src="friend.logo.publicUrl"
@@ -112,56 +97,13 @@ async function submitApplication() {
             />
             <span v-else>{{ initials(friend.name) }}</span>
           </span>
-          <span class="friend-link-card__body">
-            <strong>{{ friend.name }}</strong>
-            <small>{{ friend.description }}</small>
-            <em>{{ domain(friend.url) }}</em>
+          <span class="link-body">
+            <span class="link-name">{{ friend.name }}</span>
+            <span class="link-desc">{{ friend.description }}</span>
+            <span class="link-domain">{{ domain(friend.url) }}</span>
           </span>
-          <b aria-hidden="true">↗</b>
         </a>
       </div>
-    </section>
-
-    <section class="friend-link-apply" aria-labelledby="friend-link-apply-heading">
-      <div>
-        <p class="eyebrow">Leave an entrance</p>
-        <h2 id="friend-link-apply-heading">想交换友链？</h2>
-        <p>填写站点信息并验证邮箱，确认后会进入后台审核队列。</p>
-      </div>
-      <form class="friend-link-apply__form" @submit.prevent="submitApplication">
-        <div class="form-row">
-          <label
-            ><span>网站名称</span><input v-model="application.websiteName" required maxlength="120"
-          /></label>
-          <label
-            ><span>网站地址</span
-            ><input v-model="application.websiteUrl" required type="url" maxlength="500"
-          /></label>
-        </div>
-        <div class="form-row">
-          <label
-            ><span>联系邮箱</span
-            ><input v-model="application.contactEmail" required type="email" maxlength="254"
-          /></label>
-          <label
-            ><span>一句介绍</span><input v-model="application.description" required maxlength="300"
-          /></label>
-        </div>
-        <label
-          ><span>留言（可选）</span><textarea v-model="application.note" rows="3" maxlength="500" />
-        </label>
-        <div class="friend-link-apply__actions">
-          <span v-if="applicationNotice" class="admin-notice" role="status">{{
-            applicationNotice
-          }}</span>
-          <span v-if="applicationError" class="admin-error" role="alert">{{
-            applicationError
-          }}</span>
-          <button class="button" type="submit" :disabled="isApplying">
-            {{ isApplying ? '提交中…' : '提交申请' }}
-          </button>
-        </div>
-      </form>
     </section>
   </BlogChrome>
 </template>
