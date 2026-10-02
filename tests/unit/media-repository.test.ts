@@ -10,9 +10,8 @@ describe('media repository references', () => {
       friendLink: { count: async () => 3 },
       cvProfile: { count: async () => 4 },
       timelineEntryMedia: { count: async () => 5 },
-      footprintMemoryMedia: { count: async () => 6 },
     } as never);
 
-    await expect(repository.countReferences('media-id')).resolves.toBe(21);
+    await expect(repository.countReferences('media-id')).resolves.toBe(15);
   });
 });

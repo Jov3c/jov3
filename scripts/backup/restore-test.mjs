@@ -52,7 +52,6 @@ async function verifyDatabase() {
       'projects',
       'posts',
       'timeline_entries',
-      'footprint_cities',
     ];
     for (const table of requiredTables) {
       const result = await client.query(

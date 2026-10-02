@@ -209,7 +209,7 @@ function createEmptyForm(): ProjectForm {
     techStack: '',
     githubUrl: '',
     demoUrl: '',
-    readmeMarkdown: '# Project\n\nWrite the project README here.',
+    readmeMarkdown: '# 新项目\n\n在这里编写项目介绍。',
     sortOrder: (projects.value.length + 1) * 10,
     visible: true,
   };

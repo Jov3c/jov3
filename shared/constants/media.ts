@@ -5,7 +5,6 @@ export const MEDIA_CATEGORIES = [
   'blog',
   'projects',
   'timeline',
-  'footprint',
   'links',
   'general',
 ] as const;

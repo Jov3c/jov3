@@ -2,21 +2,20 @@ import { defineConfig, devices } from '@playwright/test';
 
 const statefulE2eFiles = [
   '**/about-admin.spec.ts',
-  '**/admin-shell.spec.ts',
   '**/auth-api.spec.ts',
   '**/blog-admin.spec.ts',
   '**/community.spec.ts',
-  '**/footprint-admin.spec.ts',
   '**/friend-links.spec.ts',
   '**/home-config.spec.ts',
   '**/media-library.spec.ts',
   '**/projects-admin.spec.ts',
   '**/seo-stats.spec.ts',
 ];
+const externalStatefulE2eFiles = [...statefulE2eFiles, '**/admin-shell.spec.ts'];
 const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL;
 const allowExternalStatefulTests = process.env.PLAYWRIGHT_ALLOW_EXTERNAL_WRITES === 'true';
 const externalStatefulIgnore =
-  externalBaseURL && !allowExternalStatefulTests ? statefulE2eFiles : [];
+  externalBaseURL && !allowExternalStatefulTests ? externalStatefulE2eFiles : [];
 
 export default defineConfig({
   testDir: './tests/e2e',

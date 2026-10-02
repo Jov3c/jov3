@@ -4,38 +4,37 @@ const route = useRoute();
 const isSigningOut = ref(false);
 const isCollapsed = ref(false);
 const isMobileOpen = ref(false);
+const mobileMenuButton = ref<HTMLButtonElement | null>(null);
+const mobileCloseButton = ref<HTMLButtonElement | null>(null);
 
 const navigation = [
   {
     label: '内容管理',
     items: [
-      { label: '文章管理', to: '/admin/posts', icon: '文' },
-      { label: '分类管理', to: '/admin/categories', icon: '类' },
-      { label: '项目管理', to: '/admin/projects', icon: '项' },
-      { label: '时间线', to: '/admin/timeline', icon: '时' },
+      { label: '文章管理', to: '/admin/posts' },
+      { label: '分类管理', to: '/admin/categories' },
+      { label: '项目管理', to: '/admin/projects' },
+      { label: '时间线', to: '/admin/timeline' },
     ],
   },
   {
     label: '资料管理',
     items: [
-      { label: '首页资料', to: '/admin/home', icon: '首' },
-      { label: '个人简历', to: '/admin/cv', icon: '历' },
+      { label: '首页资料', to: '/admin/home' },
+      { label: '个人简历', to: '/admin/cv' },
     ],
   },
   {
     label: '互动管理',
     items: [
-      { label: '评论管理', to: '/admin/comments', icon: '评' },
-      { label: '留言管理', to: '/admin/messages', icon: '留' },
-      { label: '友链管理', to: '/admin/links', icon: '链' },
+      { label: '评论管理', to: '/admin/comments' },
+      { label: '留言管理', to: '/admin/messages' },
+      { label: '友链管理', to: '/admin/links' },
     ],
   },
   {
     label: '系统管理',
-    items: [
-      { label: '媒体库', to: '/admin/media', icon: '媒' },
-      { label: '足迹数据', to: '/admin/footprint', icon: '迹' },
-    ],
+    items: [{ label: '媒体库', to: '/admin/media' }],
   },
 ];
 
@@ -49,12 +48,31 @@ const currentPage = computed(() => {
 
 watch(
   () => route.path,
-  () => (isMobileOpen.value = false),
+  () => closeMobileNav(false),
 );
 
 onMounted(() => {
   isCollapsed.value = localStorage.getItem('admin-sidebar-collapsed') === 'true';
+  window.addEventListener('keydown', handleKeydown);
 });
+
+onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
+
+async function openMobileNav() {
+  isMobileOpen.value = true;
+  await nextTick();
+  mobileCloseButton.value?.focus();
+}
+
+function closeMobileNav(restoreFocus = true) {
+  if (!isMobileOpen.value) return;
+  isMobileOpen.value = false;
+  if (restoreFocus) nextTick(() => mobileMenuButton.value?.focus());
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && isMobileOpen.value) closeMobileNav();
+}
 
 function toggleCollapsed() {
   isCollapsed.value = !isCollapsed.value;
@@ -86,26 +104,30 @@ async function signOut() {
       class="admin-sidebar-backdrop"
       type="button"
       aria-label="关闭导航"
-      @click="isMobileOpen = false"
+      @click="closeMobileNav()"
     />
-    <aside class="admin-sidebar">
+    <aside id="admin-sidebar" class="admin-sidebar">
       <div class="admin-sidebar__brand-row">
         <NuxtLink class="admin-wordmark" to="/admin" aria-label="JOV3 后台首页">
-          <span class="admin-wordmark__mark">J3</span>
-          <span class="admin-wordmark__text">JOV3 管理后台</span>
+          <i class="admin-wordmark__dot" aria-hidden="true" />
+          <span class="admin-wordmark__text">JOV3</span>
+          <small>管理台</small>
         </NuxtLink>
         <button
+          ref="mobileCloseButton"
           class="admin-sidebar__mobile-close"
           type="button"
           aria-label="关闭导航"
-          @click="isMobileOpen = false"
+          @click="closeMobileNav()"
         >
           ×
         </button>
       </div>
 
       <nav aria-label="后台导航">
-        <NuxtLink class="admin-nav-link" to="/admin"> <i>览</i><span>仪表盘</span> </NuxtLink>
+        <NuxtLink class="admin-nav-link" to="/admin" aria-label="仪表盘"
+          ><span>仪表盘</span></NuxtLink
+        >
         <section v-for="section in navigation" :key="section.label">
           <p>{{ section.label }}</p>
           <NuxtLink
@@ -113,9 +135,9 @@ async function signOut() {
             :key="item.to"
             class="admin-nav-link"
             :to="item.to"
+            :aria-label="item.label"
           >
-            <i>{{ item.icon }}</i
-            ><span>{{ item.label }}</span>
+            <span>{{ item.label }}</span>
           </NuxtLink>
         </section>
       </nav>
@@ -133,10 +155,13 @@ async function signOut() {
       <header class="admin-topbar">
         <div class="admin-topbar__leading">
           <button
+            ref="mobileMenuButton"
             class="admin-mobile-menu"
             type="button"
             aria-label="打开导航"
-            @click="isMobileOpen = true"
+            aria-controls="admin-sidebar"
+            :aria-expanded="isMobileOpen"
+            @click="openMobileNav"
           >
             ☰
           </button>
@@ -167,4 +192,3 @@ async function signOut() {
 </template>
 
 <style src="~/assets/css/admin.css"></style>
-<style src="~/assets/css/admin-shell.css"></style>

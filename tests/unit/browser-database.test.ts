@@ -11,7 +11,6 @@ describe('browser database reset', () => {
     expect(BROWSER_RESET_TABLES).toContain('admin_users');
     expect(BROWSER_RESET_TABLES).toContain('projects');
     expect(BROWSER_RESET_TABLES).toContain('timeline_entries');
-    expect(BROWSER_RESET_TABLES).toContain('footprint_memories');
     expect(BROWSER_RESET_TABLES).not.toContain('_prisma_migrations');
     expect(buildBrowserResetSql()).toContain('RESTART IDENTITY CASCADE');
   });

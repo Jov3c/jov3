@@ -27,9 +27,7 @@ async function submit() {
   } catch (error) {
     const fetchError = error as { data?: { error?: { message?: string } }; statusCode?: number };
     errorMessage.value =
-      fetchError.statusCode === 429
-        ? '尝试次数过多，请稍后再试。'
-        : fetchError.data?.error?.message || '登录失败，请检查邮箱和密码。';
+      fetchError.statusCode === 429 ? '尝试次数过多，请稍后再试。' : '登录失败，请检查邮箱和密码。';
   } finally {
     isSubmitting.value = false;
   }

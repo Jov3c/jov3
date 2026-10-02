@@ -37,6 +37,7 @@ COPY --chown=jov3:jov3 --from=build /app/server/generated ./server/generated
 COPY --chown=jov3:jov3 --from=build /app/server/services ./server/services
 COPY --chown=jov3:jov3 --from=build /app/server/utils ./server/utils
 COPY --chown=jov3:jov3 --from=build /app/shared ./shared
+COPY --chown=jov3:jov3 --from=build /app/scripts/remove-footprint-media.mjs ./scripts/remove-footprint-media.mjs
 COPY --chown=jov3:jov3 --from=build /app/.output ./.output
 COPY --chmod=755 docker/app-entrypoint.sh /usr/local/bin/jov3-entrypoint
 

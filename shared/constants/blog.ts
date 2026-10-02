@@ -14,7 +14,6 @@ export const BLOG_RESERVED_SLUGS = [
   'archive',
   'links',
   'message',
-  'footprint',
   'about',
   'blog',
   'projects',

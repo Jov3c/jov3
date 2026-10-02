@@ -21,7 +21,6 @@ const categories = [
   { value: 'blog', label: '博客' },
   { value: 'projects', label: '项目' },
   { value: 'timeline', label: '时间线' },
-  { value: 'footprint', label: '足迹' },
   { value: 'links', label: '友链' },
 ];
 const items = ref<MediaItem[]>([]);
@@ -134,7 +133,7 @@ onMounted(loadMedia);
         <p>系统管理 / 媒体</p>
         <h1>媒体库</h1>
       </div>
-      <span>{{ total }} assets · stored outside the build</span>
+      <span>共 {{ total }} 个文件 · 独立持久化存储</span>
     </header>
 
     <section class="media-upload-panel">
@@ -188,7 +187,7 @@ onMounted(loadMedia);
     <p v-if="errorMessage" class="admin-error" role="alert">{{ errorMessage }}</p>
     <p v-if="isLoading" class="media-empty">正在加载媒体…</p>
     <p v-else-if="items.length === 0" class="media-empty">还没有媒体文件。</p>
-    <section v-else class="media-grid" aria-label="Media assets">
+    <section v-else class="media-grid" aria-label="媒体文件">
       <article v-for="item in items" :key="item.id" class="media-card">
         <div class="media-card__preview">
           <img :src="item.publicUrl" :alt="item.altText || item.originalName" loading="lazy" />

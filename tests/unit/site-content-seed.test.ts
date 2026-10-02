@@ -13,20 +13,10 @@ describe('site content seed', () => {
       seedBlogDefaults: seed('posts'),
       seedCommunityDefaults: seed('community'),
       seedFriendLinkDefaults: seed('links'),
-      seedFootprintDefaults: seed('footprint'),
       seedCvDefaults: seed('cv'),
       seedTimelineDefaults: seed('timeline'),
     });
 
-    expect(calls).toEqual([
-      'home',
-      'projects',
-      'posts',
-      'community',
-      'links',
-      'footprint',
-      'cv',
-      'timeline',
-    ]);
+    expect(calls).toEqual(['home', 'projects', 'posts', 'community', 'links', 'cv', 'timeline']);
   });
 });

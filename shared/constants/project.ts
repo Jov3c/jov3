@@ -18,7 +18,6 @@ export const PROJECT_RESERVED_SLUGS = [
   'archive',
   'links',
   'message',
-  'footprint',
   'about',
   'blog',
   'projects',

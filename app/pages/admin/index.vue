@@ -20,10 +20,10 @@ const overview = computed(() => [
 ]);
 
 const shortcuts = [
-  { title: '文章管理', description: '撰写、发布和维护博客文章', to: '/admin/posts', icon: '文' },
-  { title: '项目管理', description: '维护项目展示和项目详情', to: '/admin/projects', icon: '项' },
-  { title: '互动管理', description: '处理评论、留言和友链', to: '/admin/comments', icon: '评' },
-  { title: '首页资料', description: '更新身份信息和首页入口', to: '/admin/home', icon: '首' },
+  { title: '文章管理', description: '撰写、发布和维护博客文章', to: '/admin/posts' },
+  { title: '项目管理', description: '维护项目展示和项目详情', to: '/admin/projects' },
+  { title: '互动管理', description: '处理评论、留言和友链', to: '/admin/comments' },
+  { title: '首页资料', description: '更新身份信息和首页入口', to: '/admin/home' },
 ];
 
 useSeoMeta({ title: '仪表盘 — JOV3 管理后台', robots: 'noindex, nofollow' });
@@ -78,8 +78,7 @@ useSeoMeta({ title: '仪表盘 — JOV3 管理后台', robots: 'noindex, nofollo
           :to="item.to"
           class="admin-shortcut-card"
         >
-          <i>{{ item.icon }}</i
-          ><span
+          <span
             ><strong>{{ item.title }}</strong
             ><small>{{ item.description }}</small></span
           ><b>›</b>

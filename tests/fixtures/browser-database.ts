@@ -24,9 +24,6 @@ export const BROWSER_RESET_TABLES = [
   'timeline_entry_media',
   'timeline_entry_links',
   'timeline_entry_projects',
-  'footprint_cities',
-  'footprint_memories',
-  'footprint_memory_media',
   'page_view_daily',
   'visitor_activity',
 ] as const;

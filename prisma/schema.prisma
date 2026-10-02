@@ -109,7 +109,6 @@ model MediaAsset {
   friendLinkLogos FriendLink[] @relation("FriendLinkLogo")
   cvPortraits  CvProfile[]  @relation("CvPortrait")
   timelineMedia TimelineEntryMedia[]
-  footprintMemoryMedia FootprintMemoryMedia[]
 
   @@map("media_assets")
 }
@@ -431,55 +430,6 @@ model TimelineEntryProject {
   @@unique([timelineEntryId, projectId])
   @@index([timelineEntryId, sortOrder])
   @@map("timeline_entry_projects")
-}
-
-model FootprintCity {
-  id               String             @id @default(uuid()) @db.Uuid
-  slug             String             @unique @db.VarChar(140)
-  countryCode      String             @map("country_code") @db.Char(2)
-  countryName      String             @map("country_name") @db.VarChar(100)
-  cityName         String             @map("city_name") @db.VarChar(120)
-  regionName       String?            @map("region_name") @db.VarChar(120)
-  geoProvider      String             @map("geo_provider") @db.VarChar(80)
-  geoCode          String?            @map("geo_code") @db.VarChar(160)
-  localGeoJsonPath String?            @map("local_geojson_path") @db.VarChar(500)
-  sortOrder        Int                @default(0) @map("sort_order")
-  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
-  memories         FootprintMemory[]
-
-  @@index([countryCode, sortOrder])
-  @@map("footprint_cities")
-}
-
-model FootprintMemory {
-  id          String                 @id @default(uuid()) @db.Uuid
-  cityId      String                 @map("city_id") @db.Uuid
-  title       String                 @db.VarChar(180)
-  body        String
-  occurredOn  DateTime?              @map("occurred_on") @db.Date
-  sortOrder   Int                    @default(0) @map("sort_order")
-  visible     Boolean                @default(true)
-  createdAt   DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime               @updatedAt @map("updated_at") @db.Timestamptz(6)
-  city        FootprintCity          @relation(fields: [cityId], references: [id], onDelete: Cascade)
-  media       FootprintMemoryMedia[]
-
-  @@index([cityId, visible, sortOrder])
-  @@map("footprint_memories")
-}
-
-model FootprintMemoryMedia {
-  id        String          @id @default(uuid()) @db.Uuid
-  memoryId  String          @map("memory_id") @db.Uuid
-  mediaId   String          @map("media_id") @db.Uuid
-  sortOrder Int             @default(0) @map("sort_order")
-  memory    FootprintMemory @relation(fields: [memoryId], references: [id], onDelete: Cascade)
-  media     MediaAsset      @relation(fields: [mediaId], references: [id], onDelete: Restrict)
-
-  @@unique([memoryId, mediaId])
-  @@index([memoryId, sortOrder])
-  @@map("footprint_memory_media")
 }
 
 model PageViewDaily {

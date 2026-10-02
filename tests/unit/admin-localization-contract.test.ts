@@ -20,7 +20,6 @@ const pageTitles = new Map([
   ['messages.vue', '留言管理'],
   ['links.vue', '友链管理'],
   ['media.vue', '媒体库'],
-  ['footprint.vue', '足迹数据'],
 ]);
 
 describe('admin localization contract', () => {
@@ -32,7 +31,7 @@ describe('admin localization contract', () => {
     const layout = read('app/layouts/admin.vue');
     const posts = read('app/pages/admin/posts.vue');
 
-    expect(layout).toContain('JOV3 管理后台');
+    expect(layout).toContain('管理台');
     expect(layout).toContain('查看站点');
     expect(posts).toContain('<h1>文章管理</h1>');
     expect(posts).not.toContain('<h1>Posts</h1>');
@@ -45,5 +44,15 @@ describe('admin localization contract', () => {
       DRAFT: '草稿',
       PUBLISHED: '已发布',
     });
+  });
+
+  it('keeps operational interface copy in Chinese', () => {
+    const login = read('app/pages/admin/login.vue');
+    const media = read('app/pages/admin/media.vue');
+
+    expect(login).not.toContain('fetchError.data?.error?.message');
+    expect(media).toContain('独立持久化存储');
+    expect(media).not.toContain('stored outside the build');
+    expect(media).not.toContain('aria-label="Media assets"');
   });
 });
