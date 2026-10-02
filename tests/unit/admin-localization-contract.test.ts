@@ -3,6 +3,8 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { POST_STATUS_LABELS } from '../../shared/constants/blog';
+
 const root = resolve(import.meta.dirname, '../..');
 const read = (path: string) => readFileSync(resolve(root, path), 'utf8');
 
@@ -36,5 +38,12 @@ describe('admin localization contract', () => {
     expect(posts).not.toContain('<h1>Posts</h1>');
     expect(posts).not.toContain('Manage categories');
     expect(posts).not.toContain('New post');
+  });
+
+  it('presents article workflow statuses in Chinese', () => {
+    expect(POST_STATUS_LABELS).toEqual({
+      DRAFT: '草稿',
+      PUBLISHED: '已发布',
+    });
   });
 });

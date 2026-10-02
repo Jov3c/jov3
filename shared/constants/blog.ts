@@ -3,8 +3,8 @@ export const POST_STATUSES = ['DRAFT', 'PUBLISHED'] as const;
 export type PostStatus = (typeof POST_STATUSES)[number];
 
 export const POST_STATUS_LABELS: Record<PostStatus, string> = {
-  DRAFT: 'Draft',
-  PUBLISHED: 'Published',
+  DRAFT: '草稿',
+  PUBLISHED: '已发布',
 };
 
 export const BLOG_RESERVED_SLUGS = [
