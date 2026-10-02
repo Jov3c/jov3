@@ -79,7 +79,7 @@ test('admin can create and remove a Timeline entry', async ({ page }, testInfo) 
     await page.goto('/admin/timeline');
     await expect(page.getByRole('heading', { name: '时间线管理', exact: true })).toBeVisible();
     await page.getByRole('button', { name: '新建条目' }).click();
-    await page.getByLabel('日期').fill('2026-09-29');
+    await page.getByRole('textbox', { name: '日期', exact: true }).fill('2026-09-29');
     await page.getByLabel('日期精度').selectOption('DAY');
     await page.getByLabel('标题').fill(title);
     await page.getByLabel('正文').fill('Created from the Timeline editor.');
