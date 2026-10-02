@@ -21,19 +21,19 @@ const railProgress = ref(0);
 let revealObserver: IntersectionObserver | null = null;
 
 function chapterLabel(entry: PublicTimelineResponse['data'][number], index: number) {
-  return index === entries.value.length - 1 ? 'CONTINUE' : entry.dateLabel;
+  return index === entries.value.length - 1 ? '继续书写' : entry.dateLabel;
 }
 
 function chapterKicker(entry: PublicTimelineResponse['data'][number]) {
   if (entry.projects.length) return entry.projects.map((project) => project.name).join(' · ');
-  if (entry.links.length) return 'LINKS';
+  if (entry.links.length) return '相关链接';
   return entry.datePrecision;
 }
 
 function chapterTag(entry: PublicTimelineResponse['data'][number]) {
-  if (entry.projects.length) return 'PROJECT';
-  if (entry.links.length) return 'LINK';
-  return 'LIFE / BUILD';
+  if (entry.projects.length) return '项目';
+  if (entry.links.length) return '链接';
+  return '生活 / 创作';
 }
 
 function yearOf(value: string) {
@@ -79,7 +79,7 @@ onBeforeUnmount(() => {
 });
 
 usePageSeo({
-  title: 'Life Timeline — About — Jov3',
+  title: '人生时间线 — 关于 — Jov3',
   description: '做过的项目、改变方向的时刻、学到的东西，以及正在发生的生活。',
 });
 </script>
@@ -88,18 +88,18 @@ usePageSeo({
   <div class="page-container life-page">
     <section class="life-hero">
       <div>
-        <p class="eyebrow">Life timeline</p>
-        <h1>A story still being written.</h1>
+        <p class="eyebrow">关于 / 人生轨迹</p>
+        <h1>人生时间线</h1>
         <p>
           不是简历，也不是履历表。只是把一些值得记住的节点留下来：做过的项目、改变方向的时刻、学到的东西，以及正在发生的生活。
         </p>
-        <div class="life-scroll-hint"><span /><em>Scroll to continue</em></div>
+        <div class="life-scroll-hint"><span /><em>滚动继续</em></div>
       </div>
     </section>
 
     <section ref="timelineRoot" class="life-timeline-wrap">
       <div class="life-current-year">
-        CURRENT<strong>{{
+        当前<strong>{{
           entries[activeIndex] ? yearOf(entries[activeIndex]!.dateLabel) : '2023'
         }}</strong>
       </div>
@@ -117,7 +117,7 @@ usePageSeo({
         >
           <div class="life-chapter__year">
             {{ chapterLabel(entry, index)
-            }}<strong>{{ index === entries.length - 1 ? 'NOW' : yearOf(entry.dateLabel) }}</strong>
+            }}<strong>{{ index === entries.length - 1 ? '现在' : yearOf(entry.dateLabel) }}</strong>
           </div>
           <div class="life-chapter__node"><span /></div>
           <div class="life-chapter__content">
@@ -179,6 +179,6 @@ usePageSeo({
       </div>
     </section>
 
-    <footer class="life-footer"><span>JOV3</span><span>Life timeline · 2026</span></footer>
+    <footer class="life-footer"><span>JOV3</span><span>人生时间线 · 2026</span></footer>
   </div>
 </template>

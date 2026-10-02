@@ -134,7 +134,7 @@ async function load() {
     projects.value = projectResult.data.items;
     media.value = mediaResult.data;
   } catch {
-    errorMessage.value = 'CV 配置加载失败，请刷新重试。';
+    errorMessage.value = '个人简历配置加载失败，请刷新重试。';
   } finally {
     isLoading.value = false;
   }
@@ -168,7 +168,7 @@ async function saveProjects() {
       body: { projectIds: selectedProjectIds.value },
     });
     applyAggregate(result.data);
-    notice.value = 'CV 项目关联已保存。';
+    notice.value = '个人简历项目关联已保存。';
   });
 }
 
@@ -384,7 +384,7 @@ onMounted(load);
         <h1>个人简历</h1>
       </div>
       <NuxtLink class="admin-secondary-button" to="/about/cv" target="_blank">
-        View public CV ↗
+        查看公开简历 ↗
       </NuxtLink>
     </header>
 

@@ -387,7 +387,7 @@ onMounted(load);
             <h2>管理首页中的功能入口</h2>
           </div>
           <span
-            >{{ entries.filter((entry) => entry.visible).length }} visible · maximum 8 public</span
+            >已展示 {{ entries.filter((entry) => entry.visible).length }} 个 · 最多公开 8 个</span
           >
         </div>
         <div class="home-entry-list">

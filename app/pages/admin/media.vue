@@ -16,13 +16,13 @@ interface MediaItem {
 }
 
 const categories = [
-  { value: 'general', label: 'General' },
-  { value: 'avatars', label: 'Avatars' },
-  { value: 'blog', label: 'Blog' },
-  { value: 'projects', label: 'Projects' },
-  { value: 'timeline', label: 'Timeline' },
-  { value: 'footprint', label: 'Footprint' },
-  { value: 'links', label: 'Links' },
+  { value: 'general', label: '通用' },
+  { value: 'avatars', label: '头像' },
+  { value: 'blog', label: '博客' },
+  { value: 'projects', label: '项目' },
+  { value: 'timeline', label: '时间线' },
+  { value: 'footprint', label: '足迹' },
+  { value: 'links', label: '友链' },
 ];
 const items = ref<MediaItem[]>([]);
 const query = ref('');

@@ -17,7 +17,7 @@ if (!data.value) {
 const cv = computed(() => data.value!.data);
 
 usePageSeo({
-  title: 'CV — About — Jov3',
+  title: '个人简历 — 关于 — Jov3',
   description: 'Jov3 的个人工作档案、经历、项目和技能。',
 });
 
@@ -51,8 +51,8 @@ const updatedYear = computed(() => new Date(cv.value.profile.updatedAt).getFullY
     <section class="cv-prototype-hero">
       <div class="cv-prototype-hero__top">
         <div>
-          <p class="eyebrow">CURRICULUM VITAE</p>
-          <h1>CV, but make it mine.</h1>
+          <p class="eyebrow">关于 / 个人档案</p>
+          <h1>个人简历</h1>
           <p>
             不是传统的一页纸模板，而是一张可以持续更新的个人工作档案。保留专业信息，也保留一点个人气质。
           </p>
@@ -63,7 +63,7 @@ const updatedYear = computed(() => new Date(cv.value.profile.updatedAt).getFullY
             type="button"
             @click="printCv"
           >
-            Print / PDF
+            打印 / 导出 PDF
           </button>
         </div>
       </div>

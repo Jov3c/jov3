@@ -92,7 +92,7 @@ async function load() {
       startNewEntry();
     }
   } catch {
-    errorMessage.value = 'Timeline 加载失败，请刷新重试。';
+    errorMessage.value = '时间线加载失败，请刷新重试。';
   } finally {
     isLoading.value = false;
   }
@@ -122,7 +122,7 @@ async function saveEntry() {
       );
       replaceEntry(result.data);
       fillForm(result.data);
-      notice.value = `Timeline「${result.data.title}」已保存。`;
+      notice.value = `时间节点「${result.data.title}」已保存。`;
       return;
     }
 
@@ -133,7 +133,7 @@ async function saveEntry() {
     entries.value = [...entries.value, result.data].sort(compareEntries);
     selectedEntryId.value = result.data.id;
     fillForm(result.data);
-    notice.value = `Timeline「${result.data.title}」已创建。`;
+    notice.value = `时间节点「${result.data.title}」已创建。`;
   });
 }
 
@@ -145,7 +145,7 @@ async function deleteEntry() {
     entries.value = entries.value.filter((item) => item.id !== entry.id);
     if (entries.value[0]) selectEntry(entries.value[0]);
     else startNewEntry();
-    notice.value = 'Timeline entry 已删除。';
+    notice.value = '时间节点已删除。';
   });
 }
 
@@ -257,9 +257,9 @@ onMounted(load);
               <p class="eyebrow">生活 / 工作 / 记录</p>
               <h2>时间线条目</h2>
             </div>
-            <span>{{ entries.length }} entries</span>
+            <span>{{ entries.length }} 个节点</span>
           </div>
-          <div v-if="!entries.length" class="media-empty">还没有 Timeline entry，先创建一个。</div>
+          <div v-if="!entries.length" class="media-empty">还没有时间节点，先创建一个。</div>
           <ol v-else class="timeline-admin-list">
             <li v-for="entry in entries" :key="entry.id">
               <button
@@ -309,7 +309,7 @@ onMounted(load);
             <div class="timeline-admin-relations about-admin-form-grid__wide">
               <div class="timeline-admin-relation-group">
                 <strong>媒体</strong>
-                <select v-model="form.mediaIds" multiple size="5" aria-label="Timeline media">
+                <select v-model="form.mediaIds" multiple size="5" aria-label="时间线媒体">
                   <option v-for="item in media" :key="item.id" :value="item.id">
                     {{ item.originalName }}
                   </option>
@@ -317,7 +317,7 @@ onMounted(load);
               </div>
               <div class="timeline-admin-relation-group">
                 <strong>关联项目</strong>
-                <select v-model="form.projectIds" multiple size="5" aria-label="Timeline projects">
+                <select v-model="form.projectIds" multiple size="5" aria-label="时间线项目">
                   <option v-for="project in projects" :key="project.id" :value="project.id">
                     {{ project.name }}{{ project.visible ? '' : ' · hidden' }}
                   </option>

@@ -104,7 +104,7 @@ async function load() {
       startNewCity();
     }
   } catch {
-    errorMessage.value = 'Footprint 加载失败，请刷新重试。';
+    errorMessage.value = '足迹数据加载失败，请刷新重试。';
   } finally {
     isLoading.value = false;
   }
@@ -501,12 +501,7 @@ onMounted(load);
             >
             <label class="about-admin-form-grid__wide"
               ><span>图片</span
-              ><select
-                v-model="memoryForm.mediaIds"
-                multiple
-                size="6"
-                aria-label="Footprint memory media"
-              >
+              ><select v-model="memoryForm.mediaIds" multiple size="6" aria-label="足迹记忆媒体">
                 <option v-for="item in media" :key="item.id" :value="item.id">
                   {{ item.originalName }}
                 </option>
